@@ -2,6 +2,7 @@
 layout: post
 title: Using EntityCache to speed up your Drupal site
 subtitle: "Make your Drupal sites faster"
+header-img: "img/post-bg-02.jpg"
 permalink: /article/using-entitycache-speed-your-drupal-site
 author: "Sean Hamlin"
 categories:

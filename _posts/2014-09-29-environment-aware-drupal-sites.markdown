@@ -1,8 +1,6 @@
 ---
 layout: post
 title: Environment aware Drupal sites
-header-img: "img/post-bg-06.jpg"
-subtitle: "Per environment configuration and settings"
 permalink: /article/environment-aware-drupal-sites
 author: "Sean Hamlin"
 categories:

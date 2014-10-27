@@ -2,7 +2,8 @@
 layout: post
 title: Environment aware Drupal sites
 header-img: "img/post-bg-06.jpg"
-description: "Making Drupal 'environment' aware, so it knows how it should behave, what modules should be turned on (or off) and what servers it should be talking to."
+subtitle: "Per environment configuration and settings"
+permalink: /article/environment-aware-drupal-sites
 author: "Sean Hamlin"
 categories:
 - tutorial

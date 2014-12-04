@@ -1,0 +1,86 @@
+---
+layout: post
+title:How to use Entity Metadata Wrappers with Drupal 7release
+header-img: "
+permalink: /article/how-use-entity-metadata-wrappers-drupal-7
+author: "Sean Hamlin"
+categories:
+- tutorial
+tags:
+- drupalplanet
+- entity
+- API
+- drupal
+---
+
+<p>It has long been a pain point of mine to see pieces of code like this sprinkled over the code base:</p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">$showid = $node-&gt;field_seriesid[LANGUAGE_NONE][0]['value']</pre>
+<p>Not only does this hard code the language into the field value lookup, it also throws PHP warnings when the field has
+    no data (due to the array keys not being set).</p><p>One of the projects we are currently working on is fully
+    multilingual, using a combination of <a href="https://drupal.org/project/i18n">i18n</a> (translation using separate
+    nodes for each translation) and <a href="https://drupal.org/project/entity_translation">entity_translation</a>
+    (translation using one node, with field translation). It became apparent that a better solution was required here.
+</p><h2>Entity metadata wrappers to the rescue</h2><p>This wrapping class is provided by the <a
+        href="https://drupal.org/project/entity">Entity API</a> module, which I would highly recommend you run (more
+    than likely you already are as it is required by some other modules).</p><h2>How to use the API</h2>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">// use entity metadata wrappers as they are SMART
+$wrapper = entity_metadata_wrapper('node', $node);
+dsm($wrapper-&gt;getPropertyInfo());</pre>
+<p>This will print out a list of all known fields on the node, and you can access properties easily. Once you have the
+    $wrapper object defined you will now be able to use the below advanced syntax for quering values of fields.</p><h3>
+    Retrieving an integer value of a field</h3><p>To retrieve the raw value from a field you can use the raw() accessor
+    method, this will perform no additional logic other than returning the current value. It is useful for integer
+    fields etc.</p><p><strong>Old approach</strong></p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">$showid = $node-&gt;field_seriesid[LANGUAGE_NONE][0]['value'];</pre>
+<p><strong>Entity metadata wrapper approach</strong></p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">$showid = $wrapper-&gt;field_seriesid-&gt;raw();</pre>
+<h3>Retrieving taxonomy term name in a single-select taxonomy</h3><p>To load entities nested within entities you can use
+    the value() accessor method. This comes in very handy for taxonomy terms, users, files etc.</p><p><strong>Old
+    approach</strong></p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">// Extract Te Reo level
+$level = $show-&gt;field_te_reo_level;
+$tid = $level[LANGUAGE_NONE][0]['tid'];
+$term = taxonomy_term_load($tid);
+$variables['level'] = $term-&gt;name;</pre>
+<p><strong>Entity metadata wrapper approach</strong></p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">$variables['level'] = $wrapper-&gt;field_te_reo_level-&gt;value()-&gt;name;</pre>
+<h3>Retrieving taxonomy term names in a multi-select taxonomy</h3><p>What if we needed to loop around a unlimited
+    multi-select list of terms. The code is simple to adapt from above.</p><p><strong>Old approach</strong></p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">// add the items from the 'show_features' taxonomy
+$show_features = array();
+$features = $series-&gt;field_features;
+if (is_array($features[LANGUAGE_NONE])) {
+&nbsp; foreach($features[LANGUAGE_NONE] as $tids) {
+&nbsp;&nbsp;&nbsp; $tid = $tids['tid'];
+&nbsp;&nbsp;&nbsp; $term = taxonomy_term_load($tid);
+&nbsp;&nbsp;&nbsp; $featureList[] = $term-&gt;name;
+&nbsp; }
+}</pre>
+<p><strong>Entity metadata wrapper approach</strong></p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">// add the items from the 'show_features' taxonomy
+$show_features = array();
+foreach ($show_wrapper-&gt;field_features-&gt;value() as $index =&gt; $feature) {
+&nbsp; $show_features[] = $feature-&gt;name;
+}</pre>
+<p>In this example you really see a glimpse of the power of entity metadata wrappers, here they have automatically
+    loaded the taxonomy term entities that were contained inside the main $node entity, and now we can loop directly
+    around the loaded terms. This saves a lot of code and makes it more readable.</p><h3>Language specific fields</h3>
+<p>Entity metadata wrappers have native support for accessing the value of language specific fields (e.g. when using
+    field translations),</p><p><strong>Entity metadata wrapper approach</strong></p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">global $language;
+// get the localised title and body (hence the language param)
+$title = $wrapper-&gt;language($language-&gt;language)-&gt;title_field-&gt;raw();
+$body = $wrapper-&gt;language($language-&gt;language)-&gt;body-&gt;value-&gt;value(array('sanitize' =&gt; TRUE));</pre>
+<h2>Why use entity metadata wrappers?</h2>
+<ul>
+    <li>Makes your code more readable</li>
+    <li>Provides a standardised way of accessing field values and entities through an API</li>
+    <li>Stopped you hard coding the language key into the array lookups</li>
+    <li>Stops those nasty PHP warnings when you are trying to access properties that do not exist</li>
+    <li>The wrapper autoloads entities (when used in conjunction with the -&gt;value() accessor), which allowing you to
+        chain the callbacks
+    </li>
+</ul><h2>Further reading</h2><p>I would reccommend watching <a href="http://wolfgangziegler.net/drupalcon-denver">fago's
+    Drupalcon Denver talk</a> on entities as it contains a lot of information on this topic.</p><h3>Your thoughts</h3>
+<p>How have you found entity metadata wrappers? Leave a comment if you have found this article helpful or you have some
+    other useful advice.</p>

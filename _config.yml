@@ -4,12 +4,12 @@ email: email@pixelite.co.nz
 description: "Write your site description here. It will be used as your sites meta description as well!"
 baseurl: ""
 url: "http://www.pixelite.co.nz"
-twitter_username: wiifm
-github_username:  wiifm69
+twitter_username: pixelite_
+github_username:  pixelite-co-nz
 facebook_username:  sean.hamlin
 
 # Build settings
 markdown: kramdown
 permalink: /article/:title
-paginate: 5
+paginate: 10
 exclude: ["node_modules"]

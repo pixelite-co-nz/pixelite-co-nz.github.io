@@ -1,0 +1,62 @@
+---
+layout: post
+title: "Installing and configuring PostgreSQL 9.1 on Ubuntu 12.04 for local Drupal development"
+header-img: ""
+permalink: /article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development
+author: "Sean Hamlin"
+categories:
+- tutorial
+tags:
+- ubuntu
+- postgresql
+- drupalplanet
+- development
+- drupal
+---
+
+<p>I am constantly referring to several shell scripts to help with PostgreSQL, so this blog post is merely a brain dump on how I find it easiest to install and configure for local Drupal development. These settings should be tweaked moving to staging or production, they are mainly done to help the developers.</p><h2>Install the packages</h2>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install postgresql phppgadmin</pre>
+<h2>Create the users and set permissions</h2><p>Start by switching to the postgres superuser:</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">seanh@wiifmonthego ~ &nbsp;» sudo su - postgres</pre>
+<div>From here you can create new users:</div>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">postgres@wiifmonthego:~$ createuser drupal
+Shall the new role be a superuser? (y/n) y</pre>
+<p>and change their passwords:</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">postgres=# alter user postgres with password 'crazylongpassword';
+ALTER ROLE
+postgres=# alter user drupal with password 'password';
+ALTER ROLE
+postgres=#\q</pre>
+<h2>Relax PostgreSQL access control</h2><p>When in development, I often find myself dumping, restoring, dropping and re-creating databases all the time, so I find having to remember the password to be frustrating. Luckily PostgreSQL lets us trust certain users when coming from certain domains.</p><h3>First edit the main PostgreSQL access control file</h3>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">sudo vim /etc/postgresql/9.1/main/pg_hba.conf</pre>
+<p>Add in your development user with the method 'trust'</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag"># Database administrative login by Unix domain socket
+local   all             postgres                                peer
+local   all             drupal                                  trust
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD</pre>
+<h2>Now restrict connections to allow only localhost</h2><p>This is needed to stop any unwanted network traffic to your local development box</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">sudo vim /etc/postgresql/9.1/main/postgresql.conf</pre>
+<p>Uncomment the 'listen_addresses' section</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">#------------------------------------------------------------------------------
+# CONNECTIONS AND AUTHENTICATION
+#------------------------------------------------------------------------------
+
+# - Connection Settings -
+
+listen_addresses = 'localhost'    # what IP address(es) to listen on;
+</pre>
+<h2>Restart the PostgreSQL cluster</h2><p>In order to make the above changes take effect you need to restart the service</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">seanh@wiifmonthego ~  » sudo service postgresql restart
+ * Restarting PostgreSQL 9.1 database server</pre>
+<h2>Handy PostgreSQL command line examples</h2><p>These gems I use a lot.</p><h3>Create a database</h3>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">createdb -p 5432 -O drupal -U drupal -E UTF8 testingsiteone -T template0</pre>
+<h3>Dropping the database</h3>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">dropdb -p 5432 -U drupal testingsiteone</pre>
+<h3>Dumping the database</h3>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">pg_dump -p 5432 -h localhost -Fc -U drupal --no-owner testingsiteone &gt; /tmp/testingsiteone_$(date +"%Y-%m-%d_%s").pgdump</pre>
+<h3>Restoring the database</h3>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">pg_restore -p 5432 -h localhost -Fc -d testingsiteone -U drupal --no-owner &lt; /tmp/path-to-the-file.pgdump</pre>
+<h2>Comments</h2><p>Are there any other steps you normally take when setting up PostgreSQL for Drupal development? If so, let me know in the comments.</p>

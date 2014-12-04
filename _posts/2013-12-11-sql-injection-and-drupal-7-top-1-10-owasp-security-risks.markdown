@@ -1,7 +1,7 @@
 ---
 layout: post
 title: SQL injection and Drupal 7 - top 1 of 10 OWASP security risks
-header-img: "img/sql-injectquery.png"
+header-img: "img/sql-inject/query.png"
 permalink: /article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks
 author: "Sean Hamlin"
 categories:

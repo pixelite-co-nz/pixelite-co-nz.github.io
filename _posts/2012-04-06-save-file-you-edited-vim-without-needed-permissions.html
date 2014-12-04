@@ -1,0 +1,35 @@
+---
+layout: post
+title: "Save a file you edited in vim without the needed permissions"
+header-img: "img/vim-permissions/vim-e212.png"
+permalink: /article/save-file-you-edited-vim-without-needed-permissions
+author: "Sean Hamlin"
+categories:
+- tutorial
+tags:
+- linux
+- vim
+- permissions
+- sudo
+---
+
+<p>If you have been working on linux for any amount of time, you would at some time experienced the error:</p>
+<pre class="brush: plain; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">E212: Can't open file for writing</pre>
+<p>This means essentially you forgot to include the sudo command before opening the file in question.</p><p>There have been a number of solutions to this problem, you can choose the solution that works for you.</p><h2>Solution 1: Redo all changes but with sudo</h2><p>This is probably what you do now</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">:q!
+sudo !!</pre>
+<p>You have to re-create all changes that you did prior to remembering that you needed to open the file with sudo. Obviously this is less than ideal. It does however teach you a lesson ;)</p><h2>Solution 2: Copy to a temp file</h2><p>This solution is one level better than the above solution, but still is not optimal as it involves a temporary file</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">:w /tmp/hosts.temp
+:q!
+sudo mv /tmp/hosts.temp /etc/hosts</pre>
+<h2>Solution 3: Use tee and sudo</h2><p>This is the top rated solution on www.commandlinefu.com and involves using tee and sudo:</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">:w !sudo tee %
+</pre>
+<p>This solution does have the advantage that it avoids the temporary file in solution 2, it does however force you to remember a command that is quite complex. Fortunately, there is a solution. First edit your .vimrc file</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">vim ~/.vimrc
+</pre>
+<p>Append on the end of the file</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">ca w!! w !sudo tee "%"</pre>
+<p>Now the next time you edit a file without the correct priviledges, you can simply</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">:w!!</pre>
+<p>Hope this little tutorial helps you out, if you have any other ideas that can help, please leave a comment below</p><p>Cheers</p>

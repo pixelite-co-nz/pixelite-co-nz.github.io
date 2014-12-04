@@ -1,0 +1,55 @@
+---
+layout: post
+title: "Remote debugging with Chrome and Android"
+header-img: "img/remote-debugging/chrome-debugging.jpg"
+permalink: /article/remote-debugging-chrome-and-android
+author: "Craig Pearson"
+categories:
+- tutorial
+tags:
+- chrome
+- mobile
+- debugging
+- android
+- responsive
+---
+
+<p>As developers, many of you may have encountered the <a
+        href="https://developers.google.com/chrome-developer-tools/docs/overview">Chrome Developer Tools</a>&nbsp;(CDT)
+    at one time or another. You may also be aware of the <a
+            href="https://developers.google.com/chrome-developer-tools/docs/remote-debugging">Remote Debugging</a>
+    functionality which opens up an API and allows you to run the developer tools in another browser. Which, to be
+    honest I haven't found a use for yet.</p><p>What you may not know is that Remote Debugging is also includded in
+    Android's version of Chrome. This feature allows developers to run CDT in their desktop browser, but for sites
+    loaded in Chrome on their Android device. This can be a powerful tool for developing responsive and/or mobile web
+    layouts.</p><h3>Setup</h3><p>In order to get things started, first we will need to install the Android SDK. The
+    installation of which is out of scope for this post but there are some fantastic resources over at the Android
+    Developer <a href="http://developer.android.com/sdk/installing/index.html">site</a>.</p><p>Once you have the android
+    SDK installed and your device <a href="http://developer.android.com/tools/device.html">set up</a>, you'll need to
+    enable remote debugging on the device. This is easilly done by opening Chrome on your android device and fingering
+    on:&nbsp;<strong>Menu </strong>&gt;<strong> Settings </strong>&gt;<strong> Developer Tools </strong>&gt;<strong>
+        Enable USB Web Debugging.</strong></p><p>
+    <img src="/img/remote-debugging/turn-on-debugging_1.png"></p>
+<p>
+    <img src="/img/remote-debugging/turn-on-debugging_2.png"></p>
+<p>
+    <img src="/img/remote-debugging/turn-on-debugging_3.png"></p>
+<h3>Connecting to your device</h3><p>Now that you've set up yout device and environment we need to connect to it. So
+    plug your device in and issue the command:</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag"> $ adb forward tcp:9222 localabstract:chrome_devtools_remote</pre>
+<p>This tells adb to forward any requests on localhost:9222 to the chrome_devtools_remote port on the android
+    device.</p><p>Now all one has to do is open their Chrome browser on the desktop and navigate to&nbsp;<a
+        href="http://localhost:9222">http://localhost:9222</a></p><p>You will be presented with a list of tabs that are
+    open on Chrome running on the Android device.</p><p>
+    <img src="/img/remote-debugging/Select-page-to-inspect.png"></p>
+<p>Selecting a site opens up CDT for that site like so.</p><p>
+    <img src="/img/remote-debugging/Web_debug-elements.png"></p>
+<p>On the device you see the same hover tool tips you get when debugging locally.</p><p>
+    <img src="/img/remote-debugging/Screenshot_2012-10-05-10-27-52.png"></p>
+<p>Even plugins like <a href="https://developers.google.com/speed/pagespeed/">PageSpeed</a>&nbsp;work! So you can easily
+    test performance on different media queries.</p><p>
+    <img src="/img/remote-debugging/Web_debug-pagespeed.pngb_de"></p>
+<p>With the latest release of iOS Apple also has an offering to help out the iDevice kids. Safari and iOS6 offer up a
+    similar offering, More info can be found on the <a
+            href="http://developer.apple.com/library/ios/#documentation/AppleApplications/Reference/SafariWebContent/DebuggingSafarioniPhoneContent/DebuggingSafarioniPhoneContent.html">Apple
+        Developer</a> page.</p><p>What other ways do you debug your mobile web apps? Leave a comment.</p>

@@ -23,10 +23,10 @@ The library is not limited to provisioning servers and supports a bunch of thing
 
 I am assuming you are running Ubuntu or another Debian variant. if not check official installation instructions [here](https://ci.apache.org/projects/libcloud/docs/getting_started.html). Normally installation is as easy as:
 
-<code>
-    sudo apt-get install python-pip
-    sudo pip install apache-libcloud
-</code>
+{% highlight bash %}
+sudo apt-get install python-pip
+sudo pip install apache-libcloud
+{% endhighlight %}
 
 
 ### Getting started
@@ -42,33 +42,36 @@ The library is designed to provide a common interface to the different cloud pro
 As an example, if I wanted to see the EC2 instance sizes that were available in Sydney I could do the following.
 
 Include the required libraries:
-<code>
-    from libcloud.compute.types import Provider
-    from libcloud.compute.providers import get_driver
-</code>
+
+{% highlight python %}
+from libcloud.compute.types import Provider
+from libcloud.compute.providers import get_driver
+{% endhighlight %}
 
 Request the AWS EC2 Sydney provider: (remember full list [here](https://ci.apache.org/projects/libcloud/docs/supported_providers.html#compute))
-<code>
-    cls = get_driver(Provider.EC2_AP_SOUTHEAST2)
-</code>
+
+{% highlight python %}
+cls = get_driver(Provider.EC2_AP_SOUTHEAST2)
+{% endhighlight %}
 
 Set my credentials
-<code>
-    driver = cls(AWS_EC2_ACCESS_ID, AWS_EC2_SECRET_KEY)
-</code>
+{% highlight python %}
+driver = cls(AWS_EC2_ACCESS_ID, AWS_EC2_SECRET_KEY)
+{% endhighlight %}
 
 Now I can request a list of node sizes
-<code>
-    sizes = driver.list_sizes()
-    for size in sizes:
-    print size
-</code>
+
+{% highlight python %}
+sizes = driver.list_sizes()
+for size in sizes:
+print size
+{% endhighlight %}
 
 **NOTE:** Remember to set the variables **AWS_EC2_ACCESS_ID** and **AWS_EC2_SECRET_KEY** to your API credentials.
 
 The variable **sizes** now contains a list of all the available instance sizes in Sydney. Running that script would output something like so:
 
-<code>
+{% highlight xml %}
     <NodeSize: id=t1.micro, name=Micro Instance, ram=613 disk=15 bandwidth=None price=0.02 driver=Amazon EC2 (ap-southeast-2) ...>
         <NodeSize: id=m1.small, name=Small Instance, ram=1740 disk=160 bandwidth=None price=0.085 driver=Amazon EC2 (ap-southeast-2) ...>
             <NodeSize: id=m1.medium, name=Medium Instance, ram=3700 disk=410 bandwidth=None price=0.17 driver=Amazon EC2 (ap-southeast-2) ...>
@@ -81,19 +84,19 @@ The variable **sizes** now contains a list of all the available instance sizes i
                                         <NodeSize: id=m3.2xlarge, name=Double Extra Large Instance, ram=30720 disk=None bandwidth=None price=1.4 driver=Amazon EC2 (ap-southeast-2) ...>
                                             <NodeSize: id=c1.medium, name=High-CPU Medium Instance, ram=1740 disk=350 bandwidth=None price=0.186 driver=Amazon EC2 (ap-southeast-2) ...>
                                                 <NodeSize: id=c1.xlarge, name=High-CPU Extra Large Instance, ram=7680 disk=1690 bandwidth=None price=0.744 driver=Amazon EC2 (ap-southeast-2) ...>
-</code>
+{% endhighlight %}
 
 Another helpful method is **list_images()** which returns a list of all the OS images that are available for our current driver (in this case just EC2 AMI's in Sydney). Simply adding the following to the bottom of our script and running it again
 
-<code>
-    images = driver.list_images()
-    for image in images:
-    print image
-</code>
+{% highlight python %}
+images = driver.list_images()
+for image in images:
+print image
+{% endhighlight %}
 
 Will output a the size list then a big list of the available node images like following (trimmed)
 
-<code>
+{% highlight xml %}
     [...]
     <NodeImage: id=ami-ff69fec5, name=979382823631/bitnami-lappstack-5.4.10-0-linux-ubuntu-12.04.1-x86_64-ebs, driver=Amazon EC2 (ap-southeast-2)  ...>
         <NodeImage: id=ami-ff70e3c5, name=979382823631/bitnami-redmine-2.3.1-2-linux-ubuntu-12.04.2-x86_64-ebs, driver=Amazon EC2 (ap-southeast-2)  ...>
@@ -106,49 +109,49 @@ Will output a the size list then a big list of the available node images like fo
                                     <NodeImage: id=ami-ff9407c5, name=979382823631/bitnami-discourse-0.9.2.5-0-linux-ubuntu-12.04.2-i386-ebs, driver=Amazon EC2 (ap-southeast-2)  ...>
                                         <NodeImage: id=ami-ffa434c5, name=979382823631/bitnami-redmine-2.3.0-1-linux-ubuntu-12.04.2-x86_64-ebs, driver=Amazon EC2 (ap-southeast-2)  ...>
                                             [...]
-</code>
+{% endhighlight %}
 
 One thing to note, is that these images and sizes are objects we need to pass through to the create methods, so if you know the size of Node you want unfortunately to make the library portable you cant just parse in the ID, you still need to get the **NodeSize** object you are after from the list, for example if you knew you wanted to create a 'm1.small' instance you'd have to do something like this:
 
-<code>
-    MY_SIZE = 'm1.small'
-    sizes = driver.list_sizes()
-    size = [s for s in sizes if s.id == MY_SIZE][0]
-</code>
+{% highlight python %}
+MY_SIZE = 'm1.small'
+sizes = driver.list_sizes()
+size = [s for s in sizes if s.id == MY_SIZE][0]
+{% endhighlight %}
 
 Sets the **size** variable to
 
-<code>
+```
     <NodeSize: id=m1.small, name=Small Instance, ram=1740 disk=160 bandwidth=None price=0.085 driver=Amazon EC2 (ap-southeast-2) ...>
-</code>
+```
 
 The same is true for your host's **NodeImage** so lets update our script from before to specify a **NodeSize** and a **NodeImage**.
 
 For this example I am going to use an AMI for an official Ubuntu Instance image in Sydney. This is for m1.small instances and is available in the Sydney pool of AMI's. **ami-934ddea9**. You can see all the official Ubuntu ones [here](https://help.ubuntu.com/community/EC2StartersGuide#Official_Ubuntu_Cloud_Guest_Amazon_Machine_Images_.28AMIs.29).
 
-<code>
-    from libcloud.compute.types import Provider
-    from libcloud.compute.providers import get_driver
+{% highlight python %}
+from libcloud.compute.types import Provider
+from libcloud.compute.providers import get_driver
 
-    cls = get_driver(Provider.EC2_AP_SOUTHEAST2)
-    driver = cls(AWS_EC2_ACCESS_ID, AWS_EC2_SECRET_KEY)
+cls = get_driver(Provider.EC2_AP_SOUTHEAST2)
+driver = cls(AWS_EC2_ACCESS_ID, AWS_EC2_SECRET_KEY)
 
-    MY_SIZE = 'm1.small'
-    MY_IMAGE = 'ami-934ddea9'
+MY_SIZE = 'm1.small'
+MY_IMAGE = 'ami-934ddea9'
 
-    sizes = driver.list_sizes()
-    images = driver.list_images()
+sizes = driver.list_sizes()
+images = driver.list_images()
 
-    size = [s for s in sizes if s.id == MY_SIZE][0]
-    image = [i for i in images if i.id == MY_IMAGE][0]
+size = [s for s in sizes if s.id == MY_SIZE][0]
+image = [i for i in images if i.id == MY_IMAGE][0]
 
-    print size
-    print image
+print size
+print image
 
-    # Outputs
-    # <NodeSize: id=m1.small, name=Small Instance, ram=1740 disk=160 bandwidth=None price=0.085 driver=Amazon EC2 (ap-southeast-2) ...>
-    # <NodeImage: id=ami-934ddea9, name=ubuntu-ap-southeast-2/images/ubuntu-precise-12.04-amd64-server-20130624.manifest.xml, driver=Amazon EC2 (ap-southeast-2)  ...>
-</code>
+# Outputs
+# <NodeSize: id=m1.small, name=Small Instance, ram=1740 disk=160 bandwidth=None price=0.085 driver=Amazon EC2 (ap-southeast-2) ...>
+# <NodeImage: id=ami-934ddea9, name=ubuntu-ap-southeast-2/images/ubuntu-precise-12.04-amd64-server-20130624.manifest.xml, driver=Amazon EC2 (ap-southeast-2)  ...>
+{% endhighlight %}
 
 Perfect, let's continue.
 
@@ -156,9 +159,9 @@ Perfect, let's continue.
 
 The libcloud library provides a **create_node** method that allows us to provide, a name, NodeSize and NodeImage parameters to fully provision a node. A call to this method could look like so
 
-<code>
-    node = driver.create_node(name="My Instance", image=image, size=size)
-</code>
+{% highlight python %}
+node = driver.create_node(name="My Instance", image=image, size=size)
+{% endhighlight %}
 
 This will create an EC2 instance called **"My Instance"**
 
@@ -170,42 +173,42 @@ But that's not much help, we really want to be able to set up some access (Key P
 
 So in the AWS console set up a **Key Pair** and name it **'provision'** and then create a **Security group** called **'ssh_access'** and allow inbound SSH access. We can now update our script like so.
 
-<code>
-    from libcloud.compute.types import Provider
-    from libcloud.compute.providers import get_driver
+{% highlight python %}
+from libcloud.compute.types import Provider
+from libcloud.compute.providers import get_driver
 
-    cls = get_driver(Provider.EC2_AP_SOUTHEAST2)
-    driver = cls(AWS_EC2_ACCESS_ID, AWS_EC2_SECRET_KEY)
+cls = get_driver(Provider.EC2_AP_SOUTHEAST2)
+driver = cls(AWS_EC2_ACCESS_ID, AWS_EC2_SECRET_KEY)
 
-    ACCESS_KEY_NAME = 'provision'
+ACCESS_KEY_NAME = 'provision'
 
-    SECURITY_GROUP_NAMES = []
-    SECURITY_GROUP_NAMES.append('ssh_access')
+SECURITY_GROUP_NAMES = []
+SECURITY_GROUP_NAMES.append('ssh_access')
 
-    MY_SIZE = 'm1.small'
-    MY_IMAGE = 'ami-934ddea9'
+MY_SIZE = 'm1.small'
+MY_IMAGE = 'ami-934ddea9'
 
-    sizes = driver.list_sizes()
-    images = driver.list_images()
+sizes = driver.list_sizes()
+images = driver.list_images()
 
-    size = [s for s in sizes if s.id == MY_SIZE][0]
-    image = [i for i in images if i.id == MY_IMAGE][0]
+size = [s for s in sizes if s.id == MY_SIZE][0]
+image = [i for i in images if i.id == MY_IMAGE][0]
 
-    node = driver.create_node(name="My Instance", image=image, size=size,
-    ex_keyname=ACCESS_KEY_NAME, ex_securitygroup=SECURITY_GROUP_NAMES)
+node = driver.create_node(name="My Instance", image=image, size=size,
+ex_keyname=ACCESS_KEY_NAME, ex_securitygroup=SECURITY_GROUP_NAMES)
 
-    print node
-    # outputs
-    # <Node: uuid=a1acbb69c58dd3936fc34ca070d6d72c029e2354, name=My Instance, state=3, public_ips=[], provider=Amazon EC2 (ap-southeast-2) ...>
-</code>
+print node
+# outputs
+# <Node: uuid=a1acbb69c58dd3936fc34ca070d6d72c029e2354, name=My Instance, state=3, public_ips=[], provider=Amazon EC2 (ap-southeast-2) ...>
+{% endhighlight %}
 
 This script will create a EC2 small instance, in Sydney, add the Public key to the authorized_keys file for root, and make sure that port 22 is open for connection.
 
 You can now SSH into your server, check the AWS EC2 console for the publicly assigned DNS name to connect to.
 
-<code>
-    ssh -l root ec2-54-252-210-134.ap-southeast-2.compute.amazonaws.com
-</code>
+{% highlight bash %}
+ssh -l root ec2-54-252-210-134.ap-southeast-2.compute.amazonaws.com
+{% endhighlight %}
 
 **NOTE:** since we are running Ubuntu, you can't SSH into the new box as **root** you need to use the user account **ubuntu**. If you do login with **root** you will be instructed about this.
 

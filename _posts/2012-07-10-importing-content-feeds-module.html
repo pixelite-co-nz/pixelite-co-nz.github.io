@@ -1,0 +1,110 @@
+---
+layout: post
+title: "Importing content with the feeds module"
+header-img: ""
+permalink: /article/importing-content-feeds-module
+author: "Craig Pearson"
+categories:
+- tutorial
+tags:
+- feeds
+- drupalplanet
+- rss
+- atom
+- syndication
+- drupal
+---
+Submitted by thepearson on Sun, 10/07/2012 - 11:37
+
+<p>For the Pixelite website, I want to add a block that displays content from external sources with content that could
+    be related to the article the user is currently reading.</p><p>The first step in this process is to aggregate some
+    content from RSS or Atom feeds. To achieve this we'll use a contrib module called <a
+            href="http://drupal.org/project/feeds">feeds</a>.</p><p>&nbsp;</p><h3>Install Feeds</h3><p>Lets use <a
+        href="http://drupal.org/project/drush">Drush</a> to install the feeds module and turn it on.</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">thepearson@localhost:~/git/pixelite.co.nz$ drush dl feeds</pre>
+<p>and turn it on</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">thepearson@localhost:~/git/pixelite.co.nz$ drush en feeds feeds_ui feeds_import</pre>
+<p>This will also download, install and enable the&nbsp;<a href="http://drupal.org/project/job_scheduler">Job
+    Scheduler</a>&nbsp;module which, at the time of this article is required for feeds.</p><h3>&nbsp;</h3><h3>Install
+    Feeds image grabber</h3><p>Lets also install an add-on module for feeds. The <a
+        href="http://drupal.org/project/feeds_imagegrabber">feeds image grabber</a>&nbsp;(FIG) module will allow us to
+    pull in images from the RSS/Atom feed items, so we can have nicer looking feed nodes.</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">thepearson@localhost:~/git/pixelite.co.nz$ drush dl feeds_imagegrabber</pre>
+<p>and now enable the FIG module.</p>
+<pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">thepearson@localhost:~/git/pixelite.co.nz$ drush en feeds_imagegrabber</pre>
+<p>&nbsp;</p><h3>Content types</h3><p>I need to create a couple of content types. If you need a primer on creating
+    content types I suggest you take a look at the&nbsp;<a href="http://drupal.org/node/774728">Community Docs</a>.&nbsp;The
+    first content type we'll be creating is for defining the Atom/RSS feed sources. This will also allow us to specify
+    multiple feed sources. This content type has only a title and a Url.</p>
+<ul>
+    <li>Title</li>
+    <li>Url</li>
+</ul><p>As the feeds module will automatically add a&nbsp;<strong>Feeds&nbsp;</strong>field to the content type we can
+    get away with just creating a content type with a title field. Below is an image of the fields page after this
+    tutorial has been completed.</p><p>
+    <img src="/img/feeds/feeds_content-tye_feed.png"></p>
+<p>Next we will need to set up a <strong>feed item&nbsp;</strong>content type, this will be used as a the node type that
+    each feed item will be imported as. I figure for this post the content type will require the following:</p>
+<ul>
+    <li>Title</li>
+    <li>Description</li>
+    <li>URL</li>
+    <li>Image</li>
+</ul><p>
+    <img src="/img/feeds/feeds_content-type_0.png"></p>
+<p>&nbsp;</p><h3>Create a feed importer</h3><p>Next step. Create the feed importer. This will enable us to map feeds to
+    our content type and will also set up importing schedule. Navigate to&nbsp;<strong>Structure&nbsp;</strong>&gt; <b>Feeds
+        importers </b>and click on the&nbsp;<strong>Clone </strong>operation&nbsp;on the&nbsp;<strong>Node
+        import</strong> importer. Choose a new name and description. We should now be at the following screen.</p><p>
+    <img src="/img/feeds/feeds_feed-importer.png"></p>
+<p>First let's click on the <strong>Basic settings</strong> &gt;&nbsp;<strong>Settings&nbsp;</strong>link and configure
+    some of the more basic settings. You should be faced with the following screen.</p><p>
+    <img src="/img/feeds/feeds_feed-importer_settings_0.png"></p>
+<p>The name and description fields should be fairly&nbsp;self explanatory. The next field,&nbsp;<strong>Attach to
+    content type&nbsp;</strong>allows us to define the source for our feeds, this could either be a <strong>standalone
+    form </strong>or we can&nbsp;choose a source content type from the list of available content types for our site. We
+    are going to set this to our&nbsp;<strong>Feed </strong>content type. Set&nbsp;<strong>Periodic import</strong> to
+    <strong> Every 15 min</strong>. Check&nbsp;<strong>Import on submission&nbsp;</strong>and&nbsp;<strong>Process in
+        background</strong>. Save your basic settings and click on the <strong>Change&nbsp;</strong>link in
+    the&nbsp;<strong>Fetcher&nbsp;</strong>tab.</p><p>
+    <img src="/img/feeds/feeds_feed-importer_fetcher_0.png"></p>
+<p>In this tab we can define how we collect the data we are trying to import. Because we are going to be importing RSS
+    and Atom feeds we want to use the&nbsp;<strong>HTTP Fetcher.</strong>&nbsp;Select that option and click save.&nbsp;Now
+    the fetcher is set to&nbsp;<strong>HTTP</strong>&nbsp;<strong>fetcher&nbsp;</strong>we will want to set up some
+    default settings.</p><p>
+    <img src="/img/feeds/feeds_feed-importer_fetcher-http.png"></p>
+<p>Choosing&nbsp;<strong>Auto detect feeds</strong>&nbsp;will enable some tolerance when feeds are added that link to
+    HTML pages. The fetcher will attempt to find the feed within the document. Save that and move onto the&nbsp;<strong>Parser&nbsp;</strong>tab.
+</p><p>
+    <img src="/img/feeds/feeds_feed-importer_parser.png"></p>
+<p>Choose the&nbsp;<b>Common syndication parser,&nbsp;</b>click Save. There are currently no settings to alter for the
+    Common syndication parser so lets move on to the&nbsp;<strong>Processor</strong>&nbsp; tab and click&nbsp;<strong>Change.</strong>
+</p><p>
+    <img src="/img/feeds/feeds_feed-importer_processor.png"></p>
+<p>Ensure&nbsp;<strong>Node processor</strong> is selected, click&nbsp;<strong>Save</strong> and then click
+    on&nbsp;<strong>Node processor&nbsp;</strong>&gt;&nbsp;<strong>Settings.</strong></p><p>
+    <img src="/img/feeds/feeds_feed-importer_node_processor.png"></p>
+<p>Check <strong>Replace existing nodes</strong> to replace duplicate content, Text format&nbsp;<strong>Plain
+    text </strong>or&nbsp;<strong>Filtered HTML</strong><strong>. </strong>Select the content type you created earlier
+    in the&nbsp;<strong>Content type</strong> field. In this instance I have set the&nbsp;<strong>Expire
+        nodes&nbsp;</strong>to&nbsp;<strong>after 1 month.</strong> This will remove old content after a month. Since
+    it's only news items we''ll be aggregating we don't really need them hanging around for longer than a month. Click
+    on the <strong>Mapping </strong>link.</p><p>
+    <img src="/img/feeds/feeds_feed-importer_mapper_1.png"></p>
+<p>On this page we can map fields from our soure (RSS or Atom feed) to fields in our Node. Notice, we've
+    mapped&nbsp;<strong>Item URL (link)&nbsp;</strong>twice. Once to the Url field of our content type and once to&nbsp;<strong>Image
+        (FIG)</strong> the FIG link should enable us to grab images from the feed. For now our configuration is
+    complete. Click&nbsp;<strong>Save.</strong></p><p>&nbsp;</p><h3>Testing it out</h3><p>Go to&nbsp;<strong>Content&nbsp;</strong>&gt;&nbsp;<strong>Add
+    content&nbsp;</strong>&gt;&nbsp;<strong>Your source feed type&nbsp;</strong>Fill in a title, and add the feed url.
+    Open up the&nbsp;<strong>Feeds image grabber&nbsp;</strong>fieldset.</p><p>
+    <img src="/img/feeds/create-content_feed.png"></p>
+<p>Select&nbsp;<strong>Enable Feeds Image Grabber.&nbsp;</strong>I always find it usefull to help the parser find the
+    image I am after by specifying a class or id tags to look within. If you have any issues with grabbing images adjust
+    the <strong>Execution time[%]. </strong>Save this content node an you should see a success message with a number of
+    nodes imported messages. Let's validate that by going to <strong>Content </strong>and seeing what content nodes have
+    been imported.</p><p>
+    <img src="/img/feeds/content.png"></p>
+<p>Nice, so we've got a whole bunch of imported nodes. Here is one.</p><p>
+    <img src="/img/feeds/feed-item.png"></p>
+<p>So now we have all this content being imported as nodes&nbsp;from other sources. In the next post, we'll do something
+    with this content. Feel free to comment, or ask any questions.</p>

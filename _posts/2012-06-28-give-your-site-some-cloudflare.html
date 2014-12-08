@@ -1,0 +1,58 @@
+---
+layout: post
+title: "Give your site some CloudFlare"
+header-img: "img/cloud-flare/cloudflare-logo_1.png"
+permalink: /article/give-your-site-some-cloudflare
+author: "Craig Pearson"
+categories:
+- tutorial
+tags:
+- cdn
+- hosting
+- security
+- web
+---
+
+<h3>Intro</h3><p>A few weeks ago I was reading an online forum, about some of the better CDN providers out there and a
+    user mentioned CloudFlare. Not having heard of CloudFlare before I thought I'd investigate further.</p><p>A few
+    seconds later I find myself on the company website presented with this video.</p><p>
+    <object width="480" height="360">
+        <param name="movie" value="http://www.youtube.com/v/0XZOecsbnKo?version=3">
+        <param name="allowFullScreen" value="true">
+        <param name="wmode" value="transparent">
+        <embed src="http://www.youtube.com/v/0XZOecsbnKo?version=3" type="application/x-shockwave-flash" width="480" height="360" allowfullscreen="true" wmode="transparent">
+    </object></p>
+<p>Hmmm, it all seems too simple.</p><p>&nbsp;</p><h3>What's it all about?</h3><p>Essentially, CloudFlare is a dynamic
+    CDN that works by taking over the DNS of your domain name. CloudFlare will direct traffic to your site via the most
+    efficient route, cache and serve static content like images, js and css from their global CDN (not page markup
+    unless you tell it to) and also protect your site from known spammers, hackers and web baddies.</p><p>CloudFlare
+    also has a host of other features like, web optimisation tools to make your site run even faster. Web analytics,
+    Threat dashboard and a reasonably large application repository where you can choose from a range of third party apps
+    to help enhance your site. Like adding Google Analytics, site pop-up notifications and friendly reminders to those
+    on the web still running old browsers that they need to upgrade. I am (still) looking at you IE. The crazy thing is
+    they provide all this for free.</p><p>There are paid accounts too that start at $20USD per month but most of the
+    features you need as a small site owner you can easily get away with the free account.</p><p>I did a bit of web
+    snoopery and read a few articles and reviews and all seem positive. So I decided to give it a try.</p><p>&nbsp;</p>
+<h3>Getting setup</h3><p>CloudFlare claim that you can be up and running in 5 minutes. They aren't lying. In fact I
+    found it to be so painless, quick and easy I wasn't entirely sure I had done it right.</p><p>
+    <img alt="" src="/img/cloud-flare/Scanning.png">
+<p>First up you put in your domain name and CloudFlare's servers proceed to scan your DNS records so that they can
+    migrate over your DNS setup. This process took around 60 seconds and they then present you a list of your current
+    DNS profile. They add a few extra helpful aliases as well.</p><p>At this point you can add other DNS records or even
+    upload a zone dump for easy migration of large zones.&nbsp;</p><p>There is a cloud toggle button on the right that
+    enables you to easily specify whether or not you want that particular record to bypasss the CloudFlare servers and
+    go direct.</p><p>
+    <img alt="" src="/img/cloud-flare/dns.png"></p><p>After reviewing all the changes you are asked
+    to set up your plan performance and security settings. SSL is unavailable on the free plan, but $20 a month isn't a
+    wallet drain.</p><p>The performance and security settings give you some initial out of the box configurations, all
+    of which are pretty straight forward but all can be customised at a later date.&nbsp;</p><p>
+    <img alt="" src="/img/cloud-flare/profilegit.png"></p>
+<p>In the last step CloudFlare assign you some name servers to update your domain with which has to be done via your
+    registrar. Once that is done you are ready to go. Aside from the time delay it takes for the DNS to propegate across
+    the globe that's the end of the set up.</p><p>&nbsp;</p><h3>Thoughts so far</h3><p>I have now had a couple of sites
+    running on the system for a week or so and so far so good. Speed wise it seems comparable to before, though my sites
+    were optimised pretty well prior. I have already had some benefit from CloudFlares threat protection that has
+    blocked quite a number of malicious users from accessing my site. Also CloudFlare's always available feature has
+    kept my site online when my web server went down a few days ago. Nice.</p><p>Even if you don't have any scalability
+    requirements or current performance constraints, I'd suggest giving CloudFlare a go, for a month or two at least.
+    See what you think. It's free. Feel free to leave a comment and let me know how your experiences have been.</p>

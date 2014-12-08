@@ -13,8 +13,6 @@ tags:
 - curl
 ---
 
-Submitted by acbramley on Tue, 08/06/2013 - 12:12
-
 I've been helping out a co-worker with a small PHP library he's working on which will eventually automate Drupal Security Advisory emails through to a central drupal "management" site, which knows about all sites that we work on, and automatically create "work requests" and allocate them to people so that we can easily track security vulnerabilities that need fixing! The work request API was missing a vital component - creating a new work request. So that was my job.
 
 ## Curl is awesome(ly verbose), but Guzzle is awesomer

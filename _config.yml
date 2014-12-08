@@ -1,12 +1,12 @@
 # Site settings
 title: Pixelite
-email: email@pixelite.co.nz
-description: "Write your site description here. It will be used as your sites meta description as well!"
+email: admin@pixelite.co.nz
+description: "A technology blog or rant area depending on the topic"
 baseurl: ""
 url: "http://www.pixelite.co.nz"
 twitter_username: pixelite_
 github_username:  pixelite-co-nz
-facebook_username:  sean.hamlin
+facebook_username:
 
 # Build settings
 markdown: kramdown

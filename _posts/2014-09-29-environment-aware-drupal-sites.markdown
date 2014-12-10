@@ -206,13 +206,13 @@ The new 7.x-2.x branch of environment indicator contains a lot of improvements o
 
 To illustrate this, here is a screenshot of our toolbar in development (some links were stripped)
 
-<a href="/img/toolbar.png" >
-<img src="/img/toolbar.png" alt="Environment indicator and the toolbar module working together" class="img-responsive" />
+<a href="{{ site.url }}/img/toolbar.png" >
+<img src="{{ site.url }}/img/toolbar.png" alt="Environment indicator and the toolbar module working together" class="img-responsive" />
 </a>
 
 The module also alters the favicon to include a tiny letter and coloured background to match the colour you chose
 
-<img src="/img/toolbar-icon.png" width="181" height="38" alt="Environment indicator and the favicon working together"  />
+<img src="{{ site.url }}/img/toolbar-icon.png" width="181" height="38" alt="Environment indicator and the favicon working together"  />
 
 This way you will never again forget which environment you are using, as the colours will be right there at the top of every page.
 

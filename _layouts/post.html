@@ -15,16 +15,16 @@ layout: default
                     <span class="meta">Posted by {{ page.author }} on {{ page.date | date: "%B %-d, %Y" }}</span>
                     <ul class="social-buttons cf">
                         <li>
-                            <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Socialite.js" data-url="{{ site.url }}{{ page.permalink }}" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                            <a href="http://twitter.com/share" class="socialite twitter-share" data-text="{{ page.title }}" data-url="{{ site.url }}{{ page.permalink }}" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
                         </li>
                         <li>
-                            <a href="https://plus.google.com/share?url=http://socialitejs.com" class="socialite googleplus-one" data-size="tall" data-href="{{ site.url }}{{ page.permalink }}" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                            <a href="https://plus.google.com/share?url={{ site.url }}{{ page.permalink }} class="socialite googleplus-one" data-size="tall" data-href="{{ site.url }}{{ page.permalink }}" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
                         </li>
                         <li>
-                            <a href="http://www.facebook.com/sharer.php?u=http://www.socialitejs.com&amp;t=Socialite.js" class="socialite facebook-like" data-href="{{ site.url }}{{ page.permalink }}" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                            <a href="http://www.facebook.com/sharer.php?u={{ site.url }}{{ page.permalink }}&amp;t={{ page.title }}" class="socialite facebook-like" data-href="{{ site.url }}{{ page.permalink }}" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
                         </li>
                         <li>
-                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://socialitejs.com&amp;title=Socialite.js" class="socialite linkedin-share" data-url="{{ site.url }}{{ page.permalink }}" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ site.url }}{{ page.permalink }}&amp;title={{ page.title }}" class="socialite linkedin-share" data-url="{{ site.url }}{{ page.permalink }}" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
                         </li>
                     </ul>
                 </div>

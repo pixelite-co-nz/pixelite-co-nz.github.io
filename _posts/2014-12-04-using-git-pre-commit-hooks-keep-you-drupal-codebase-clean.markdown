@@ -39,13 +39,14 @@ Here is a link to the github repository with the pre-commit hook:
 
 ## Installation ##
 
-    cd /tmp
-    git clone https://github.com/wiifm69/drupal-pre-commit.git
-    cd drupal-pre-commit
-    cp scripts/pre-commit.sh [PATH_TO_YOUR_DRUPAL_PROJECT]/scripts
-    cd [PATH_TO_YOUR_DRUPAL_PROJECT]
-    ln -s ../../scripts/pre-commit.sh .git/hooks/pre-commit
-
+{% highlight bash %}
+cd /tmp
+git clone https://github.com/wiifm69/drupal-pre-commit.git
+cd drupal-pre-commit
+cp scripts/pre-commit.sh [PATH_TO_YOUR_DRUPAL_PROJECT]/scripts
+cd [PATH_TO_YOUR_DRUPAL_PROJECT]
+ln -s ../../scripts/pre-commit.sh .git/hooks/pre-commit
+{% endhighlight %}
 
 ## Feedback ##
 

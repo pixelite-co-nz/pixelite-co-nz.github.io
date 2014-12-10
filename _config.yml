@@ -13,3 +13,4 @@ markdown: kramdown
 permalink: /article/:title
 paginate: 10
 exclude: ["node_modules"]
+highlighter: pygments

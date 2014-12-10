@@ -1,0 +1,22 @@
+---
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xml:base="{{ site.url }}" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>{{ site.title | xml_escape }} - drupalplanet</title>
+    <link>{{ site.url }}</link>
+    <description>Posts categorized as 'DrupalPlanet'</description>
+    <language>en</language>
+    {% for post in site.tags.drupalplanet limit:10 %}
+      <item>
+        <title>{{ post.title | xml_escape }}</title>
+        <link>{{ site.url }}{{ post.url }}</link>
+        <description>{{ post.content | xml_escape }}</description>
+        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
+        <dc:creator>{{ post.author | xml_escape }}</dc:creator>
+        <guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
+        <comments>{{ site.url }}{{ post.url }}#disqus_thread</comments>
+      </item>
+    {% endfor %}
+  </channel>
+</rss>

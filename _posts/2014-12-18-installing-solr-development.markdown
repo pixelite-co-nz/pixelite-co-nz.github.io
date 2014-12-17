@@ -10,6 +10,7 @@ categories:
 tags:
 - solr
 - search
+- drupalplanet
 - drupal
 ---
 

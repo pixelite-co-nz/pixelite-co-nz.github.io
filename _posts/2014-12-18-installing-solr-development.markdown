@@ -140,6 +140,7 @@ I wouldn't recommend using this setup in production. However, for developing on 
 In the next article, I'll talk about how to configure the [search_api] and [search_api_solr] to use Solr as a search engine for your Drupal site.
 
 [there]: https://www.google.co.nz/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#safe=off&q=installing%20solr%20on%20windows
+[apachesolr]: http://drupal.org/project/apachesolr
 [search_api]: http://drupal.org/project/search_api
 [search_api_solr]: http://drupal.org/project/search_api_solr
 [http://0.0.0.0:8983/solr/]: http://0.0.0.0:8983/solr/

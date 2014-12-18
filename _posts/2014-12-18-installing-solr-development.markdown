@@ -149,4 +149,4 @@ In the next article, I'll talk about how to configure the [search_api] and [sear
 [ubuntu]: http://www.ubuntu.com/
 [java]: https://www.oracle.com/java/index.html
 [features]: http://lucene.apache.org/solr/features.html
-[dashboard]: /img/solr/dashboard.png
+[dashboard]: {{ site.url }}/img/solr/dashboard.png

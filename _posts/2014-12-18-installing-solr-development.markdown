@@ -18,7 +18,7 @@ tags:
 
 [Solr] is an open source search engine with many powerful [features].
 
-I encounter a lot of experienced developers that either don't know how to use it or avoid it as it's in the **to hard/scary** basket.
+I encounter a lot of experienced developers that either don't know how to use it or avoid it as it's in the **too hard/scary** basket.
 In this introductory article we'll talk briefly about how to install Solr in order to use it for development.
 
 There are many ways to install and configure Solr but in this article I'll show you how to set it up quickly so you can get started developing with it. While the installation and setup will be generic to any framework you want to develop with, I'll also, show you a couple of extra steps if you're using Drupal.
@@ -28,7 +28,7 @@ There are many ways to install and configure Solr but in this article I'll show 
 
 The only real hard requirement/prerequisite for running Solr is Java. Version 1.6 is recommended for Solr version 4 and upward. [Ubuntu] and Mac should come with Java pre-installed.
 
-I'm not a windows guy so sorry you guys are on your own There's pleant of resources out [there].
+I'm not a windows guy so sorry you guys are on your own There's plenty of resources out [there].
 
 You can find out the version of Java you are running with the following command.
 

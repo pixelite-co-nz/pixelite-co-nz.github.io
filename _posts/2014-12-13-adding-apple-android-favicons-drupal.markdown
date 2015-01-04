@@ -87,6 +87,10 @@ function YOURTHEME_html_head_alter(&$head_elements) {
 
 There you have it all done.
 
+## Update 5 January ##
+
+[We have created a simple module "Responsive Favicons"](https://www.drupal.org/project/responsive_favicons) to help people new to Drupal get those metatags in the head section of the HTML, you can also upload the zip file and it will upload and extract them for you as well.
+
 ## Extra for experts - Google's theme-color meta tag ##
 
 [Google recently announced](http://updates.html5rocks.com/2014/11/Support-for-theme-color-in-Chrome-39-for-Android) that from Chrome 39 onwards on Android Lollipop (5.0+), a new meta tag will be supported

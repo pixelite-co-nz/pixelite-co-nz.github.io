@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Using git pre-commit hooks to keep you Drupal codebase clean"
+title: "Using git pre-commit hooks to keep your Drupal codebase clean"
 header-img: "img/pre-commit.png"
 permalink: /article/using-git-pre-commit-hooks-keep-you-drupal-codebase-clean
 author: "Sean Hamlin"

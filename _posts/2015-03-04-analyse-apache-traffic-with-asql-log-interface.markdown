@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Analyse Apache traffic with asql log interface
-subtitle: "Simple Solr server setup for use while developing"
+subtitle: "Get meaningful stats/data from your apache log files easily"
 header-img: "img/analyse-apache-traffic/traffic.jpeg"
 permalink: /article/analyse-apache-traffic-with-asql-log-interface
 author: "Craig Pearson (@thepearson)"

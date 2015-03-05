@@ -4,8 +4,6 @@ import yaml
 from os import listdir
 from os.path import isfile, join
 
-pp = pprint.PrettyPrinter(indent=4)
-
 path = '_posts/'
 
 metadata = {}
@@ -34,6 +32,7 @@ for file in files:
   metadata[yaml_data['permalink']] = yaml_data
 
 # metadata contains all post metadata keyed by permalink
+print "Building base metadata"
 f = open('_site/metadata.json', 'w')
 f.write(json.dumps(metadata))
 f.close()
@@ -47,6 +46,7 @@ for link, data in metadata.iteritems():
     tags[tag].append(metadata[link])
 
 # tags contains all tags and post metadata
+print "Building tag metadata"
 f = open('_site/tags.json', 'w')
 f.write(json.dumps(tags))
 f.close()
@@ -60,6 +60,7 @@ for link, data in metadata.iteritems():
     categories[category].append(metadata[link])
 
 # categories contains posts by category
+print "Building category metadata"
 f = open('_site/categories.json', 'w')
 f.write(json.dumps(categories))
 f.close()
@@ -72,6 +73,7 @@ for link, data in metadata.iteritems():
   users[data['author']].append(metadata[link])
 
 # users is post by users
+print "Building user metadata"
 f = open('_site/users.json', 'w')
 f.write(json.dumps(users))
 f.close()

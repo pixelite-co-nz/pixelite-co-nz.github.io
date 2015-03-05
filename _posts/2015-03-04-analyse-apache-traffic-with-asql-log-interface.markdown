@@ -4,7 +4,8 @@ title: Analyse Apache traffic with asql log interface
 subtitle: "Get meaningful stats/data from your apache log files easily"
 header-img: "img/analyse-apache-traffic/traffic.jpeg"
 permalink: /article/analyse-apache-traffic-with-asql-log-interface
-author: "Craig Pearson (@thepearson)"
+author: "Craig Pearson"
+twitter: "@thepearson"
 categories:
 - tutorial
 tags:

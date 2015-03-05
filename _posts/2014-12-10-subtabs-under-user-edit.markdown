@@ -4,7 +4,8 @@ title: "How to add subtabs under the User Edit tab in Drupal"
 excerpt: "To get your tabs to appear on the user edit page use hook_user_categories() and hook_menu_alter()"
 header-img: "img/post-bg-tabs-under-tabs.png"
 permalink: /article/subtabs-under-user-edit
-author: "Gold (@unifex)"
+author: "Gold"
+twitter: "@unifex"
 categories:
 - tutorial
 tags:

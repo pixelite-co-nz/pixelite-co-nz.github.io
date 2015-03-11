@@ -11,6 +11,14 @@ facebook_username:
 # Build settings
 markdown: kramdown
 permalink: /article/:title
-paginate: 10
+paginate: 21
 exclude: ["node_modules"]
 highlighter: pygments
+
+
+# Image settings
+mini_magick:
+    thumbnail:
+        source: "img"
+        destination: "img/thumbnail"
+        resize: "640x480"

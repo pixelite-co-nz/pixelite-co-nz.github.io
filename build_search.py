@@ -4,6 +4,8 @@ import yaml
 from os import listdir
 from os.path import isfile, join
 
+pp = pprint.PrettyPrinter(indent=2)
+
 path = '_posts/'
 
 metadata = {}

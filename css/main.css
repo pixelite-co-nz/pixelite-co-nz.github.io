@@ -7,3 +7,103 @@
 .social-buttons .googleplus-one { width: 50px; height: 65px; background-position: -75px 0; }
 .social-buttons .facebook-like { width: 50px; height: 65px; background-position: -145px 0; }
 .social-buttons .linkedin-share { width: 60px; height: 65px; background-position: -215px 0; }
+
+/*!
+ * Start Bootstrap - Small Business HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+    font-family: 'Roboto', sans-serif;
+}
+
+.navbar-fixed-top .nav {
+    padding: 15px 0;
+}
+
+footer {
+    padding: 30px 0;
+}
+
+@media(min-width:768px) {
+    body {
+        padding-top: 100px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+    }
+
+    .navbar-fixed-top .navbar-brand {
+        padding: 15px 0;
+    }
+}
+
+.post-preview {
+     margin-bottom:35px;
+ }
+
+.post-preview .inner {
+    min-height:250px;
+    background-color: rgb(225, 225, 225);
+    background-size: cover;
+    background-position: center;
+}
+
+.post-preview .top {
+    min-height:180px;
+}
+
+.post-preview .tags {
+    min-height: 30px;
+}
+
+.post-preview .tags {
+    padding-right: 5px;
+}
+
+.tags li {
+    padding-left: 1px;
+}
+
+.tags li a {
+    text-size: 0.8em;
+    border-radius: 3px;
+    padding:3px;
+    color: #fff;
+    background-color: dodgerblue;
+}
+
+.tags li a:hover {
+    color: #fff;
+    background-color: cornflowerblue;
+}
+
+.post-preview h2 a {
+    color:#fff;
+}
+.post-preview h2 a:hover {
+    color: #dddddd;
+    text-decoration: none;
+}
+.post-preview h2 {
+    text-shadow: 1px 1px 2px #000;
+    margin: 10px;
+}
+
+.post-preview .post-subtitle {
+    color:#fff;
+    text-shadow: 1px 1px 2px #000;
+    margin: 15px 10px 0;
+}
+
+.post-preview .bottom {
+    margin:0;
+    padding-top:10px;
+    min-height:40px;
+    border-top: 1px solid #bcbcbc;
+    background-color:rgba(204, 204, 204, 0.9);
+}
+
+.search .search-row {
+    padding: 0 15px;
+    margin: 0 0 35px;
+}

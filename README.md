@@ -12,9 +12,9 @@ This enables jekyll to create thumbnails of images.
 
 Checkout the branch
 
-`git clone git@github.com:scoz/jekyll-minimagick.git`
-`cd jekyll-minimagick`
-`git checkout -b test origin/fancy`
+    git clone git@github.com:scoz/jekyll-minimagick.git
+    cd jekyll-minimagick
+    git checkout -b test origin/fancy
 
 then install with either:
 
@@ -22,7 +22,7 @@ then install with either:
 
 or
 
-`gem build jekyll-minimagick.gemspec`
-`sudo gem install jekyll-minimagick-0.0.2.gem --no-ri --no-rdoc`
+    gem build jekyll-minimagick.gemspec
+    sudo gem install jekyll-minimagick-0.0.2.gem --no-ri --no-rdoc
 
 This was initially based on [Start Bootstrap - Clean Blog](https://github.com/IronSummitMedia/startbootstrap-clean-blog) and powers [pixelite.co.nz](http://www.pixelite.co.nz/).

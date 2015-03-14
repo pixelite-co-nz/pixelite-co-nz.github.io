@@ -39,7 +39,7 @@ When you complete the process, you will be able to download a zip file containin
 
 You now will need to edit your `html.tpl.php` inside your theme, and add the code that the generator provides. The code should resemble something like this:
 
-{% highlight html linenos %}
+{% highlight html %}
 <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
 <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
@@ -66,7 +66,7 @@ You will notice though that Drupal likes to place it's default favicon into the 
 
 The following code below can be inserted into your `template.php` file for your theme to remove the default favicon from Drupal:
 
-{% highlight php linenos %}
+{% highlight php %}
 <?php
 /**
  * Remove the unneeded favicon from the head section.

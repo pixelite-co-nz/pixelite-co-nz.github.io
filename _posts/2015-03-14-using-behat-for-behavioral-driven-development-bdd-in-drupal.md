@@ -107,7 +107,7 @@ There is an issue open at the moment that aims to get Drupal 8 core tested with 
 
 ## Resources
 
-There is a lot of information out in the Drupal community around Behat
+There is a lot of information out in the Drupal community around Behat that I would encourage you to read and watch:
 
 * Konstantin (from Inviqa) at [DrupalCon Amsterdam 2014](https://amsterdam2014.drupal.org/session/doing-behaviour-driven-development-behat)
 * Drupal.org did a Drupal 6 to Drupal 7 upgrade, and for that they invested a lot of time into creating a [full test suite (called doobie)](https://www.drupal.org/project/doobie), and now the test suite is used to help spot regressions in the site

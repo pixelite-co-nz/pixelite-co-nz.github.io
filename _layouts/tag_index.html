@@ -1,10 +1,22 @@
 ---
 layout: default
+description: Posts tagged with "{{ page.tag }}"
 ---
+<!-- Page Header -->
+<header class="intro-header" style="background-image: url('{{ site.baseurl }}/img/post-bg-boat.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>Posts tagged with "{{ page.tag }}"</h1>
+                    <hr class="small">
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
 <div class="container">
-    <h2 class="post_title">Posts tagged with "{{ page.tag }}"</h2>
-
     <div class="row posts">
         {% for post in site.posts %}
         {% for tag in post.tags %}
@@ -17,7 +29,7 @@ layout: default
                             <a href="{{ post.permalink }}">{{ post.title }}</a>
                         </h2>
                         {% if post.subtitle %}
-                        <p class="post-subtitle">{{ post.subtitle }}</p>
+                            <p class="post-subtitle">{{ post.subtitle }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -25,9 +37,9 @@ layout: default
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
                         <ul class="list-inline">
                             {% for tag in post.tags %}
-                            {% if tag != 'drupalplanet' %}
-                            <li><a href="/tag/{{ tag }}">{{ tag }}</a></li>
-                            {% endif %}
+                                {% if tag != 'drupalplanet' %}
+                                    <li><a href="/tag/{{ tag }}">{{ tag }}</a></li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </div>
@@ -35,10 +47,12 @@ layout: default
                 <div class="row bottom">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">by {{ post.author }}
                         {% if post.twitter %}
-                        <a href="http://www.twitter.com/{{ post.twitter }}" class="post-twitter"><img src="/img/twitter.png" alt="{{ post.author }} Twitter account"></a>
+                            <a href="http://www.twitter.com/{{ post.twitter }}" class="post-twitter"><img src="/img/twitter.png" alt="{{ post.author }} Twitter account"></a>
                         {% endif %}
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">{{ post.date | date: "%B %-d, %Y" }}</div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                        <time datetime="{{ post.date | date: "%Y-%m-%dT%H:%M:00" }}">{{ post.date | date: "%B %-d, %Y" }}</time>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,3 +62,5 @@ layout: default
         {% endfor %}
     </div> <!-- /.row -->
 </div>
+
+<hr>

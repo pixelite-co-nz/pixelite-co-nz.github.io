@@ -1,4 +1,5 @@
-_site
+# Ignore
+_site/**/*
 .DS_Store
 .jekyll
 .bundle
@@ -7,6 +8,11 @@ Gemfile
 Gemfile.lock
 node_modules
 package.json
-
 .idea
 *~
+
+# Allow
+!_site/categories.json
+!_site/metadata.json
+!_site/tags.json
+!_site/users.json

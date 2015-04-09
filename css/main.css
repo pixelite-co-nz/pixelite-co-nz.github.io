@@ -29,27 +29,41 @@ footer {
 
 @media(min-width:768px) {
     body {
-        padding-top: 100px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+        padding-top: 81px;  /*Required padding for .navbar-fixed-top. Change if height of navigation changes.*/
     }
 
     .navbar-fixed-top .navbar-brand {
         padding: 15px 0;
     }
 }
+@media (max-width: 767px) {
+    body {
+        padding-top: 50px;  /*Required padding for .navbar-fixed-top. Change if height of navigation changes.*/
+    }
+
+    .navbar-fixed-top .navbar-brand {
+        padding: 5px;
+    }
+
+    .navbar-fixed-top .navbar-brand img {
+        height: 100%;
+    }
+}
 
 .post-preview {
-     margin-bottom:35px;
+     margin-bottom: 35px;
  }
 
 .post-preview .inner {
-    min-height:250px;
+    min-height: 290px;
     background-color: rgb(225, 225, 225);
     background-size: cover;
     background-position: center;
+    position: relative;
 }
 
 .post-preview .top {
-    min-height:180px;
+    min-height: 180px;
 }
 
 .post-preview .tags {
@@ -65,9 +79,9 @@ footer {
 }
 
 .tags li a {
-    text-size: 0.8em;
+    font-size: 0.8em;
     border-radius: 3px;
-    padding:3px;
+    padding: 3px;
     color: #fff;
     background-color: dodgerblue;
 }
@@ -78,7 +92,7 @@ footer {
 }
 
 .post-preview h2 a {
-    color:#fff;
+    color: #fff;
 }
 .post-preview h2 a:hover {
     color: #dddddd;
@@ -90,17 +104,22 @@ footer {
 }
 
 .post-preview .post-subtitle {
-    color:#fff;
+    color: #fff;
     text-shadow: 1px 1px 2px #000;
     margin: 15px 10px 0;
 }
 
 .post-preview .bottom {
-    margin:0;
-    padding-top:10px;
-    min-height:40px;
+    margin: 0;
+    padding-top: 10px;
+    min-height: 40px;
     border-top: 1px solid #bcbcbc;
-    background-color:rgba(204, 204, 204, 0.9);
+    background-color: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 0.8em;
 }
 
 .search .search-row {

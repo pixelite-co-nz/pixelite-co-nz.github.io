@@ -15,7 +15,6 @@ paginate: 21
 exclude: ["node_modules"]
 highlighter: pygments
 
-
 # Image settings
 mini_magick:
     thumbnail:

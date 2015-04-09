@@ -1,7 +1,7 @@
 ---
 layout: page
 description: "A technology blog or rant area depending on the topic"
-header-img: "img/home-bg.jpg"
+header-img: "img/post-bg-boat.jpg"
 ---
 <div class="container">
 
@@ -34,11 +34,13 @@ header-img: "img/home-bg.jpg"
                 </div>
                 <div class="row bottom">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">by {{ post.author }}
-                    {% if post.twitter %}
-                        <a href="http://www.twitter.com/{{ post.twitter }}" class="post-twitter"><img src="/img/twitter.png" alt="{{ post.author }} Twitter account"></a>
-                    {% endif %}
+                        {% if post.twitter %}
+                            <a href="http://www.twitter.com/{{ post.twitter }}" class="post-twitter"><img src="/img/twitter.png" alt="{{ post.author }} Twitter account"></a>
+                        {% endif %}
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">{{ post.date | date: "%B %-d, %Y" }}</div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                        <time datetime="{{ post.date | date: "%Y-%m-%dT%H:%M:00" }}">{{ post.date | date: "%B %-d, %Y" }}</time>
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,6 +49,7 @@ header-img: "img/home-bg.jpg"
     </div> <!-- /.row -->
 </div>
 
+<hr>
 
 <!-- Pager -->
 {% if paginator.total_pages > 1 %}

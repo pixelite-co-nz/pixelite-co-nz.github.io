@@ -36,7 +36,7 @@ Within the ```$row``` object the taxonomy has been added with its vid as the roo
 </figure>
 
 Once it was realised that the vid was from the destination vocabulary things got easier.  This is how the code looked in the end for me;
-```php
+{% highlight php %}
   public function prepare($node, $row) {
     // The node's terms are in an array under their destination vocab ID and
     // this is different from environment to environment. However, we've only
@@ -61,7 +61,7 @@ Once it was realised that the vid was from the destination vocabulary things got
       }
     }
   }
-```
+{% endhighlight %}
 
 ### Caveats
 This worked for me because I only had **one** taxonomy field to worry about. The moment you get more than one you will want to revisit the assignment of $new_tid to the appropriate field. This shouldn't be a problem to hand code and if you have migrated the vocabularies too you may be able to use the migrate_map table to make something more dynamic.

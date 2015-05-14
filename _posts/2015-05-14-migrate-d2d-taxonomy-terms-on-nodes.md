@@ -37,6 +37,7 @@ Within the ```$row``` object the taxonomy has been added with its vid as the roo
 
 Once it was realised that the vid was from the destination vocabulary things got easier.  This is how the code looked in the end for me;
 {% highlight php %}
+<?php
   public function prepare($node, $row) {
     // The node's terms are in an array under their destination vocab ID and
     // this is different from environment to environment. However, we've only
@@ -61,6 +62,7 @@ Once it was realised that the vid was from the destination vocabulary things got
       }
     }
   }
+?>
 {% endhighlight %}
 
 ### Caveats

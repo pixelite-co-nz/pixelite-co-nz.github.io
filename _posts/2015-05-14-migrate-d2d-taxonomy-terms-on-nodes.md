@@ -15,7 +15,7 @@ tags:
 - migrate
 - migrated2d
 ---
-A migration project I am currently working on hit a small hurdle with taxonomy terms on a content type. This took too long to resolve. Hopefully posting this here will save others the time and hassel I went though.
+A migration project I am currently working on hit a small hurdle with taxonomy terms on a content type. This took too long to resolve. Hopefully posting this here will save others the time and hassle I went though.
 
 ## Migrate D2D
 I am going to assume that if you are reading this you are already using the [migrate_d2d] module so I won't go into the big explanation about what it is, why you should use it and just how greatful we all should be to [Mike Ryan].
@@ -65,6 +65,11 @@ Once it was realised that the vid was from the destination vocabulary things got
 
 ### Caveats
 This worked for me because I only had **one** taxonomy field to worry about. The moment you get more than one you will want to revisit the assignment of $new_tid to the appropriate field. This shouldn't be a problem to hand code and if you have migrated the vocabularies too you may be able to use the migrate_map table to make something more dynamic.
+
+
+## Comments
+
+If you have (or are currently) using migrate I would be interested to hear how you found it. Especially if you are migrating terms, but not the vocabulary.
 
 [migrate_d2d]:https://www.drupal.org/project/migrate_d2d
 [Mike Ryan]:https://www.drupal.org/u/mikeryan

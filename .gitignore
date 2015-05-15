@@ -8,5 +8,7 @@ Gemfile.lock
 node_modules
 package.json
 
+*.xcf
+
 .idea
 *~

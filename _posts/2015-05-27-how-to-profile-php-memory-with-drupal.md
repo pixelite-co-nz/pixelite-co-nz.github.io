@@ -67,7 +67,7 @@ On Acquia Cloud a request ID is added to all requests, we don't need this. Also 
 {% highlight bash %}
 $ grep "memory profiler" drupal-watchdog.log | head -n 1 | awk -F'|' -v OFS=',' '{print $5, $9}' | sed 's/ MB.*//'
 
-https://www.presto.com.au/,4.75
+https://www.sitename.com/,4.75
 {% endhighlight %}
 
 Perfect.

@@ -97,6 +97,7 @@ $conf['cache_debug_common_settings'] = array(
   'variables' => TRUE,
   'theme_registry' => TRUE,
 );
+# Turn off logging
 $conf['cache_debug_log_get'] = FALSE;
 $conf['cache_debug_log_getMulti'] = FALSE;
 $conf['cache_debug_log_set'] = FALSE;

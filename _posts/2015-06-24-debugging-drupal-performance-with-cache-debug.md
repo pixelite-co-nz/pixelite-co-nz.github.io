@@ -42,56 +42,56 @@ Because the caching system is so highly utilized, cache logging can be incredibl
 ### Basic configuration
 If you've used the memcache module before, this should feel familiar. In order to use Cache Debug, you need to set it as the cache handler:
 
-```php
+{% highlight php %}
 $conf['cache_backends'][] = 'sites/all/modules/cache_debug/cache_debug.inc';
 $conf['cache_default_class'] = 'DrupalDebugCache';
-```
+{% endhighlight %}
 
 This tells Drupal that there is a cache backend located in the path provided (make sure its correct for your Drupal site!) and that the default class for all cache bins is the DrupalDebugCache class. If you only want to monitor a single bin you may want to omit this option.
 
 Since Cache Debug is a logger and not an actual caching system, it needs to pass cache requests onto a real cache system. By default, Debug Cache will use Drupal core's Database Cache system for cache storage, but if you're using memcache, redis or similar, you may want to set that as the handler for Cache Debug:
 
-```php
+{% highlight php %}
 $conf['cache_debug_class'] = 'MemCacheDrupal';
 $conf['cache_cache_debug_form'] = 'DrupalDatabaseCache';
-```
+{% endhighlight %}
 You need to also configure those modules accordingly.
 
 At this point, you'll be logging all cache calls and stack traces to set and clear calls to the php error log.
 
 ### Configure the logging location
-You may want to choose your own logging location. For example, if you use dblog, then you won't want to log to watchdog because it will bloat your database. Likewise, if you don't want to bloat  our php error log, then you may want to log to an arbitrary file. You can choose your logging location by setting cache_debug_logging_destination to error_log (default), watchdog or file. For file you will also need to provide the location:
+You may want to choose your own logging location. For example, if you use dblog, then you won't want to log to watchdog because it will bloat your database. Likewise, if you don't want to bloat  our php error log, then you may want to log to an arbitrary file. You can choose your logging location by setting `cache_debug_logging_destination` to error_log (default), watchdog or file. For file you will also need to provide the location:
 
-```php
+{% highlight php %}
 $conf['cache_debug_logging_destination'] = 'file';
 $conf['cache_debug_log_filepath'] = '/tmp/cachedebug.log';
-```
+{% endhighlight %}
 
 ### Configuring logging options
 You can choose to log calls to cache get, getMulti, set and clear. You can also choose to log a stacktrace of these calls to show the stack that triggered the call. This is most useful for calls to SET and CLEAR. For a minimal logging option with the most about of insight, you might want to try this:
 
-```php
+{% highlight php %}
 $conf['cache_debug_log_get'] = FALSE;
 $conf['cache_debug_log_getMulti'] = FALSE;
 $conf['cache_debug_log_set'] = TRUE;
 $conf['cache_debug_log_clear'] = TRUE;
 $conf['cache_debug_stacktrace_set'] = TRUE;
 $conf['cache_debug_stacktrace_clear'] = TRUE;
-```
+{% endhighlight %}
 
 ### Logging per cache bin
 You don't have to log the entire caching layer if you know which bin to look at for the caching issue you're observing. For example, if you're looking for misuse of variable_set, you only need to log the cache_bootstrap bin. In which case you could do this:
 
-```php
+{% highlight php %}
 # Do not log to all cache bins so ensure this line is removed (from above):
 # $conf['cache_default_class'] = 'DrupalDebugCache';
 $conf['cache_bootstrap_class'] = 'DrupalDebugCache';
-```
+{% endhighlight %}
 
 ### Configure for common issues
 Variable set calls and theme registry rebuilds are the two most common issues and so Cache Debug has use cases for these issues built in. So long as Cache Debug is the cache handler for the bin, you can turn off logging and turn on these features and Cache Debug will only log when these issues occur:
 
-```php
+{% highlight php %}
 $conf['cache_default_class'] = 'DrupalDebugCache';
 $conf['cache_debug_common_settings'] = array(
   'variables' => TRUE,
@@ -102,6 +102,17 @@ $conf['cache_debug_log_get'] = FALSE;
 $conf['cache_debug_log_getMulti'] = FALSE;
 $conf['cache_debug_log_set'] = FALSE;
 $conf['cache_debug_log_clear'] = FALSE;
-```
+{% endhighlight %}
 
 ## Analysing the logged data
+Cache debug logs to a log file like the example below:
+<img src="{{ site.url }}/img/cache-debug/cache_debug-example.png" alt="Example output of cache debug logging" class="img-responsive img-thumbnail" />
+
+In this snapshot of log output you can see both how cache debug logs cache calls and the stacktracing in action.
+
+### Log format structure
+A log line starts with a value that describes the cache bin, the cache command and the cache id. E.g. `cache_bootstrap->set->variables` would bet a cache_set call to the cache_bootstrap cache bin to set the variables cache key.
+Some calls also log additional data, for example, cache clear also indicates if the call was a wildcard clear. Set calls also log how much data (length) was set.
+
+### Stack trace logs
+When stack tracing is enabled for specific commands, a stack trace will be logged immediately after the log event that triggered it. The trace rolls back through each function that led to the current cache command being triggered. In the example above you can see that cache_clear_all was called by drupal_theme_rebuild which was called by an include from phptemplate_init. If you look at the source code in phptemplate_init, you'll see that this means a cache rebuild was triggered from including template.php. In this case it was that Zen base theme had the theme registery rebuild left on.

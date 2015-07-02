@@ -80,7 +80,7 @@ I'll show how I made this basic interactive. (If you want to know how I made the
 
 <hr>
 
-This tutorial doesn't have a whole lot of practicality, but it's will show you the basics.
+This interactive doesn't have a whole lot of real-world practicality, it does have the core functionality you'd need when making your own interactive website elements.
 
 * Loading an external SVG file
 * Element selection

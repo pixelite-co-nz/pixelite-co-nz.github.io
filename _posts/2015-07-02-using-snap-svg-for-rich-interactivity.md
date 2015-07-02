@@ -17,7 +17,7 @@ tags:
 
 Snap.svg (Snap) is a modern javascript llibrary that allows developers to interact with Scalable vector graphics (or [svg]). According to the [website]. Snap is...
 
-> Snap.svg is a brand new JavaScript library for working with SVG. Snap provides web developers with a clean, streamlined, intuitive, and powerful API for animating and manipulating both existing SVG content, and SVG content generated with Snap.
+> ... a brand new JavaScript library for working with SVG. Snap provides web developers with a clean, streamlined, intuitive, and powerful API for animating and manipulating both existing SVG content, and SVG content generated with Snap.
 
 Snap is designed to be a modern replacement for the likes of [Raphael]. Instead of focusing on compatibility with the older browsers like Internet Explorer 6, Snap instead drops support for older browsers in favor of a more complete SVG feature set.
 

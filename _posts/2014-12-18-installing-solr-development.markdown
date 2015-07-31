@@ -58,7 +58,7 @@ Navigate to the [Solr download page] and find the closest mirror for you. At the
 Copy the download link for either the solr-VERSION.tar.gz or the solr-VERSION.zip. You don't want the solr-VERSION-src.tgz (this is the source code and will need to be compiled) and download it with wget.
 
 {% highlight bash %}
-$ wget -c http://mirrors.sonic.net/apache/lucene/solr/4.10.2/solr-4.10.2.tgz
+$ wget -c http://mirrors.sonic.net/apache/lucene/solr/4.10.4/solr-4.10.4.tgz 
 {% endhighlight %}
 
 

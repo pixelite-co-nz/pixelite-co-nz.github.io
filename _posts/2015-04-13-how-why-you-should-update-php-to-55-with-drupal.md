@@ -2,7 +2,7 @@
 layout: post
 title: "How and why you should update PHP to PHP 5.5 with Drupal"
 subtitle: "You should do this yesterday"
-excerpt: "Secuirty, performance and new features are wins all around."
+excerpt: "Security, performance and new features are wins all around."
 header-img: "img/post-bg-04.jpg"
 permalink: /article/how-why-you-should-update-php-to-55-with-drupal/
 author: "Sean Hamlin"

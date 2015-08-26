@@ -15,7 +15,6 @@
  */
 
 body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
     font-family: 'Roboto', sans-serif;
 }
 
@@ -28,10 +27,6 @@ footer {
 }
 
 @media(min-width:768px) {
-    body {
-        padding-top: 81px;  /*Required padding for .navbar-fixed-top. Change if height of navigation changes.*/
-    }
-
     .navbar-fixed-top .navbar-brand {
         padding: 15px 0;
     }

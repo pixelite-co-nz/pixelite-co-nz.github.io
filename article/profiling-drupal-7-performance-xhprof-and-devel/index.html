@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="description" content="There often comes a time when you wonder why your page is occasionally experiencing a PHP Out Of Memory error with Drupal. Without profiling tools, you have no idea why Drupal is consuming the memory it is. Luckily the team at Facebook have created the tool XHProf.">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>Profiling Drupal 7 performance with XHProf and Devel - Pixelite</title>
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="http://www.pixelite.co.nz/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="All Drupal planet posts" href="http://www.pixelite.co.nz/drupalplanet.xml" />
+
+    <link rel="canonical" href="http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-pixelite" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img alt="Pixelite homepage" src="/img/pixelite.svg" width="180" height="60" /></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/about.html">About</a>
+                </li>
+                <li>
+                    <a href="/contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <article itemscope="" itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="inLanguage" content="en-GB"/>
+    <meta itemprop="wordCount" content="365"/>
+    <meta itemprop="url" content="http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel"/>
+
+    <!-- Post Header -->
+    <header class="intro-header" style="background-image: url('/')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1 itemprop="name headline">Profiling Drupal 7 performance with XHProf and Devel</h1>
+                        
+                        <span class="meta">Posted by <span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Craig Pearson</span></span> on <time datetime="2013-01-22T00:00:00" itemprop="datePublished">January 22, 2013</time></span>
+                        <ul class="social-buttons cf">
+                            <li>
+                                <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Profiling Drupal 7 performance with XHProf and Devel" data-url="http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                            </li>
+                            <li>
+                                <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                            </li>
+                            <li>
+                                <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel&amp;t=Profiling%20Drupal%207%20performance%20with%20XHProf%20and%20Devel" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                            </li>
+                            <li>
+                                <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel&amp;title=Profiling%20Drupal%207%20performance%20with%20XHProf%20and%20Devel" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <div itemprop="articleBody">
+                    <p>There often comes a time when you wonder why your page is occasionally experiencing a PHP Out Of Memory error with Drupal. Without profiling tools, you have no idea why Drupal is consuming the memory it is. Luckily the team at Facebook have created the tool <a href="https://github.com/facebook/xhprof">XHProf</a>.</p>
+
+<h2 id="how-to-install-xhprof-with-apache">How to install XHProf with apache</h2>
+
+<p>This can be done entirely with PECL:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">pear channel-update pear.php.net
+sudo apt-get install php5-common graphviz
+sudo pecl config-set preferred_state beta
+sudo pecl install xhprof</code></pre></div>
+
+<p>Create the directory for the data to live in, I choose to use /tmp but you can choose another location for more permanent storage</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">mkdir /tmp/xhprof
+chmod <span class="m">777</span> /tmp/xhprof</code></pre></div>
+
+<p>If you use apache, then setting this up is trivial. First create the settings file (included automatically)</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo vim /etc/php5/conf.d/xhprof.ini</code></pre></div>
+
+<p>Insert:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>xhprof<span class="o">]</span>
+<span class="nv">extension</span><span class="o">=</span>xhprof.so
+xhprof.output_dir<span class="o">=</span><span class="s2">&quot;/tmp/xhprof&quot;</span></code></pre></div>
+
+<p>Then let apache know that all URLs beginning with “xhprof_html” are indeed XHProf URLs.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo vim /etc/apache2/conf.d/xhprof.conf</code></pre></div>
+
+<p>Insert:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">alias</span> /xhprof_html <span class="s2">&quot;/usr/share/php/xhprof_html/&quot;</span></code></pre></div>
+
+<p>Restart Apache</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo service apache2 restart</code></pre></div>
+
+<h2 id="drupal-7-integration-with-devel">Drupal 7 integration with Devel</h2>
+
+<p>The <a href="http://drupal.org/project/devel" title="Visit the module on Drupal.org">devel</a> module makes the integration with XHProf as simple as enabling the module and setting some variables.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">drush dl devel
+drush en devel
+drush vset devel_xhprof_enabled 1
+drush vset devel_xhprof_directory <span class="s2">&quot;/usr/share/php&quot;</span>
+drush vset devel_xhprof_url <span class="s2">&quot;/xhprof_html&quot;</span></code></pre></div>
+
+<p>And there you have it, now all your pages will be profiled as they are generated, and Devel will embed a link at the bottom of the page in order to view the metrics, and callgraph trace.</p>
+
+<h2 id="screenshots">Screenshots</h2>
+
+<p>Here are some images snapped from a recent project on a complex page generation:</p>
+
+<p><img src="/img/xhprof/1.png" width="547" height="144" alt="XHProf summary" /></p>
+
+<p>The metrics page lists all functions, and can be sorted numerous ways:</p>
+
+<p><img src="/img/xhprof/2.png" width="611" height="162" alt="XHProf sorting" /></p>
+
+<p>The callgraph is useful to find the critical path in terms of page load:</p>
+
+<p><img src="/img/xhprof/3.png" width="810" height="559" alt="XHProf callgraph" /></p>
+
+                </div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+                <script type="text/javascript">
+                    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                    var disqus_shortname = 'pixelite'; // required: replace example with your forum shortname
+                    var disqus_url = 'http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel';
+
+                    /* * * DON'T EDIT BELOW THIS LINE * * */
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/article/how-speed-drupal-altering-tokens-ui" data-toggle="tooltip" data-placement="top" title="How to speed up Drupal by altering the tokens UI">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="http://www.pixelite.co.nz/article/attaching-ajax-events-non-form-page-elements-drupal" data-toggle="tooltip" data-placement="top" title="Attaching AJAX events to non-form page elements in Drupal">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/pixelite_">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/pixelite-co-nz">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JS libs -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/js/socialite.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/js/clean-blog.js"></script>
+
+<!-- Social links -->
+<script type="text/javascript">
+    (function($) {
+        Socialite.load();
+    })(jQuery);
+</script>
+
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34737960-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>

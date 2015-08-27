@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="description" content="I’ve been helping out a co-worker with a small PHP library he’s working on which will eventually automate Drupal Security Advisory emails through to a central drupal “management” site, which knows about all sites that we work on, and automatically create “work requests” and allocate them to people so that we can easily track security vulnerabilities that need fixing! The work request API was missing a vital component - creating a new work request. So that was my job.">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>Guzzle for HTTP POST authentication and form submission with Symfony 2.0 - Pixelite</title>
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="http://www.pixelite.co.nz/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="All Drupal planet posts" href="http://www.pixelite.co.nz/drupalplanet.xml" />
+
+    <link rel="canonical" href="http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-pixelite" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img alt="Pixelite homepage" src="/img/pixelite.svg" width="180" height="60" /></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/about.html">About</a>
+                </li>
+                <li>
+                    <a href="/contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <article itemscope="" itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="inLanguage" content="en-GB"/>
+    <meta itemprop="wordCount" content="786"/>
+    <meta itemprop="url" content="http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20"/>
+
+    <!-- Post Header -->
+    <header class="intro-header" style="background-image: url('/')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1 itemprop="name headline">Guzzle for HTTP POST authentication and form submission with Symfony 2.0</h1>
+                        
+                        <span class="meta">Posted by <span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Adam Bramley</span></span> on <time datetime="2013-08-06T00:00:00" itemprop="datePublished">August 6, 2013</time></span>
+                        <ul class="social-buttons cf">
+                            <li>
+                                <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Guzzle for HTTP POST authentication and form submission with Symfony 2.0" data-url="http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                            </li>
+                            <li>
+                                <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                            </li>
+                            <li>
+                                <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20&amp;t=Guzzle%20for%20HTTP%20POST%20authentication%20and%20form%20submission%20with%20Symfony%202.0" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                            </li>
+                            <li>
+                                <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20&amp;title=Guzzle%20for%20HTTP%20POST%20authentication%20and%20form%20submission%20with%20Symfony%202.0" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <div itemprop="articleBody">
+                    <p>I’ve been helping out a co-worker with a small PHP library he’s working on which will eventually automate Drupal Security Advisory emails through to a central drupal “management” site, which knows about all sites that we work on, and automatically create “work requests” and allocate them to people so that we can easily track security vulnerabilities that need fixing! The work request API was missing a vital component - creating a new work request. So that was my job.</p>
+
+<h2 id="curl-is-awesomely-verbose-but-guzzle-is-awesomer">Curl is awesome(ly verbose), but Guzzle is awesomer</h2>
+
+<p>I initially implemented this using PHP’s curl functions:</p>
+
+<ul>
+  <li>curl_init()</li>
+  <li>curl_setopt()</li>
+  <li>curl_exec()</li>
+</ul>
+
+<p>Which works nicely, but requires quite a lot of code:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$post_data = array(</span>
+<span class="x">  &#39;username&#39; =&gt; &#39;user&#39;,</span>
+<span class="x">  &#39;password&#39; =&gt; &#39;password&#39;,</span>
+<span class="x">  &#39;submit&#39; =&gt; &#39;Login&#39;,</span>
+<span class="x">);</span>
+<span class="x">// Initiate a connection with the domain.</span>
+<span class="x">$curl_connection = curl_init();</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_URL, &#39;www.example.com&#39;);</span>
+
+<span class="x">// Set curl options.</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 3);</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_USERAGENT, &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36&quot;);</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_HEADER, 1);</span>
+<span class="x">// This is important, it means we get the response as the return var.</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_RETURNTRANSFER, 1);</span>
+
+<span class="x">curl_setopt($curl_connection, CURLOPT_POST, count($post_data));</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_POSTFIELDS, $post_data);</span>
+
+<span class="x">// Execute the curl command</span>
+<span class="x">$response = curl_exec($curl_connection);</span>
+<span class="x">$info = curl_getinfo($curl_connection);</span>
+<span class="x">if (!$response || $info[&#39;http_code&#39;] != 200) {</span>
+<span class="x">  throw new \Exception(&quot;Problem encountered during authentication (HTTP Code&quot; . $info[&#39;http_code&#39;] . &quot;) - &quot; . curl_error($curl_connection));</span>
+<span class="x">}</span>
+
+<span class="x">// Get the headers and the response.</span>
+<span class="x">$response_parts = explode(&quot;\r\n\r\n&quot;, $response);</span>
+<span class="x">$body = array_pop($response_parts);</span>
+<span class="x">$headers = array_pop($response_parts);</span>
+
+<span class="x">// Check for Set Cookie headers and save them for later use.</span>
+<span class="x">foreach (explode(&quot;\n&quot;, $headers) as $i =&gt; $h) {</span>
+<span class="x">  if (substr($h, 0, 10) === &quot;Set-Cookie&quot;){</span>
+<span class="x">    preg_match(&#39;/^Set\-Cookie: ([A-Za-z]+)=([0-9A-Za-z%]*);/&#39;, $h, $matches);</span>
+
+<span class="x">    // Save the cookies somewhere for later use....</span>
+<span class="x">  }</span>
+<span class="x">}</span>
+<span class="x">curl_close($curl_connection);</span></code></pre></div>
+
+<p>Notice after I execute the post I need to then parse the response, get the “Set-Cookie” headers and store those cookies to use in my next post request so I can successfully submit a form.</p>
+
+<p>Now we can use the cookies in the new curl connection and post some data to a form.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$post_data = array(</span>
+<span class="x">  &#39;title&#39; =&gt; &#39;My work&#39;,</span>
+<span class="x">  &#39;description&#39; =&gt; &#39;This is a request created using curl&#39;,</span>
+<span class="x">  &#39;submit&#39; =&gt; &#39;submit&#39;,</span>
+<span class="x">);</span>
+<span class="x">// Initialise the curl connection</span>
+<span class="x">$curl_connection = curl_init();</span>
+<span class="x">// Set curl options</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_URL, &#39;https://www.example.com/create.php&#39;);</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 30);</span>
+<span class="x">// Use the cookie we got from authentication here.</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_HTTPHEADER, array(</span>
+<span class="x">  &#39;Cookie: sid=&#39; . $my_cookie,</span>
+<span class="x">));</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_USERAGENT,</span>
+<span class="x">&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36&quot;);</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_FOLLOWLOCATION, 1);</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, FALSE);</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_POST, count($post_data));</span>
+<span class="x">curl_setopt($curl_connection, CURLOPT_POSTFIELDS, $post_data);</span>
+
+<span class="x">// Send the post data.</span>
+<span class="x">$result = curl_exec($curl_connection);</span>
+<span class="x">curl_close($curl_connection);</span></code></pre></div>
+
+<p>Well…this works but is less than ideal. It’s long, boring, and it hurts my eyes.</p>
+
+<h2 id="enter-guzzle">Enter Guzzle:</h2>
+
+<blockquote>
+  <p>“Guzzle gives PHP developers complete control over HTTP requests while utilizing HTTP/1.1 best practices. Guzzle’s HTTP functionality is a robust framework built on top of the PHP libcurl bindings.”</p>
+</blockquote>
+
+<p>Using the Guzzle HTTP Client and Cookie plugins, I was able to simplify this a lot.</p>
+
+<p>First we set up the Guzzle client and add an empty CookiePlugin object as a “subscriber” on the HTTP Client. For more info on this see the <a href="http://guzzlephp.org/http-client/client.html">Guzzle HTTP Client documentation</a></p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">// Add this to allow your app to use Guzzle and the Cookie Plugin.</span>
+<span class="x">use Guzzle\Http\Client as GuzzleClient;</span>
+<span class="x">use Guzzle\Plugin\Cookie\Cookie;</span>
+<span class="x">use Guzzle\Plugin\Cookie\CookiePlugin;</span>
+<span class="x">use Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar;</span>
+
+
+<span class="x">$httpClient = new GuzzleClient(&#39;https://example.com/&#39;);</span>
+<span class="x">$httpClient-&gt;setSslVerification(FALSE);</span>
+
+<span class="x">$cookieJar = new ArrayCookieJar();</span>
+<span class="x">// Create a new cookie plugin</span>
+<span class="x">$cookiePlugin = new CookiePlugin($cookieJar);</span>
+<span class="x">// Add the cookie plugin to the client</span>
+<span class="x">$httpClient-&gt;addSubscriber($cookiePlugin);</span></code></pre></div>
+
+<p>Now we login.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$post_data = array(</span>
+<span class="x">  &#39;username&#39; =&gt; $username,</span>
+<span class="x">  &#39;password&#39; =&gt; $password,</span>
+<span class="x">  &#39;submit&#39; =&gt; &#39;Login&#39;,</span>
+<span class="x">);</span>
+
+<span class="x">// Send a post to the base url</span>
+<span class="x">$response = $httpClient-&gt;post(&#39;&#39;, array(), $post_data)-&gt;send();</span></code></pre></div>
+
+<p>Notice that the URL provided to the client’s post() method is relative. Relative URLs will always merge into the base URL of the client. Guzzle’s HTTP Client docs <a href="http://guzzlephp.org/http-client/client.html#base-urls">explain this more</a></p>
+
+<p>Guzzle automagically gets the Cookies set from the response and adds them to our client. We literally do nothing else and we can now post data using the same cookies as we got from our login attempt.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$post_data = array(</span>
+<span class="x">  &#39;title&#39; =&gt; &#39;My work&#39;,</span>
+<span class="x">  &#39;description&#39; =&gt; &#39;This is a request created using curl&#39;,</span>
+<span class="x">  &#39;submit&#39; =&gt; &#39;submit&#39;,</span>
+<span class="x">);</span>
+<span class="x">$response = $http_client-&gt;post(&#39;/create.php&#39;, array(), $post_data)-&gt;send();</span></code></pre></div>
+
+<p>How easy was that? Now that I know how to use this library I can see the amazing opportunities with it. Drupal 8 core is utilising this as a replacement to the archaic drupal_http_request, the issue can be seen <a href="https://drupal.org/node/1447736">here</a>, I can’t wait to see what other awesome features D8 gets from Symfony!</p>
+
+<h3 id="references">References:</h3>
+<ul>
+  <li><a href="http://guzzlephp.org/http-client/client.html">Guzzle HTTP Client documentation</a></li>
+  <li><a href="http://guzzlephp.org/api/class-Guzzle.Http.Client.html">Guzzle HTTP Client API</a></li>
+</ul>
+
+                </div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+                <script type="text/javascript">
+                    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                    var disqus_shortname = 'pixelite'; // required: replace example with your forum shortname
+                    var disqus_url = 'http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20';
+
+                    /* * * DON'T EDIT BELOW THIS LINE * * */
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/article/drupal-7-backbone-js-part-1-setting-upinstallation" data-toggle="tooltip" data-placement="top" title="Drupal 7 & Backbone JS: Part 1 - Setting up/Installation">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="http://www.pixelite.co.nz/article/remove-custom-drupal-modules-and-themes-update-status-page" data-toggle="tooltip" data-placement="top" title="Remove custom Drupal modules and themes from the update status page">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/pixelite_">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/pixelite-co-nz">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JS libs -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/js/socialite.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/js/clean-blog.js"></script>
+
+<!-- Social links -->
+<script type="text/javascript">
+    (function($) {
+        Socialite.load();
+    })(jQuery);
+</script>
+
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34737960-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>

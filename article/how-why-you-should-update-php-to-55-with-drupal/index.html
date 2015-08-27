@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="description" content="Security, performance and new features are wins all around.">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>How and why you should update PHP to PHP 5.5 with Drupal - Pixelite</title>
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="http://www.pixelite.co.nz/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="All Drupal planet posts" href="http://www.pixelite.co.nz/drupalplanet.xml" />
+
+    <link rel="canonical" href="http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-pixelite" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img alt="Pixelite homepage" src="/img/pixelite.svg" width="180" height="60" /></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/about.html">About</a>
+                </li>
+                <li>
+                    <a href="/contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <article itemscope="" itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="inLanguage" content="en-GB"/>
+    <meta itemprop="wordCount" content="923"/>
+    <meta itemprop="url" content="http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/"/>
+
+    <!-- Post Header -->
+    <header class="intro-header" style="background-image: url('/img/post-bg-04.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1 itemprop="name headline">How and why you should update PHP to PHP 5.5 with Drupal</h1>
+                        
+                        <h2 class="subheading" itemprop="description">You should do this yesterday</h2>
+                        
+                        <span class="meta">Posted by <span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span> on <time datetime="2015-04-13T00:00:00" itemprop="datePublished">April 13, 2015</time></span>
+                        <ul class="social-buttons cf">
+                            <li>
+                                <a href="http://twitter.com/share" class="socialite twitter-share" data-text="How and why you should update PHP to PHP 5.5 with Drupal" data-url="http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                            </li>
+                            <li>
+                                <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                            </li>
+                            <li>
+                                <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/&amp;t=How%20and%20why%20you%20should%20update%20PHP%20to%20PHP%205.5%20with%20Drupal" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                            </li>
+                            <li>
+                                <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/&amp;title=How%20and%20why%20you%20should%20update%20PHP%20to%20PHP%205.5%20with%20Drupal" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <div itemprop="articleBody">
+                    <p>This post is a follow up to my previous blog post on <a href="/article/upgrading-php-54-ubuntu-1204-lts-support-drupal-8">how to upgrade PHP to 5.4 to support Drupal 8</a>.</p>
+
+<h2 id="why-you-should-upgrade-php">Why you should upgrade PHP</h2>
+
+<p>If you are looking for reasons to ditch PHP 5.3, here are some:</p>
+
+<h3 id="security">Security</h3>
+
+<p>PHP 5.3 <a href="http://php.net/supported-versions.php">reached end of life in August 2014</a>, this means that if you are running this version, you are running an insecure version of PHP that potentially has security holes in it. This is bad for obvious reasons.</p>
+
+<h3 id="bundled-opcode-cache">Bundled opcode cache</h3>
+
+<p>PHP 5.5 is the first version that bundles an opcode cache with PHP, this means there is also no need to also run APC (unless you need userland caching in <a href="https://github.com/krakjoe/apcu">APCu</a>).</p>
+
+<h3 id="performance">Performance</h3>
+
+<p>PHP <a href="http://news.php.net/php.internals/57760">profiled the 5.4 release compared to 5.3 for Drupal</a>, and that found that:</p>
+
+<ul>
+  <li>7% more requests/second</li>
+  <li>50% PHP memory reduction</li>
+</ul>
+
+<p>PHP 5.5 offers more performance again, and there is a section at the bottom of this article that goes through a real life scenario.</p>
+
+<h3 id="cool-new-features">Cool new features</h3>
+
+<p>Read through the list of new features, here are some neat things you are missing out on:</p>
+
+<ul>
+  <li><a href="http://php.net/manual/en/language.exceptions.php#language.exceptions.finally">try/catch/finally</a> is finally now in</li>
+  <li>Short array syntax</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$array = [</span>
+<span class="x">  &quot;foo&quot; =&gt; &quot;bar&quot;,</span>
+<span class="x">  &quot;bar&quot; =&gt; &quot;foo&quot;,</span>
+<span class="x">];</span></code></pre></div>
+
+<ul>
+  <li>Function array dereferencing</li>
+</ul>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$secondElement = getArray()[1];</span></code></pre></div>
+
+<ul>
+  <li><a href="http://php.net/manual/en/language.oop5.traits.php">Traits</a></li>
+</ul>
+
+<p>And <a href="http://php.net/manual/en/migration54.new-features.php">many</a> <a href="http://php.net/manual/en/migration55.new-features.php">others</a>.</p>
+
+<h2 id="how-to-upgrade-to-php-55">How to upgrade to PHP 5.5</h2>
+
+<p>There are a number of ways to update your server to PHP 5.5.</p>
+
+<h3 id="upgrade-to-ubuntu-trusty-tahr-1404">Upgrade to Ubuntu Trusty Tahr 14.04</h3>
+
+<p>Ubuntu Trusty Tahr 14.04 (which is an LTS version), which comes bundled with <a href="http://packages.ubuntu.com/trusty/php5-common">PHP 5.5.9</a>. This is probably the best solution if you are managing your own Ubuntu box.</p>
+
+<h3 id="install-a-ppa-on-ubuntu-precise-1204">Install a PPA on Ubuntu Precise 12.04</h3>
+
+<p>If you are running the older Ubuntu Precise 12.04, you can add a PPA</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo add-apt-repository ppa:ondrej/php5
+sudo apt-get update
+sudo apt-get install php5
+php5 -v</code></pre></div>
+
+<p>It would be worth considering a dist upgrade though, but this at least can buy you some time.</p>
+
+<h3 id="acquia-cloud-ui">Acquia Cloud UI</h3>
+
+<p>If you use <a href="https://www.acquia.com/products-services/acquia-cloud">Acquia Cloud</a> for hosting there is a convenient PHP version selector in the UI.</p>
+
+<p><img src="http://www.pixelite.co.nz/img/php55/cloud.png" alt="Acquia Cloud UI allows site administrators to change the PHP version" class="img-responsive img-thumbnail" /></p>
+
+<p>More information can be found in the <a href="https://docs.acquia.com/cloud/configure/environments/php#php-version">documentation</a>. Be aware, once you upgrade beyond PHP 5.3, you cannot downgrade, so ensure you test your code on a development server first ;)</p>
+
+<h2 id="common-coding-issues">Common coding issues</h2>
+
+<p>Although Drupal 7 core, and most popular contributed modules will already support PHP 5.5, it would pay to do a code audit on any custom code written to ensure you are not using things you should not be. Here are some links you should read:</p>
+
+<ul>
+  <li><a href="http://php.net/manual/en/migration54.incompatible.php">PHP 5.4 incompatible changes</a></li>
+  <li><a href="http://php.net/manual/en/migration55.incompatible.php">PHP 5.5 incompatible changes</a></li>
+</ul>
+
+<p>Below are some of the most common issues I have found in sites:</p>
+
+<h3 id="call-time-pass-by-reference">Call time pass-by-reference</h3>
+
+<p>If you have this in your code, you will have a bad time, as this is now a PHP fatal.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">foo(&amp;$a); // Bad times.</span></code></pre></div>
+
+<h3 id="only-variables-can-be-passed-by-reference">Only variables can be passed by reference</h3>
+
+<p>This will cause PHP to throw notices.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>php -a
+Interactive shell
+
+php &gt; ini_set<span class="o">(</span><span class="s1">&#39;error_reporting&#39;</span>, E_ALL<span class="o">)</span><span class="p">;</span>
+php &gt; var_dump<span class="o">(</span>reset<span class="o">(</span>explode<span class="o">(</span><span class="s1">&#39;|&#39;</span>, <span class="s1">&#39;Jim|Bob|Cat&#39;</span><span class="o">)))</span><span class="p">;</span>
+PHP Strict Standards:  Only variables should be passed by reference in php shell code on line 1
+
+Strict Standards: Only variables should be passed by reference in php shell code on line 1
+string<span class="o">(</span>3<span class="o">)</span> <span class="s2">&quot;Jim&quot;</span></code></pre></div>
+
+<p>Where you will likely find this in Drupal in my experience is when manually rendering nodes:</p>
+
+<p>This code works in PHP 5.3, but will throw notices in PHP 5.5:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$rendered = drupal_render(node_view(node_load(1), &#39;teaser&#39;));</span></code></pre></div>
+
+<p>The fix is to simply use a temporary variable:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$view = node_view(node_load(1), &#39;teaser&#39;);</span>
+<span class="x">$rendered = drupal_render($view);</span></code></pre></div>
+
+<p>The reason being that <code>drupal_render()</code> expects a variable to be passed in (as it is passed by reference).</p>
+
+<h3 id="how-do-you-find-coding-issues">How do you find coding issues</h3>
+
+<p>Enable the syslog module, and tail that in your development environment, hunt down and fix as many notices and warnings as possible. The more noisy your logs are, the harder it is to find actual issues in them. While you are at it, turn off the dblog module, this is only helpful if you do not have access to your syslog (as it is a performance issue to be continually writing to the database).</p>
+
+<h2 id="real-world-performance-comparison">Real world performance comparison</h2>
+
+<p>This was taken from a recent site that underwent a PHP 5.3 to 5.5 upgrade. Here are 2 New Relic overviews, taken with identical performance tests run against the same codebase. The first image is taken with PHP 5.3 running:</p>
+
+<p><img src="http://www.pixelite.co.nz/img/php55/php53.png" alt="Performance of Drupal on PHP 5.3 is not that flash" class="img-responsive img-thumbnail" /></p>
+
+<p>You can see PHP time is around 260ms of the request.</p>
+
+<p><img src="http://www.pixelite.co.nz/img/php55/php55.png" alt="Performance of Drupal on PHP 5.5 is much better than 5.3" class="img-responsive img-thumbnail" /></p>
+
+<p>With an upgrade to PHP 5.5, the time spent in PHP drops to around 130ms. So this is around a a 50% reduction in PHP time. This not only makes your application faster, but also it means you can serve more traffic from the same hardware.</p>
+
+<h2 id="comments">Comments</h2>
+
+<p>If you have gone through a recent PHP upgrade, I would be interested to hear how you found it, and what performance gains you managed to achieve.</p>
+
+                </div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+                <script type="text/javascript">
+                    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                    var disqus_shortname = 'pixelite'; // required: replace example with your forum shortname
+                    var disqus_url = 'http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/';
+
+                    /* * * DON'T EDIT BELOW THIS LINE * * */
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/article/using-behat-for-behavioral-driven-development-bdd-in-drupal" data-toggle="tooltip" data-placement="top" title="Using Behat for Behavioral Driven Development (BDD) in Drupal">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/" data-toggle="tooltip" data-placement="top" title="Drupal Migrate D2D :: Taxonomy terms on nodes">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/pixelite_">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/pixelite-co-nz">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JS libs -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/js/socialite.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/js/clean-blog.js"></script>
+
+<!-- Social links -->
+<script type="text/javascript">
+    (function($) {
+        Socialite.load();
+    })(jQuery);
+</script>
+
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34737960-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>

@@ -1,56 +1,3206 @@
----
-layout: null
-sitemap:
-  exclude: 'yes'
----
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  {% for post in site.posts %}
-    {% unless post.published == false %}
+  
+    
     <url>
-      <loc>{{ site.url }}{{ post.url }}</loc>
-      {% if post.sitemap.lastmod %}
-        <lastmod>{{ post.sitemap.lastmod | date: "%Y-%m-%d" }}</lastmod>
-      {% elsif post.date %}
-        <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
-      {% else %}
-        <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
-      {% endif %}
-      {% if post.sitemap.changefreq %}
-        <changefreq>{{ post.sitemap.changefreq }}</changefreq>
-      {% else %}
+      <loc>http://www.pixelite.co.nz/article/starter-regression-test-suite-powered-by-casperjs/</loc>
+      
+        <lastmod>2015-07-10T00:00:00+12:00</lastmod>
+      
+      
         <changefreq>monthly</changefreq>
-      {% endif %}
-      {% if post.sitemap.priority %}
-        <priority>{{ post.sitemap.priority }}</priority>
-      {% else %}
+      
+      
         <priority>0.5</priority>
-      {% endif %}
+      
     </url>
-    {% endunless %}
-  {% endfor %}
-  {% for page in site.pages %}
-    {% unless page.sitemap.exclude == "yes" %}
+    
+  
+    
     <url>
-      <loc>{{ site.url }}{{ page.url | remove: "index.html" }}</loc>
-      {% if page.sitemap.lastmod %}
-        <lastmod>{{ page.sitemap.lastmod | date: "%Y-%m-%d" }}</lastmod>
-      {% elsif page.date %}
-        <lastmod>{{ page.date | date_to_xmlschema }}</lastmod>
-      {% else %}
-        <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
-      {% endif %}
-      {% if page.sitemap.changefreq %}
-        <changefreq>{{ page.sitemap.changefreq }}</changefreq>
-      {% else %}
+      <loc>http://www.pixelite.co.nz/article/using-snap-svg-for-rich-interactivity</loc>
+      
+        <lastmod>2015-07-02T00:00:00+12:00</lastmod>
+      
+      
         <changefreq>monthly</changefreq>
-      {% endif %}
-      {% if page.sitemap.priority %}
-        <priority>{{ page.sitemap.priority }}</priority>
-      {% else %}
-        <priority>0.3</priority>
-      {% endif %}
+      
+      
+        <priority>0.5</priority>
+      
     </url>
-    {% endunless %}
-  {% endfor %}
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/debugging-drupal-performance-with-cache-debug/</loc>
+      
+        <lastmod>2015-07-01T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/how-to-profile-php-memory-with-drupal/</loc>
+      
+        <lastmod>2015-05-27T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/top-10-drupalcon-la-sessions/</loc>
+      
+        <lastmod>2015-05-22T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/</loc>
+      
+        <lastmod>2015-05-14T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/</loc>
+      
+        <lastmod>2015-04-13T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/using-behat-for-behavioral-driven-development-bdd-in-drupal</loc>
+      
+        <lastmod>2015-03-14T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/extracting-file-folder-from-git-repository-with-full-git-history</loc>
+      
+        <lastmod>2015-03-10T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal</loc>
+      
+        <lastmod>2015-03-07T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/analyse-apache-traffic-with-asql-log-interface</loc>
+      
+        <lastmod>2015-03-04T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/installing-solr-development</loc>
+      
+        <lastmod>2014-12-18T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal</loc>
+      
+        <lastmod>2014-12-13T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/subtabs-under-user-edit</loc>
+      
+        <lastmod>2014-12-10T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/using-git-pre-commit-hooks-keep-you-drupal-codebase-clean</loc>
+      
+        <lastmod>2014-12-04T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/environment-aware-drupal-sites</loc>
+      
+        <lastmod>2014-09-29T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/how-create-dashboard-dashing-and-integrate-drupal-data</loc>
+      
+        <lastmod>2014-07-31T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/upgrading-php-54-ubuntu-1204-lts-support-drupal-8</loc>
+      
+        <lastmod>2014-03-22T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/updating-drupal-use-google-analytics-universal-tracking</loc>
+      
+        <lastmod>2014-01-07T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks</loc>
+      
+        <lastmod>2013-12-11T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/high-performance-ajax-callbacks-drupal-7-and-js-module</loc>
+      
+        <lastmod>2013-11-28T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/error-aggregation-and-alerting-drupal-7-and-raygunio</loc>
+      
+        <lastmod>2013-10-11T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/using-gimps-foreground-select-tool</loc>
+      
+        <lastmod>2013-09-01T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/using-apache-libcloud-provision-cloud-servers</loc>
+      
+        <lastmod>2013-08-27T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7</loc>
+      
+        <lastmod>2013-08-22T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/validate-and-clean-user-submitted-address-data-pygeocoder</loc>
+      
+        <lastmod>2013-08-20T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/remove-custom-drupal-modules-and-themes-update-status-page</loc>
+      
+        <lastmod>2013-08-20T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/guzzle-http-post-authentication-and-form-submission-symfony-20</loc>
+      
+        <lastmod>2013-08-06T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/drupal-7-backbone-js-part-1-setting-upinstallation</loc>
+      
+        <lastmod>2013-07-23T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/practical-example-converting-drupal-7-module-work-drupal-8</loc>
+      
+        <lastmod>2013-07-14T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/how-find-and-debug-large-variables-drupal-7</loc>
+      
+        <lastmod>2013-05-22T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/how-computers-see-simple-introduction-computer-vision</loc>
+      
+        <lastmod>2013-04-18T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/how-exclude-casperjs-your-google-analytics-statistics</loc>
+      
+        <lastmod>2013-04-09T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/using-entitycache-speed-your-drupal-site</loc>
+      
+        <lastmod>2013-04-01T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/convert-existing-textfield-textarea-drupal-7</loc>
+      
+        <lastmod>2013-03-07T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/why-i-use-casperjs-regression-testing-web-applications</loc>
+      
+        <lastmod>2013-03-04T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/attaching-ajax-events-non-form-page-elements-drupal</loc>
+      
+        <lastmod>2013-02-02T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/profiling-drupal-7-performance-xhprof-and-devel</loc>
+      
+        <lastmod>2013-01-22T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/how-speed-drupal-altering-tokens-ui</loc>
+      
+        <lastmod>2013-01-16T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/what-sass-and-why-you-should-be-using-it</loc>
+      
+        <lastmod>2013-01-06T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/setting-ubuntu-use-inconsolata</loc>
+      
+        <lastmod>2012-10-24T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/building-custom-content-panes-aka-ctools-content-types-panels-3-and-drupal-7</loc>
+      
+        <lastmod>2012-10-14T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/remote-debugging-chrome-and-android</loc>
+      
+        <lastmod>2012-10-05T00:00:00+13:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7</loc>
+      
+        <lastmod>2012-09-15T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/using-git-attributes-exclude-files-your-release</loc>
+      
+        <lastmod>2012-08-22T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development</loc>
+      
+        <lastmod>2012-07-12T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/importing-content-feeds-module</loc>
+      
+        <lastmod>2012-07-10T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/give-your-site-some-cloudflare</loc>
+      
+        <lastmod>2012-06-28T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/installing-aptana-ubuntu-1204</loc>
+      
+        <lastmod>2012-06-04T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/connecting-private-lan-host-over-internet-ssh</loc>
+      
+        <lastmod>2012-05-22T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/backing-content-email-gmail</loc>
+      
+        <lastmod>2012-05-20T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/save-file-you-edited-vim-without-needed-permissions</loc>
+      
+        <lastmod>2012-04-06T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/article/configuring-aptana-drupal-development</loc>
+      
+        <lastmod>2012-04-06T00:00:00+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/about.html</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/contact.html</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+  
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/adam-bramley/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/adam-bramley/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/gold/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/gold/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/josh-waihi/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/craig-pearson/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/authors/sean-hamlin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/ubuntu/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/aptana/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/ide/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/drupalplanet/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/drupal/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/linux/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/vim/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/permissions/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/sudo/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/mysql/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/backup/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/gmail/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/bash/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/ssh/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/cdn/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/hosting/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/security/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/web/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/feeds/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/rss/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/atom/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/syndication/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/postgresql/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/development/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/git/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/code/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/release/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/deployment/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/entity/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/API/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/chrome/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/mobile/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/debugging/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/android/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/responsive/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/ctools/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/panels/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/font/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/programming/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/css/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/sass/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/performance/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/database/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/xhprof/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/apache/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/ajax/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/javascript/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/casperjs/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/testing/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/updatehook/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/caching/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/CasperJS/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/Google%20Analytics/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/computer%20vision/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/introduction/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/tutorial/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/backbone/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/js/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/guzzle/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/symfony2/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/php/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/curl/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/updatestatus/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/python/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/data%20validation/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/geocoding/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/openerp/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/module/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/aws/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/cloud/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/servers/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/sysadmin/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/GIMP/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/graphics/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/siox/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/errors/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/thirdpartyintegration/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/owasp/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/dashing/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/dashboards/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/data%20visualisation/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/environment/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/menus/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/favicon/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/theming/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/solr/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/search/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/sql/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/analytics/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/log/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/preview/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/content-staging/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/sed/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/bdd/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/behat/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/migrate/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/migrated2d/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/drupalcon/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/bestof/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/memory/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/cache/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/tag/svg/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/page2/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://www.pixelite.co.nz/page3/</loc>
+      
+        <lastmod>2015-08-27T23:32:32+12:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
 </urlset>

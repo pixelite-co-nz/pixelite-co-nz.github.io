@@ -1,29 +1,958 @@
----
-layout: null
-sitemap:
-  exclude: 'yes'
----
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xml:base="{{ site.url }}"
+<rss version="2.0" xml:base="http://www.pixelite.co.nz"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
     xmlns:cc="http://web.resource.org/cc/">
   <channel>
-    <title>{{ site.title | xml_escape }} - drupalplanet</title>
-    <link>{{ site.url }}</link>
+    <title>Pixelite - drupalplanet</title>
+    <link>http://www.pixelite.co.nz</link>
     <description>Posts categorized as 'DrupalPlanet'</description>
     <language>en</language>
-    {% for post in site.tags.drupalplanet limit:10 %}
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <link>{{ site.url }}{{ post.url }}</link>
-        <description>{{ post.content | xml_escape }}</description>
+        <title>Debugging Drupal performance with Cache Debug module</title>
+        <link>http://www.pixelite.co.nz/article/debugging-drupal-performance-with-cache-debug/</link>
+        <description>&lt;h2 id=&quot;preface&quot;&gt;Preface&lt;/h2&gt;
+&lt;p&gt;This blog post is for developers, not site builders, as the analysis for cache debugging requires knowledge about the runtime stack of Drupal.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem-with-caching-in-drupal-7&quot;&gt;The Problem with Caching in Drupal 7&lt;/h2&gt;
+&lt;p&gt;To obtain performance in Drupal 7, Drupal relies heavily on caching. That is, to process something and cache the end result so that same work doesn’t need to be repeated. Conditions also have to be created for when that cache expires or is invalidated.
+Drupal has a caching layer to help with this. When you want to store something in cache, you use &lt;a href=&quot;https://api.drupal.org/api/drupal/includes%21cache.inc/function/cache_set/7&quot;&gt;cache_set&lt;/a&gt;, to retrieve it, you use &lt;a href=&quot;https://api.drupal.org/api/drupal/includes%21cache.inc/function/cache_get/7&quot;&gt;cache_get&lt;/a&gt; and to wipe the cache bin clean, you can use &lt;a href=&quot;https://api.drupal.org/api/drupal/includes%21cache.inc/function/cache_clear_all/7&quot;&gt;cache_clear_all&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Often, modules can implicitly clear or set cache unintentionally. This can lead to more caching overhead than you need. For example, theme registry clearing, use of the variable_set function or calls to other modules that call cache_clear_all. The problem is, how do you track down culprits to fix the issue?&lt;/p&gt;
+
+&lt;h2 id=&quot;enter-cache-debug&quot;&gt;Enter Cache Debug&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.drupal.org/project/cache_debug&quot;&gt;Cache Debug&lt;/a&gt; is a module that wraps around the caching layer and adds logging. Including stacktrace information. It means when a cache_set or cache_clear_all is called, you can trace back to what called it - understand the problem and fix it. Very quickly.&lt;/p&gt;
+
+&lt;p&gt;It comes with three logging options:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;watchdog&lt;/strong&gt; - good if you’re using syslog module but deadly if you’re using dblog.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;error_log&lt;/strong&gt; - logs to your php error log&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;arbitrary file&lt;/strong&gt; - specify your own log file to log to&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;configuring-cache-debug&quot;&gt;Configuring Cache Debug&lt;/h2&gt;
+&lt;p&gt;Because the caching system is so highly utilized, cache logging can be incredibly verbose. Perhaps this is why there is no logging around this in Drupal core. Fortunately, Cache Debug is highly configurable to control what to log.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Because the caching system is loaded and used before Drupal’s variable system which manages configuration, it is best to set configuration in settings.php rather than in the database. However, there is a web UI that does set configuration in the database for ease of use.&lt;/p&gt;
+
+&lt;h3 id=&quot;basic-configuration&quot;&gt;Basic configuration&lt;/h3&gt;
+&lt;p&gt;If you’ve used the memcache module before, this should feel familiar. In order to use Cache Debug, you need to set it as the cache handler:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_backends&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sites/all/modules/cache_debug/cache_debug.inc&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_default_class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;DrupalDebugCache&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This tells Drupal that there is a cache backend located in the path provided (make sure its correct for your Drupal site!) and that the default class for all cache bins is the DrupalDebugCache class. If you only want to monitor a single bin you may want to omit this option.&lt;/p&gt;
+
+&lt;p&gt;Since Cache Debug is a logger and not an actual caching system, it needs to pass cache requests onto a real cache system. By default, Debug Cache will use Drupal core’s Database Cache system for cache storage, but if you’re using memcache, redis or similar, you may want to set that as the handler for Cache Debug:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;MemCacheDrupal&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_cache_debug_form&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;DrupalDatabaseCache&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You need to also configure those modules accordingly.&lt;/p&gt;
+
+&lt;p&gt;At this point, you’ll be logging all cache calls and stack traces to set and clear calls to the php error log.&lt;/p&gt;
+
+&lt;h3 id=&quot;configure-the-logging-location&quot;&gt;Configure the logging location&lt;/h3&gt;
+
+&lt;p&gt;You may want to choose your own logging location. For example, if you use dblog, then you won’t want to log to watchdog because it will bloat your database. Likewise, if you don’t want to bloat  our php error log, then you may want to log to an arbitrary file. You can choose your logging location by setting &lt;code&gt;cache_debug_logging_destination&lt;/code&gt; to error_log (default), watchdog or file. For file you will also need to provide the location:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_logging_destination&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;file&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_filepath&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/tmp/cachedebug.log&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;configuring-logging-options&quot;&gt;Configuring logging options&lt;/h3&gt;
+
+&lt;p&gt;You can choose to log calls to cache get, getMulti, set and clear. You can also choose to log a stacktrace of these calls to show the stack that triggered the call. This is most useful for calls to SET and CLEAR. For a minimal logging option with the most about of insight, you might want to try this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_get&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_getMulti&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_set&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_clear&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_stacktrace_set&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_stacktrace_clear&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;logging-per-cache-bin&quot;&gt;Logging per cache bin&lt;/h3&gt;
+
+&lt;p&gt;You don’t have to log the entire caching layer if you know which bin to look at for the caching issue you’re observing. For example, if you’re looking for misuse of variable_set, you only need to log the cache_bootstrap bin. In which case you could do this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Do not log to all cache bins so ensure this line is removed (from above):&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# $conf[&amp;#39;cache_default_class&amp;#39;] = &amp;#39;DrupalDebugCache&amp;#39;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_bootstrap_class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;DrupalDebugCache&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;configure-for-common-issues&quot;&gt;Configure for common issues&lt;/h3&gt;
+&lt;p&gt;Variable set calls and theme registry rebuilds are the two most common issues and so Cache Debug has use cases for these issues built in. So long as Cache Debug is the cache handler for the bin, you can turn off logging and turn on these features and Cache Debug will only log when these issues occur:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_default_class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;DrupalDebugCache&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_common_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;s1&quot;&gt;&amp;#39;variables&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s1&quot;&gt;&amp;#39;theme_registry&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Turn off logging&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_get&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_getMulti&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_set&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_clear&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;analysing-the-logged-data&quot;&gt;Analysing the logged data&lt;/h2&gt;
+
+&lt;p&gt;Cache debug logs to a log file like the example below:
+&lt;img src=&quot;http://www.pixelite.co.nz/img/cache-debug/cache_debug-example.png&quot; alt=&quot;Example output of cache debug logging&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In this snapshot of log output you can see both how cache debug logs cache calls and the stacktracing in action.&lt;/p&gt;
+
+&lt;h3 id=&quot;log-format-structure&quot;&gt;Log format structure&lt;/h3&gt;
+&lt;p&gt;A log line starts with a value that describes the cache bin, the cache command and the cache id. E.g. &lt;code&gt;cache_bootstrap-&amp;gt;set-&amp;gt;variables&lt;/code&gt; would bet a cache_set call to the cache_bootstrap cache bin to set the variables cache key.
+Some calls also log additional data, for example, cache clear also indicates if the call was a wildcard clear. Set calls also log how much data (length) was set.&lt;/p&gt;
+
+&lt;h3 id=&quot;stack-trace-logs&quot;&gt;Stack trace logs&lt;/h3&gt;
+&lt;p&gt;When stack tracing is enabled for specific commands, a stack trace will be logged immediately after the log event that triggered it. The trace rolls back through each function that led to the current cache command being triggered. In the example above you can see that cache_clear_all was called by drupal_theme_rebuild which was called by an include from phptemplate_init. If you look at the source code in phptemplate_init, you’ll see that this means a cache rebuild was triggered from including template.php. In this case it was that Zen base theme had the theme registry rebuild left on.&lt;/p&gt;
+</description>
         <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <dc:creator>{{ post.author | xml_escape }}</dc:creator>
-        <guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
-        <comments>{{ site.url }}{{ post.url }}#disqus_thread</comments>
+        <pubDate>Wed, 01 Jul 2015 00:00:00 +1200</pubDate>
+        <dc:creator>Josh Waihi</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/debugging-drupal-performance-with-cache-debug/</guid>
+        <comments>http://www.pixelite.co.nz/article/debugging-drupal-performance-with-cache-debug/#disqus_thread</comments>
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>How to profile PHP memory with Drupal</title>
+        <link>http://www.pixelite.co.nz/article/how-to-profile-php-memory-with-drupal/</link>
+        <description>&lt;h2 id=&quot;why-is-this-important&quot;&gt;Why is this important&lt;/h2&gt;
+
+&lt;p&gt;How to size the PHP setting &lt;code&gt;max_memory&lt;/code&gt; is actually really important for the health of your Drupal application. Size this too small, and you risk getting PHP fatals due to not enough memory allocated. Size this too large, and you are essentially under-utilising your hardware, which in turn can lead to more cost.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-to-record-every-drupal-requests-php-max-memory-usage&quot;&gt;How to record every Drupal requests PHP max memory usage&lt;/h2&gt;
+
+&lt;p&gt;Tim Hillard created this really nice module called &lt;a href=&quot;https://www.drupal.org/project/memory_profiler&quot;&gt;Memory profiler&lt;/a&gt;, which probably wins some sort of award for being around one of the smallest modules on drupal.org. Essentially this module registers a &lt;a href=&quot;https://api.drupal.org/api/drupal/includes%21bootstrap.inc/function/drupal_register_shutdown_function/7&quot;&gt;shutdown function&lt;/a&gt; that gets called at the end of every normal Drupal request.&lt;/p&gt;
+
+&lt;p&gt;The module is lightweight enough to run on production and only produces an extra syslog line per request.&lt;/p&gt;
+
+&lt;h2 id=&quot;analyse-the-data&quot;&gt;Analyse the data&lt;/h2&gt;
+
+&lt;p&gt;The data for memory profiler flows into watchdog, so if you run syslog (which you should), you can use CLI tools to analyse the data.&lt;/p&gt;
+
+&lt;h3 id=&quot;what-does-a-single-request-look-like&quot;&gt;What does a single request look like&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n 1
+
+May &lt;span class=&quot;m&quot;&gt;26&lt;/span&gt; 06:25:21 10.212.4.16 sitename: https://www.sitename.com&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;1432621521&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;memory profiler&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;1.152.97.17&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;https://www.sitename.com/&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;https://www.sitename.com/home&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;4.75 MB - home &lt;span class=&quot;nv&quot;&gt;request_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This comes from your syslog format (which can be changed on a per site basis):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush vget syslog_format
+
+syslog_format: &lt;span class=&quot;s1&quot;&gt;&amp;#39;!base_url|!timestamp|!type|!ip|!request_uri|!referer|!uid|!link|!message&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;extract-the-data-from-syslog&quot;&gt;Extract the data from syslog&lt;/h3&gt;
+
+&lt;p&gt;From here you can tokenise the parts you actually care about, in other words the:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;URL requested (part 5)&lt;/li&gt;
+  &lt;li&gt;PHP max memory (part 9)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Using more bash foo&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt;
+
+https://www.sitename.com/,4.75 MB - home &lt;span class=&quot;nv&quot;&gt;request_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;On Acquia Cloud a request ID is added to all requests, we don’t need this. Also having the string ‘MB’ there is superfluous.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt;
+
+https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Perfect.&lt;/p&gt;
+
+&lt;p&gt;So in order to create a CSV for analysing in a spreadsheet you could do:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;request_uri,max_memory&amp;quot;&lt;/span&gt; &amp;gt; /tmp/memory.csv &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; /tmp/memory.csv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And then you can make pretty graphs if you want:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/profile/graph.png&quot; alt=&quot;Graph showing PHP memory usage sorted by smallest to largest&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Or if you just want to find the top requests to your application by memory you can do&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sort -t, -k+2 -n -r &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n 20&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;Based on your findings in the logs, you should be able to come up with:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A better understanding of your request memory profile&lt;/li&gt;
+  &lt;li&gt;Better max memory settings for your Drupal application&lt;/li&gt;
+  &lt;li&gt;Potentially identify poor performing pages (memory wise) and can look to optimise them&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;gotchas&quot;&gt;Gotchas&lt;/h2&gt;
+
+&lt;p&gt;This module will only work if:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;hook_boot()&lt;/code&gt; is called (which might not be the case if you run custom lightweight PHP scripts that do not bootstrap Drupal)&lt;/li&gt;
+  &lt;li&gt;The Drupal request is not terminated with a SIGTERM or SIGKILL signal&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;Let me know if you found this helpful, or if you have any changes to my bash foo. If you have profiled your Drupal application recently, what methods and tools did you use?&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Wed, 27 May 2015 00:00:00 +1200</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/how-to-profile-php-memory-with-drupal/</guid>
+        <comments>http://www.pixelite.co.nz/article/how-to-profile-php-memory-with-drupal/#disqus_thread</comments>
+      </item>
+    
+      <item>
+        <title>Top 10 DrupalCon LA sessions</title>
+        <link>http://www.pixelite.co.nz/article/top-10-drupalcon-la-sessions/</link>
+        <description>&lt;h2 id=&quot;drupalcon-la&quot;&gt;DrupalCon LA&lt;/h2&gt;
+
+&lt;p&gt;So I did not make it along to DrupalCon Los Angeles, but I did spend some time reading twitter, and watching the sessions online. Here are some of the sessions I found entertaining and insightful and would recommend to others.&lt;/p&gt;
+
+&lt;h2 id=&quot;driesnote-keynote&quot;&gt;Driesnote Keynote&lt;/h2&gt;
+
+&lt;p&gt;Dries, as always, sets the lay of the land with Drupal. He also goes into the early days of Drupal, and how some key people he was involved with and have now gone on to form organisations that centre around Drupal.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Best quote:&lt;/em&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Obstacles don’t block the path, they are the path&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-16by9&quot;&gt;
+&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/uNRtZDAS0xI&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;no&quot;&gt;No&lt;/h2&gt;
+
+&lt;p&gt;Larry Garfield gives an interesting talk on why sometimes it is best to say NO in order to give focus to the things that actually matter.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Best quote:&lt;/em&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Case and point, the new Macbook Airs, they say NO TO EVERYTHING.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/eXYs09gxIzE&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;php-containers-at-scale-5k-containers-per-server&quot;&gt;PHP Containers at Scale: 5K Containers per Server&lt;/h2&gt;
+
+&lt;p&gt;David Strauss explains the history of web hosting, and how this is now far more complex. David is CTO of &lt;a href=&quot;https://pantheon.io/&quot;&gt;Pantheon&lt;/a&gt;, and they now run 100,000+ websites, all with dev + test + production environments. Pantheon run 150+ containers on a 30GB box (205MB each on average). Really interesting talk on how to run large amounts of sites efficiently.&lt;/p&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/hFqEsqRFB9s&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;decoupled-drupal-when-why-and-how&quot;&gt;Decoupled Drupal: When, Why, and How&lt;/h2&gt;
+
+&lt;p&gt;Amitai Burstein and Josh Koenig give a really entertaining presentation on monolithical architectures and some developer frustrations. And then introduce REST web services in Drupal 8, and how this can be used to provide better consumer interfaces for other frameworks.&lt;/p&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/CSrWpXe4nzw&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;features-for-drupal-8&quot;&gt;Features for Drupal 8&lt;/h2&gt;
+
+&lt;p&gt;Mike Potter goes through what role features played in Drupal 7, and how features will adapt in Drupal 8 now that CMI is in. Features in Drupal 8 will be going back to it’s roots and provide ‘bundles’ of configuration for re-use.&lt;/p&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/-91v3QvMkc0&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;meet-commerce-2x&quot;&gt;Meet Commerce 2.x&lt;/h2&gt;
+
+&lt;p&gt;Ryan and Bojan go through 1.x on Drupal 7, and how they have chosen to develop Commerce 2.x on Drupal 8. This is a complete rewrite. The hierarchical product model is really exciting.&lt;/p&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/I65tHQtJSJY&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;how-when-and-why-to-patch-a-module&quot;&gt;How, When and Why to Patch a Module&lt;/h2&gt;
+
+&lt;p&gt;Joshua Turton goes over what a patch is, when you should patch contributed modules, and how to keep track of these with Drush make.&lt;/p&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/rsNEF_JZ-2o&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;p&gt;My colleague Josh also wrote a blog post on &lt;a href=&quot;https://www.acquia.com/blog/patching-drush-make&quot;&gt;how to use Drush make&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;ci-for-css-creating-a-visual-regression-testing-workflow&quot;&gt;CI for CSS: Creating a Visual Regression Testing Workflow&lt;/h2&gt;
+
+&lt;p&gt;I topic that I am passionate about is visual regressions, here Kate Kligman goes through some tools that can help you test your site for visual changes. Tools covered include PhantomJS, SlimerJS, Selenium, &lt;a href=&quot;https://github.com/BBC-News/wraith&quot;&gt;Wraith&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/D63FWeYhISU&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;speeding-up-drupal-8-development-using-drupal-console&quot;&gt;Speeding up Drupal 8 development using Drupal Console&lt;/h2&gt;
+
+&lt;p&gt;Eduardo and Jesus give us an introduction to your new best friend in Drupal 8. Drupal console is a Symfony CLI application to help you write boilerplate code, e.g. to create a new module. Personally, I am excited for the form API generator, and the ability to create a new entity with a single command.&lt;/p&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/8Eu43RXKHmw&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;p&gt;For more information see &lt;a href=&quot;http://drupalconsole.com/&quot;&gt;drupalconsole.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;qa-with-dries&quot;&gt;Q&amp;amp;A with Dries&lt;/h2&gt;
+
+&lt;p&gt;As Drupal heads down from 130 critical issues down to &lt;a href=&quot;https://www.drupal.org/project/issues/search/drupal?project_issue_followers=&amp;amp;status%5B%5D=1&amp;amp;status%5B%5D=13&amp;amp;status%5B%5D=8&amp;amp;status%5B%5D=14&amp;amp;status%5B%5D=15&amp;amp;status%5B%5D=4&amp;amp;status%5B%5D=16&amp;amp;priorities%5B%5D=400&amp;amp;version%5B%5D=8.x&amp;amp;issue_tags_op=%3D&quot;&gt;22&lt;/a&gt; currently, what are some key concerns by people. The questions are answered by dries, xjm, webchick and alexpott.&lt;/p&gt;
+
+&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
+&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/nAzQpbdZGGI&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;where-can-i-find-more-videos&quot;&gt;Where can I find more videos&lt;/h2&gt;
+
+&lt;p&gt;Don’t worry there are plenty more videos on the &lt;a href=&quot;https://www.youtube.com/user/DrupalAssociation/videos&quot;&gt;Drupal Association Youtube page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you have any awesome sessions that I have missed let me know in the comments.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Fri, 22 May 2015 00:00:00 +1200</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/top-10-drupalcon-la-sessions/</guid>
+        <comments>http://www.pixelite.co.nz/article/top-10-drupalcon-la-sessions/#disqus_thread</comments>
+      </item>
+    
+      <item>
+        <title>Drupal Migrate D2D :: Taxonomy terms on nodes</title>
+        <link>http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/</link>
+        <description>&lt;p&gt;A migration project I am currently working on hit a small hurdle with taxonomy terms on a content type. This took too long to resolve. Hopefully posting this here will save others the time and hassle I went though.&lt;/p&gt;
+
+&lt;h2 id=&quot;migrate-d2d&quot;&gt;Migrate D2D&lt;/h2&gt;
+&lt;p&gt;I am going to assume that if you are reading this you are already using the &lt;a href=&quot;https://www.drupal.org/project/migrate_d2d&quot;&gt;migrate_d2d&lt;/a&gt; module so I won’t go into the big explanation about what it is, why you should use it and just how greatful we all should be to &lt;a href=&quot;https://www.drupal.org/u/mikeryan&quot;&gt;Mike Ryan&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;node-migration-and-taxonomies&quot;&gt;Node migration and taxonomies&lt;/h2&gt;
+&lt;p&gt;After following the docs I found that my taxonomy field was not being populated. A little digging led me to the conclusion that this was not something d2d handled out of the box and it was something I would have to deal with myself. There are a number of moving parts involved with this and due to all of these I can understand &lt;em&gt;why&lt;/em&gt; it is not something migrate d2d could do.&lt;/p&gt;
+
+&lt;h3 id=&quot;public-function-prepareentity-row&quot;&gt;public function prepare($entity, $row)&lt;/h3&gt;
+&lt;p&gt;The magic happens here.  The &lt;code&gt;prepare()&lt;/code&gt; function is the final thing to be called before the node object is saved. This is where we get to do any final tweaks or tidyups. You can find full detail on this in the &lt;a href=&quot;https://www.drupal.org/node/1132582&quot;&gt;Commonly implemented Migration methods&lt;/a&gt; page in the &lt;a href=&quot;https://www.drupal.org/migrate&quot;&gt;Migrate handbook&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the &lt;code&gt;prepare()&lt;/code&gt; function the &lt;code&gt;$entity&lt;/code&gt; is the new object that we are about to save and the &lt;code&gt;$row&lt;/code&gt; is our source object. At this point the taxonomy has been added to the &lt;code&gt;$row&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Within the &lt;code&gt;$row&lt;/code&gt; object the taxonomy has been added with its vid as the root level attribute. If you don’t know to watch for that it can catch you. Added to that it is the vid of the destination vocabulary that is used which caught me off guard. The situation I had did not have me migrating the vobacularies, just the terms within them and the vid for the Categories vocab was not the same on my development environment as it was on my staging environment. This caught me out initially as I don’t have direct access to the staging database to examine the content of tables.&lt;/p&gt;
+
+&lt;figure&gt;
+  &lt;img src=&quot;http://www.pixelite.co.nz/img/migrate-d2d/row_object_krumo.png&quot; alt=&quot;Krumo output of $row.&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;
+  &lt;figcaption&gt;&lt;small&gt;source $row-&amp;gt;{destination vid} = array({source tid}, {source tid}, {source tid})&lt;/small&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;Once it was realised that the vid was from the destination vocabulary things got easier.  This is how the code looked in the end for me;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;prepare&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// The node&amp;#39;s terms are in an array under their destination vocab ID and&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// this is different from environment to environment. However, we&amp;#39;ve only&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// got one taxonomy...&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$keys&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;array_keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$keys&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;is_numeric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$cat_vid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;empty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$cat_vid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$cat_vid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$tid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// We want the tid of the term we have migrated. This lets us look it up&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// our migrate_map table.&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$new_tid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;db_select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;migrate_map_tncategoryterms&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;m&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fields&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;m&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;destid1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;condition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;sourceid1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$tid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fetchField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;field_category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;LANGUAGE_NONE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;tid&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$new_tid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;caveats&quot;&gt;Caveats&lt;/h3&gt;
+&lt;p&gt;This worked for me because I only had &lt;strong&gt;one&lt;/strong&gt; taxonomy field to worry about. The moment you get more than one you will want to revisit the assignment of $new_tid to the appropriate field. This shouldn’t be a problem to hand code and if you have migrated the vocabularies too you may be able to use the migrate_map table to make something more dynamic.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you have (or are currently) using migrate I would be interested to hear how you found it. Especially if you are migrating terms, but not the vocabulary.&lt;/p&gt;
+
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 14 May 2015 00:00:00 +1200</pubDate>
+        <dc:creator>Gold</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/</guid>
+        <comments>http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/#disqus_thread</comments>
+      </item>
+    
+      <item>
+        <title>How and why you should update PHP to PHP 5.5 with Drupal</title>
+        <link>http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/</link>
+        <description>&lt;p&gt;This post is a follow up to my previous blog post on &lt;a href=&quot;/article/upgrading-php-54-ubuntu-1204-lts-support-drupal-8&quot;&gt;how to upgrade PHP to 5.4 to support Drupal 8&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-you-should-upgrade-php&quot;&gt;Why you should upgrade PHP&lt;/h2&gt;
+
+&lt;p&gt;If you are looking for reasons to ditch PHP 5.3, here are some:&lt;/p&gt;
+
+&lt;h3 id=&quot;security&quot;&gt;Security&lt;/h3&gt;
+
+&lt;p&gt;PHP 5.3 &lt;a href=&quot;http://php.net/supported-versions.php&quot;&gt;reached end of life in August 2014&lt;/a&gt;, this means that if you are running this version, you are running an insecure version of PHP that potentially has security holes in it. This is bad for obvious reasons.&lt;/p&gt;
+
+&lt;h3 id=&quot;bundled-opcode-cache&quot;&gt;Bundled opcode cache&lt;/h3&gt;
+
+&lt;p&gt;PHP 5.5 is the first version that bundles an opcode cache with PHP, this means there is also no need to also run APC (unless you need userland caching in &lt;a href=&quot;https://github.com/krakjoe/apcu&quot;&gt;APCu&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h3 id=&quot;performance&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;p&gt;PHP &lt;a href=&quot;http://news.php.net/php.internals/57760&quot;&gt;profiled the 5.4 release compared to 5.3 for Drupal&lt;/a&gt;, and that found that:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;7% more requests/second&lt;/li&gt;
+  &lt;li&gt;50% PHP memory reduction&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;PHP 5.5 offers more performance again, and there is a section at the bottom of this article that goes through a real life scenario.&lt;/p&gt;
+
+&lt;h3 id=&quot;cool-new-features&quot;&gt;Cool new features&lt;/h3&gt;
+
+&lt;p&gt;Read through the list of new features, here are some neat things you are missing out on:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/language.exceptions.php#language.exceptions.finally&quot;&gt;try/catch/finally&lt;/a&gt; is finally now in&lt;/li&gt;
+  &lt;li&gt;Short array syntax&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$array = [&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;  &amp;quot;foo&amp;quot; =&amp;gt; &amp;quot;bar&amp;quot;,&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;  &amp;quot;bar&amp;quot; =&amp;gt; &amp;quot;foo&amp;quot;,&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Function array dereferencing&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$secondElement = getArray()[1];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/language.oop5.traits.php&quot;&gt;Traits&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And &lt;a href=&quot;http://php.net/manual/en/migration54.new-features.php&quot;&gt;many&lt;/a&gt; &lt;a href=&quot;http://php.net/manual/en/migration55.new-features.php&quot;&gt;others&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-to-upgrade-to-php-55&quot;&gt;How to upgrade to PHP 5.5&lt;/h2&gt;
+
+&lt;p&gt;There are a number of ways to update your server to PHP 5.5.&lt;/p&gt;
+
+&lt;h3 id=&quot;upgrade-to-ubuntu-trusty-tahr-1404&quot;&gt;Upgrade to Ubuntu Trusty Tahr 14.04&lt;/h3&gt;
+
+&lt;p&gt;Ubuntu Trusty Tahr 14.04 (which is an LTS version), which comes bundled with &lt;a href=&quot;http://packages.ubuntu.com/trusty/php5-common&quot;&gt;PHP 5.5.9&lt;/a&gt;. This is probably the best solution if you are managing your own Ubuntu box.&lt;/p&gt;
+
+&lt;h3 id=&quot;install-a-ppa-on-ubuntu-precise-1204&quot;&gt;Install a PPA on Ubuntu Precise 12.04&lt;/h3&gt;
+
+&lt;p&gt;If you are running the older Ubuntu Precise 12.04, you can add a PPA&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo add-apt-repository ppa:ondrej/php5
+sudo apt-get update
+sudo apt-get install php5
+php5 -v&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It would be worth considering a dist upgrade though, but this at least can buy you some time.&lt;/p&gt;
+
+&lt;h3 id=&quot;acquia-cloud-ui&quot;&gt;Acquia Cloud UI&lt;/h3&gt;
+
+&lt;p&gt;If you use &lt;a href=&quot;https://www.acquia.com/products-services/acquia-cloud&quot;&gt;Acquia Cloud&lt;/a&gt; for hosting there is a convenient PHP version selector in the UI.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/php55/cloud.png&quot; alt=&quot;Acquia Cloud UI allows site administrators to change the PHP version&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;More information can be found in the &lt;a href=&quot;https://docs.acquia.com/cloud/configure/environments/php#php-version&quot;&gt;documentation&lt;/a&gt;. Be aware, once you upgrade beyond PHP 5.3, you cannot downgrade, so ensure you test your code on a development server first ;)&lt;/p&gt;
+
+&lt;h2 id=&quot;common-coding-issues&quot;&gt;Common coding issues&lt;/h2&gt;
+
+&lt;p&gt;Although Drupal 7 core, and most popular contributed modules will already support PHP 5.5, it would pay to do a code audit on any custom code written to ensure you are not using things you should not be. Here are some links you should read:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/migration54.incompatible.php&quot;&gt;PHP 5.4 incompatible changes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/migration55.incompatible.php&quot;&gt;PHP 5.5 incompatible changes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Below are some of the most common issues I have found in sites:&lt;/p&gt;
+
+&lt;h3 id=&quot;call-time-pass-by-reference&quot;&gt;Call time pass-by-reference&lt;/h3&gt;
+
+&lt;p&gt;If you have this in your code, you will have a bad time, as this is now a PHP fatal.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;foo(&amp;amp;$a); // Bad times.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;only-variables-can-be-passed-by-reference&quot;&gt;Only variables can be passed by reference&lt;/h3&gt;
+
+&lt;p&gt;This will cause PHP to throw notices.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;php -a
+Interactive shell
+
+php &amp;gt; ini_set&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;error_reporting&amp;#39;&lt;/span&gt;, E_ALL&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+php &amp;gt; var_dump&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;reset&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;explode&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;Jim|Bob|Cat&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+PHP Strict Standards:  Only variables should be passed by reference in php shell code on line 1
+
+Strict Standards: Only variables should be passed by reference in php shell code on line 1
+string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Jim&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Where you will likely find this in Drupal in my experience is when manually rendering nodes:&lt;/p&gt;
+
+&lt;p&gt;This code works in PHP 5.3, but will throw notices in PHP 5.5:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$rendered = drupal_render(node_view(node_load(1), &amp;#39;teaser&amp;#39;));&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The fix is to simply use a temporary variable:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$view = node_view(node_load(1), &amp;#39;teaser&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$rendered = drupal_render($view);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The reason being that &lt;code&gt;drupal_render()&lt;/code&gt; expects a variable to be passed in (as it is passed by reference).&lt;/p&gt;
+
+&lt;h3 id=&quot;how-do-you-find-coding-issues&quot;&gt;How do you find coding issues&lt;/h3&gt;
+
+&lt;p&gt;Enable the syslog module, and tail that in your development environment, hunt down and fix as many notices and warnings as possible. The more noisy your logs are, the harder it is to find actual issues in them. While you are at it, turn off the dblog module, this is only helpful if you do not have access to your syslog (as it is a performance issue to be continually writing to the database).&lt;/p&gt;
+
+&lt;h2 id=&quot;real-world-performance-comparison&quot;&gt;Real world performance comparison&lt;/h2&gt;
+
+&lt;p&gt;This was taken from a recent site that underwent a PHP 5.3 to 5.5 upgrade. Here are 2 New Relic overviews, taken with identical performance tests run against the same codebase. The first image is taken with PHP 5.3 running:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/php55/php53.png&quot; alt=&quot;Performance of Drupal on PHP 5.3 is not that flash&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can see PHP time is around 260ms of the request.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/php55/php55.png&quot; alt=&quot;Performance of Drupal on PHP 5.5 is much better than 5.3&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;With an upgrade to PHP 5.5, the time spent in PHP drops to around 130ms. So this is around a a 50% reduction in PHP time. This not only makes your application faster, but also it means you can serve more traffic from the same hardware.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you have gone through a recent PHP upgrade, I would be interested to hear how you found it, and what performance gains you managed to achieve.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Mon, 13 Apr 2015 00:00:00 +1200</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/</guid>
+        <comments>http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/#disqus_thread</comments>
+      </item>
+    
+      <item>
+        <title>Site preview - the holy grail of Drupal</title>
+        <link>http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal</link>
+        <description>&lt;h2 id=&quot;what-is-site-preview&quot;&gt;What is site preview&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The ability to see (and have selected others see) changes to content and layout that is not yet visible to the general public&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So recently I did a talk at &lt;a href=&quot;https://melbourne2015.drupal.org.au/session/site-preview-holy-grail-drupal&quot;&gt;DrupalSouth Melbourne&lt;/a&gt; on site preview solutions that exist within Drupal at present. I noticed that no one had managed to do a comparison between them as they stand at the moment, so I aimed to help out there.&lt;/p&gt;
+
+&lt;p&gt;Solutions compared in the talk:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Drupal 7 (stock)&lt;/li&gt;
+  &lt;li&gt;SPS&lt;/li&gt;
+  &lt;li&gt;CPS&lt;/li&gt;
+  &lt;li&gt;Zariz&lt;/li&gt;
+  &lt;li&gt;Live preview&lt;/li&gt;
+  &lt;li&gt;What is coming in Drupal 8&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I also wanted to introduce the new solution that was developed for the Ministry of Health New Zealand, that aimed to solve site preview in an entirely different manner.&lt;/p&gt;
+
+&lt;h2 id=&quot;slides&quot;&gt;Slides&lt;/h2&gt;
+
+&lt;p&gt;Here are my &lt;a href=&quot;http://bit.ly/drupalsouthsitepreview&quot;&gt;full slides&lt;/a&gt; from the talk if you want to read about the above options in more detail.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-preview-sync-is-different&quot;&gt;How preview sync is different&lt;/h2&gt;
+
+&lt;p&gt;Instead of try to take over your production site, and pollute it with complex revisioning and access control, and altering your EFQ and views using magic, it instead works with your existing workflow (workbench_moderation integration is &lt;abbr title=&quot;out of the box&quot;&gt;OOTB&lt;/abbr&gt;), and aims to be a lightweight solution.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/site-preview/diagram.png&quot; alt=&quot;Preview sync syndicates your production database to a separate preview environment&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Preview sync, takes a live snapshot (optimised) of your production database, and imports this to a separate dedicated preview environment. Then a number of actions take place, all of which are entirely alterable, so you can add your own tasks in, and remove tasks you don’t need.&lt;/p&gt;
+
+&lt;p&gt;Example tasks in preview sync:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;environment switch to preview, this allows you to enable and disable modules, perform actions (e.g. redirecting email to a log). This is a powerful hook.&lt;/li&gt;
+  &lt;li&gt;publish the content currently in ‘Needs Review’, this allows your content approvers to see the content, including all surrounding content as if it was published on production, but in a safe and controlled environment&lt;/li&gt;
+  &lt;li&gt;re-index solr, if your site is largely driven by Apache Solr (which is not uncommon), this will allow the newly published content above to be inserted into the preview Solr index. This is a unique feature&lt;/li&gt;
+  &lt;li&gt;your task here, seriously, the task list is completely alterable, and any drush command can be remotely executed on the preview environment. Custom drush commands can be added. An example of which is the bundled workbench-moderation-publish drush command.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;security&quot;&gt;Security&lt;/h3&gt;
+
+&lt;p&gt;As all the complex access control is not needed on production (e.g. you are never sending un-published content to Solr), there is a huge security benefit to using preview sync. Access control to nodes is kept simple on production.&lt;/p&gt;
+
+&lt;p&gt;Also, as the preview environment is dedicated, you can lock down access, e.g. only allow access to your preview site from certain IPs. This way, your internal content approvers can still see the content, and no one else.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If preview sync sounds like it could be useful to you, I am keen to know - please leave a comment below. I am also keen to hear if&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;there is a missing feature that is needed for you to adopt preview sync&lt;/li&gt;
+  &lt;li&gt;key integrations with other contributed modules are missing&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Sat, 07 Mar 2015 00:00:00 +1300</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal</guid>
+        <comments>http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal#disqus_thread</comments>
+      </item>
+    
+      <item>
+        <title>Installing Solr for development</title>
+        <link>http://www.pixelite.co.nz/article/installing-solr-development</link>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://lucene.apache.org/solr/&quot;&gt;Solr&lt;/a&gt; is an open source search engine with many powerful &lt;a href=&quot;http://lucene.apache.org/solr/features.html&quot;&gt;features&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I encounter a lot of experienced developers that either don’t know how to use it or avoid it as it’s in the &lt;strong&gt;too hard/scary&lt;/strong&gt; basket.
+In this introductory article we’ll talk briefly about how to install Solr in order to use it for development.&lt;/p&gt;
+
+&lt;p&gt;There are many ways to install and configure Solr but in this article I’ll show you how to set it up quickly so you can get started developing with it. While the installation and setup will be generic to any framework you want to develop with, I’ll also, show you a couple of extra steps if you’re using Drupal.&lt;/p&gt;
+
+&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
+
+&lt;p&gt;The only real hard requirement/prerequisite for running Solr is Java. Version 1.6 is recommended for Solr version 4 and upward. &lt;a href=&quot;http://www.ubuntu.com/&quot;&gt;Ubuntu&lt;/a&gt; and Mac should come with Java pre-installed.&lt;/p&gt;
+
+&lt;p&gt;I’m not a windows guy so sorry you guys are on your own There’s plenty of resources out &lt;a href=&quot;https://www.google.co.nz/webhp?sourceid=chrome-instant&amp;amp;ion=1&amp;amp;espv=2&amp;amp;ie=UTF-8#safe=off&amp;amp;q=installing%20solr%20on%20windows&quot;&gt;there&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can find out the version of Java you are running with the following command.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;java -version
+
+java version &lt;span class=&quot;s2&quot;&gt;&amp;quot;1.7.0_72&amp;quot;&lt;/span&gt;
+Java&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TM&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; SE Runtime Environment &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;build 1.7.0_72-b14&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Java HotSpot&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TM&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 64-Bit Server VM &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;build 24.72-b04, mixed mode&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I am using Ubuntu 14.04 but the instructions in this article should work if you’re on a Mac or another variant of *nix&lt;/p&gt;
+
+&lt;h2 id=&quot;download&quot;&gt;Download&lt;/h2&gt;
+
+&lt;p&gt;Open a terminal and make a folder we can use for working in, and change to that directory:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mkdir solr
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;solr&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Navigate to the &lt;a href=&quot;http://lucene.apache.org/solr/mirrors-solr-latest-redir.html&quot;&gt;Solr download page&lt;/a&gt; and find the closest mirror for you. At the time of this article the latest version of Solr is 4.10.2.&lt;/p&gt;
+
+&lt;p&gt;Copy the download link for either the solr-VERSION.tar.gz or the solr-VERSION.zip. You don’t want the solr-VERSION-src.tgz (this is the source code and will need to be compiled) and download it with wget.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;wget -c http://mirrors.sonic.net/apache/lucene/solr/4.10.4/solr-4.10.4.tgz&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;unpack&quot;&gt;Unpack&lt;/h2&gt;
+
+&lt;p&gt;Once downloaded (it’ll be about 150M) we can un-compress it and change into the directory.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;tar -zxvf solr-4.10.2.tgz
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;solr-4.10.2/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;make-a-working-copy&quot;&gt;Make a working copy&lt;/h2&gt;
+
+&lt;p&gt;In the current directory there is a folder called &lt;strong&gt;example&lt;/strong&gt; we want to make a copy of this folder.&lt;/p&gt;
+
+&lt;p&gt;We could just use the &lt;strong&gt;example&lt;/strong&gt; folder but it’s nice to leave that clean on case you want to use this copy of Solr for other sites as well. So we’ll make a copy and then change directory into the newly created copy.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cp -prv example my_solr
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;my_solr&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;make-it-work&quot;&gt;Make it work&lt;/h2&gt;
+
+&lt;p&gt;Now we’re ready to run it for the first time. To run Solr it’s really simple. Simply run:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;java -jar start.jar&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You should see a whole bunch of output (to stop solr press &lt;strong&gt;CTRL^C&lt;/strong&gt;).
+After a few seconds if you open your browser and navigate to &lt;a href=&quot;http://0.0.0.0:8983/solr/&quot;&gt;http://0.0.0.0:8983/solr/&lt;/a&gt; you should see something similar to the following (the actual screen may differ depending on your version)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/solr/dashboard.png&quot; alt=&quot;Solr dashboard&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s it. Solr is now set up and ready to use.
+Depending on your client frame work you may need to makes some config changes to Solr itself.
+Consult the installation instructions of your chosen framework.
+If you’re using Drupal keep reading and I’ll show you the steps required to make Solr ready for Drupal integration.
+First lets stop SOlr from running by hitting &lt;strong&gt;CTRL^C&lt;/strong&gt; in your terminal.&lt;/p&gt;
+
+&lt;h2 id=&quot;modules&quot;&gt;Modules&lt;/h2&gt;
+
+&lt;p&gt;There are a couple of modules you can use for Drupal integration with Solr.
+I wont go into the Drupal configuration side of things (I’ll leave that for another day) but will talk about the steps required to get the Solr server we’ve set up ready for Drupal usage depending on the Solr module you’ve chosen.&lt;/p&gt;
+
+&lt;h3 id=&quot;search-api-and-apachesolr&quot;&gt;Search API and ApacheSolr&lt;/h3&gt;
+
+&lt;p&gt;If you’re using the &lt;a href=&quot;http://drupal.org/project/search_api&quot;&gt;search_api&lt;/a&gt; you will need to ensure you have the &lt;a href=&quot;http://drupal.org/project/search_api_solr&quot;&gt;search_api_solr&lt;/a&gt; module installed. Otherwise the &lt;a href=&quot;http://drupal.org/project/apachesolr&quot;&gt;apachesolr&lt;/a&gt; module is the way to go.&lt;/p&gt;
+
+&lt;p&gt;In both the &lt;a href=&quot;http://drupal.org/project/search_api_solr&quot;&gt;search_api_solr&lt;/a&gt; and &lt;a href=&quot;http://drupal.org/project/apachesolr&quot;&gt;apachesolr&lt;/a&gt; modules, you’ll find a folder called &lt;strong&gt;solr-conf&lt;/strong&gt; in this folder there will be version folders &lt;strong&gt;4.x&lt;/strong&gt;, &lt;strong&gt;3.x&lt;/strong&gt; etc.
+Choose the version of Solr you downloaded. This folder contains all the config files you need to install in your Solr install.
+I could probably write a whole bunch of articles about the contents of these files but since this is a beginner tutorial we’ll just take the easiest route.&lt;/p&gt;
+
+&lt;p&gt;You want to copy the contents of the &lt;strong&gt;solr-conf/4.x/&lt;/strong&gt; folder into your solder core.
+We can do this with the following, go back to your terminal, and run (change the path to your Drupal module):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cp -v **/path/to/apachesolr/or/search_api_solr/**solr-conf/4.x/* solr/collection1/conf/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;That will copy the config for your Drupal site into the &lt;strong&gt;my_solr/solr/collection1/conf/&lt;/strong&gt; directory.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Solr is now ready for use by your Drupal install. You can run it whenever you like by changing into the &lt;strong&gt;my_solr&lt;/strong&gt; directory and starting it.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;java -jar start.jar&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I wouldn’t recommend using this setup in production. However, for developing on your local machine, it’s perfectly fine.&lt;/p&gt;
+
+&lt;p&gt;In the next article, I’ll talk about how to configure the &lt;a href=&quot;http://drupal.org/project/search_api&quot;&gt;search_api&lt;/a&gt; and &lt;a href=&quot;http://drupal.org/project/search_api_solr&quot;&gt;search_api_solr&lt;/a&gt; to use Solr as a search engine for your Drupal site.&lt;/p&gt;
+
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 18 Dec 2014 00:00:00 +1300</pubDate>
+        <dc:creator>Craig Pearson</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/installing-solr-development</guid>
+        <comments>http://www.pixelite.co.nz/article/installing-solr-development#disqus_thread</comments>
+      </item>
+    
+      <item>
+        <title>Adding Apple and Android favicons to Drupal</title>
+        <link>http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal</link>
+        <description>&lt;p&gt;As you end up building more and more websites that target mobile devices (e.g. iPhone, iPad, Android, Windows), you need to supply an ever increasing amount of favicons. This process can be complex if done by hand, luckily there is an easy way to introduce these into your Drupal site.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-you-will-need&quot;&gt;What you will need&lt;/h2&gt;
+
+&lt;p&gt;Before we start you will need a high quality icon to begin with, the icon should be:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;260x260px (i.e. square)&lt;/li&gt;
+  &lt;li&gt;a PNG with transparency as needed&lt;/li&gt;
+  &lt;li&gt;recognizable when shrunk right done to your browser favicon (so don’t use your entire logo complete with words).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;generating-the-favicons&quot;&gt;Generating the favicons&lt;/h2&gt;
+
+&lt;p&gt;This is where the really handy &lt;a href=&quot;http://realfavicongenerator.net/&quot;&gt;realfavicongenerator.net&lt;/a&gt; website comes into play. I have used many other websites that offer similar functionality, but this seems to be the best, and is dead simple to use.&lt;/p&gt;
+
+&lt;p&gt;You will need to upload the 260x260px PNG file, and also select a hex color for the Windows 8 tile, but this should be straight forward.&lt;/p&gt;
+
+&lt;p&gt;I also opt for the option “I will place favicon files (favicon.ico, apple-touch-icon.png, etc.) at the root of my web site.” as this seems the most sensible place for them anyway.&lt;/p&gt;
+
+&lt;p&gt;When you complete the process, you will be able to download a zip file containing a whole bunch of icons and XML files, this is fine, extract them to your docroot for Drupal.&lt;/p&gt;
+
+&lt;h2 id=&quot;adding-the-favicons-to-drupal&quot;&gt;Adding the favicons to Drupal&lt;/h2&gt;
+
+&lt;p&gt;You now will need to edit your &lt;code&gt;html.tpl.php&lt;/code&gt; inside your theme, and add the code that the generator provides. The code should resemble something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;57x57&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-57x57.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;114x114&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-114x114.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;72x72&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-72x72.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;144x144&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-144x144.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;60x60&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-60x60.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;120x120&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-120x120.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;76x76&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-76x76.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;152x152&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-152x152.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;180x180&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-180x180.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-192x192.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;192x192&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-160x160.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;160x160&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-96x96.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;96x96&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-16x16.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;16x16&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-32x32.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;32x32&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;msapplication-TileColor&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#b91d47&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;msapplication-TileImage&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/mstile-144x144.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You will notice though that Drupal likes to place it’s default favicon into the &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; section of the page, we need to remove this in order for it not to mess up the above code you inserted.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;shortcut icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://[YOURSITE]/misc/favicon.ico&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/vnd.microsoft.icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The following code below can be inserted into your &lt;code&gt;template.php&lt;/code&gt; file for your theme to remove the default favicon from Drupal:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * Remove the unneeded favicon from the head section.&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;YOURTHEME_html_head_alter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$head_elements&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$head_elements&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;empty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#attributes&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;array_key_exists&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;href&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#attributes&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;strpos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#attributes&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;href&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;misc/favicon.ico&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$head_elements&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There you have it all done.&lt;/p&gt;
+
+&lt;h2 id=&quot;update-5-january&quot;&gt;Update 5 January&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.drupal.org/project/responsive_favicons&quot;&gt;We have created a simple module “Responsive Favicons”&lt;/a&gt; to help people new to Drupal get those metatags in the head section of the HTML, you can also upload the zip file and it will upload and extract them for you as well.&lt;/p&gt;
+
+&lt;h2 id=&quot;extra-for-experts---googles-theme-color-meta-tag&quot;&gt;Extra for experts - Google’s theme-color meta tag&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://updates.html5rocks.com/2014/11/Support-for-theme-color-in-Chrome-39-for-Android&quot;&gt;Google recently announced&lt;/a&gt; that from Chrome 39 onwards on Android Lollipop (5.0+), a new meta tag will be supported&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;theme-color&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#b91d47&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This is what your site’s title bar now looks like (instead of boring and grey).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/favicon-theme-color.png&quot; alt=&quot;The theme-color meta tag in use on www.maoritelevision.com&quot; class=&quot;img-responsive img-thumbnail&quot; style=&quot;max-height:600px;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This meta tag can be added to your &lt;code&gt;html.tpl.php&lt;/code&gt; file as above.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;Let me know if this has helped you, and also if you have any other tips and tricks when it comes to favicons on your mobile devices.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Sat, 13 Dec 2014 00:00:00 +1300</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal</guid>
+        <comments>http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal#disqus_thread</comments>
+      </item>
+    
+      <item>
+        <title>How to add subtabs under the User Edit tab in Drupal</title>
+        <link>http://www.pixelite.co.nz/article/subtabs-under-user-edit</link>
+        <description>&lt;h2 id=&quot;tldr&quot;&gt;tl;dr;&lt;/h2&gt;
+
+&lt;p&gt;To get your tabs to appear on the user edit page use &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21user%21user.api.php/function/hook_user_categories/7&quot;&gt;hook_user_categories()&lt;/a&gt; and &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu_alter/7&quot;&gt;hook_menu_alter()&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-detail&quot;&gt;The detail&lt;/h2&gt;
+
+&lt;p&gt;Getting submenu items to appear within the user edit area of Drupal has not always worked as I would expect from reading the documentation around &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu/7&quot;&gt;hook_menu()&lt;/a&gt;. As it happens the user module provides hooks to make this quite simple.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21user%21user.api.php/function/hook_user_categories/7&quot;&gt;hook_user_categories()&lt;/a&gt; allows you to return a subset of the parameters you’d expect to see in &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu/7&quot;&gt;hook_menu()&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In this example we would have a new set of tabs added to the User Edit page.  The first is &lt;em&gt;Account&lt;/em&gt; and is now presented because we have more than one tab here now.  The second is &lt;em&gt;Report Settings&lt;/em&gt; and it would have a URL like &lt;code&gt;user/12345/edit/report_settings&lt;/code&gt; where &lt;em&gt;report_settings&lt;/em&gt; is taken from the name parameter.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * Implements hook_user_categories().&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_module_user_categories&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&amp;#39;title&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Report settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&amp;#39;weight&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&amp;#39;access callback&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user_edit_access&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&amp;#39;access arguments&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;At this point we have a new menu item presented as a tab on the user edit page and clicking it takes us to a blank form with a submit button. I think this is due to the way menu items can inherit behaviour from parent menu items. We’ll be wanting to overload that behaviour though and present our own form.  This can be done through &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu_alter/7&quot;&gt;hook_menu_alter()&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Checking the keys of the array passed to &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu_alter/7&quot;&gt;hook_menu_alter()&lt;/a&gt; we should find that we have a new one called &lt;code&gt;user/%user_category/edit/report_settings&lt;/code&gt;. We can edit this one to point it at our preferred form built using the &lt;a href=&quot;https://api.drupal.org/api/drupal/includes%21form.inc/group/form_api/7&quot;&gt;Form API&lt;/a&gt; as usual.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * Implements hook_menu_alter().&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_module_menu_alter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$callbacks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$callbacks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user/%user_category/edit/report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;page arguments&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;my_module_user_report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// We need to set the file path as it defaults to the user module.&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$callbacks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user/%user_category/edit/report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;file path&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;drupal_get_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;module&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;my_module&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$callbacks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user/%user_category/edit/report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;file&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;my_module.user.inc&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;gotchas&quot;&gt;Gotchas&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You will want to be clearing your menu cache a lot while getting this working. Every edit will require a &lt;code&gt;drush cc menu&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Ensure you have set the &lt;code&gt;file path&lt;/code&gt; in the hook_menu_alter() if you have your have your page callback or form function for drupal_get_form() in a separate file.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you have found that this post has been helpful ping me in the comments, on twitter (&lt;a href=&quot;http://twitter.com/unifex&quot;&gt;@Unifex&lt;/a&gt;) or on &lt;a href=&quot;http://drupal.org&quot;&gt;D.o&lt;/a&gt; at &lt;a href=&quot;http://drupal.org/u/Gold&quot;&gt;Gold&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Wed, 10 Dec 2014 00:00:00 +1300</pubDate>
+        <dc:creator>Gold</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/subtabs-under-user-edit</guid>
+        <comments>http://www.pixelite.co.nz/article/subtabs-under-user-edit#disqus_thread</comments>
+      </item>
+    
+      <item>
+        <title>Using git pre-commit hooks to keep your Drupal codebase clean</title>
+        <link>http://www.pixelite.co.nz/article/using-git-pre-commit-hooks-keep-you-drupal-codebase-clean</link>
+        <description>&lt;p&gt;All too often when peer reviewing code done by other Drupalers, I spot debug code left in the commit, waiting for the chance to be deployed to staging and break everything.&lt;/p&gt;
+
+&lt;p&gt;I started to read up on &lt;a href=&quot;http://git-scm.com/docs/githooks&quot;&gt;git hooks&lt;/a&gt;, paying particular attention to pre-commit:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;This hook is invoked by &lt;em&gt;git commit&lt;/em&gt;, and can be bypassed with &lt;code&gt;--no-verify&lt;/code&gt; option.  It takes no parameter, and is invoked before obtaining the proposed commit log message and making a commit.  Exiting with non-zero status from this script causes the &lt;em&gt;git commit&lt;/em&gt; to abort.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;You can write you pre-commit hook in any language, bash seems the most sane due to the power of text analysis tools at your disposal.&lt;/p&gt;
+
+&lt;h2 id=&quot;where-is-the-code&quot;&gt;Where is the code&lt;/h2&gt;
+
+&lt;p&gt;Here is a link to the github repository with the pre-commit hook:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/wiifm69/drupal-pre-commit.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;features&quot;&gt;Features&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Executes PHP lint across the PHP files that were changed&lt;/li&gt;
+  &lt;li&gt;Checks PHP for a blacklist of function names (e.g. &lt;code&gt;dsm()&lt;/code&gt;, &lt;code&gt;kpr()&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Checks JavaScript/CoffeeScript for a blacklist of function names (e.g. &lt;code&gt;console.log()&lt;/code&gt;, &lt;code&gt;alert()&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Ignores deleted files from git and will not check them&lt;/li&gt;
+  &lt;li&gt;Tells you all of the fails at the end (and stores a log)&lt;/li&gt;
+  &lt;li&gt;Only lets the commit go ahead when there are no fails&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /tmp
+git clone https://github.com/wiifm69/drupal-pre-commit.git
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;drupal-pre-commit
+cp scripts/pre-commit.sh &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;PATH_TO_YOUR_DRUPAL_PROJECT&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;/scripts
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;PATH_TO_YOUR_DRUPAL_PROJECT&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+ln -s ../../scripts/pre-commit.sh .git/hooks/pre-commit&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;feedback&quot;&gt;Feedback&lt;/h2&gt;
+
+&lt;p&gt;I am keen to hear from anyone else on how they do this, and if you have any enhancements to the code then I am happy to accept pull requests on github. Happy coding.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 04 Dec 2014 00:00:00 +1300</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/using-git-pre-commit-hooks-keep-you-drupal-codebase-clean</guid>
+        <comments>http://www.pixelite.co.nz/article/using-git-pre-commit-hooks-keep-you-drupal-codebase-clean#disqus_thread</comments>
+      </item>
+    
   </channel>
 </rss>

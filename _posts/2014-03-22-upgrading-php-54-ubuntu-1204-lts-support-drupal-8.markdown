@@ -67,6 +67,16 @@ This was solved by manually installing the packages:
 sudo apt-get install php-pear php5-cli php5-common php5-curl php5-dev php5-gd php5-mcrypt php5-mysql php5-pgsql php5-xdebug
 {% endhighlight %}
 
+### Update 2 June 2015
+
+An alternative to the above command is
+
+{% highlight bash %}
+sudo apt-get dist-upgrade
+{% endhighlight %}
+
+This will update the packages, but will not update the Ubuntu release (hattip @Ben Coleman and @abowman).
+
 ## Comments ##
 
 Let me know if this worked for you in the comments, or if you have another way to easily update PHP on your stack.

@@ -47,7 +47,7 @@ hr.small {
   border-width: 4px;
   border-color: white;
 }
-.navbar-custom {
+.navbar-pixelite {
   background: white;
   position: absolute;
   top: 0;
@@ -56,39 +56,43 @@ hr.small {
   z-index: 3;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
-.navbar-custom .navbar-brand {
+.navbar-pixelite .navbar-brand {
   font-weight: 800;
 }
-.navbar-custom .nav li a {
+.navbar-pixelite .nav li a {
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 1px;
+  text-decoration: none;
+}
+.navbar-pixelite .nav li a:hover {
+  text-decoration: underline;
 }
 @media only screen and (min-width: 768px) {
-  .navbar-custom {
+  .navbar-pixelite {
     background: transparent;
     border-bottom: 1px solid transparent;
   }
-  .navbar-custom .navbar-brand {
+  .navbar-pixelite .navbar-brand {
     color: white;
     padding: 20px;
   }
-  .navbar-custom .navbar-brand:hover,
-  .navbar-custom .navbar-brand:focus {
+  .navbar-pixelite .navbar-brand:hover,
+  .navbar-pixelite .navbar-brand:focus {
     color: rgba(255, 255, 255, 0.8);
   }
-  .navbar-custom .nav li a {
+  .navbar-pixelite .nav li a {
     color: white;
     padding: 20px;
   }
-  .navbar-custom .nav li a:hover,
-  .navbar-custom .nav li a:focus {
+  .navbar-pixelite .nav li a:hover,
+  .navbar-pixelite .nav li a:focus {
     color: rgba(255, 255, 255, 0.8);
   }
 }
 @media only screen and (min-width: 1170px) {
-  .navbar-custom {
+  .navbar-pixelite {
     -webkit-transition: background-color 0.3s;
     -moz-transition: background-color 0.3s;
     transition: background-color 0.3s;
@@ -101,31 +105,31 @@ hr.small {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
-  .navbar-custom.is-fixed {
+  .navbar-pixelite.is-fixed {
     /* when the user scrolls down, we hide the header right above the viewport */
     position: fixed;
-    top: -61px;
+    top: -62px;
     background-color: rgba(255, 255, 255, 0.9);
     border-bottom: 1px solid #f2f2f2;
     -webkit-transition: -webkit-transform 0.3s;
     -moz-transition: -moz-transform 0.3s;
     transition: transform 0.3s;
   }
-  .navbar-custom.is-fixed .navbar-brand {
+  .navbar-pixelite.is-fixed .navbar-brand {
     color: #404040;
   }
-  .navbar-custom.is-fixed .navbar-brand:hover,
-  .navbar-custom.is-fixed .navbar-brand:focus {
+  .navbar-pixelite.is-fixed .navbar-brand:hover,
+  .navbar-pixelite.is-fixed .navbar-brand:focus {
     color: #0085a1;
   }
-  .navbar-custom.is-fixed .nav li a {
+  .navbar-pixelite.is-fixed .nav li a {
     color: #404040;
   }
-  .navbar-custom.is-fixed .nav li a:hover,
-  .navbar-custom.is-fixed .nav li a:focus {
+  .navbar-pixelite.is-fixed .nav li a:hover,
+  .navbar-pixelite.is-fixed .nav li a:focus {
     color: #0085a1;
   }
-  .navbar-custom.is-visible {
+  .navbar-pixelite.is-visible {
     /* if the user changes the scrolling direction, we show the header */
     -webkit-transform: translate3d(0, 100%, 0);
     -moz-transform: translate3d(0, 100%, 0);
@@ -169,8 +173,8 @@ hr.small {
 .intro-header .site-heading .subheading,
 .intro-header .page-heading .subheading {
   font-size: 24px;
-  line-height: 1.1,
-			display: block;
+  line-height: 1.1;
+  display: block;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
   margin: 10px 0 0;
@@ -317,7 +321,7 @@ footer .copyright {
   -ms-transition: top 0.3s ease,opacity 0.3s ease;
   transition: top 0.3s ease,opacity 0.3s ease;
 }
-.floating-label-form-group::not(:first-child) {
+.floating-label-form-group:not(:first-child) {
   padding-left: 14px;
   border-left: 1px solid #eeeeee;
 }

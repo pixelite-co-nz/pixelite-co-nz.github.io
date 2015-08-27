@@ -1,0 +1,123 @@
+<html>
+<head>
+    <title>My first Three.js app</title>
+    <style>
+        body { margin: 0; }
+        canvas { width: 100%; height: 100% }
+    </style>
+</head>
+<body>
+<script src="js/three.min.js"></script>
+<script src="js/OrbitControls.js"></script>
+<script>
+
+    var TYPE_BLACK = 0;
+    var TYPE_GREEN = 1;
+    var TYPE_LIME = 2;
+    var TYPE_RED = 3;
+    var TYPE_CREAM = 4;
+
+    var CONFIGURATION = [
+        [TYPE_BLACK, TYPE_GREEN, TYPE_LIME],
+        [TYPE_GREEN, TYPE_LIME, TYPE_CREAM],
+        [TYPE_LIME, TYPE_CREAM, TYPE_RED]
+    ];
+
+    var START_POS_X = -1.1;
+    var START_POS_Y = 1.1;
+    var START_POS_Z = 0.0;
+
+    var ITEM_WIDTH = 1.0;
+    var ITEM_HEIGHT = 1.0;
+    var ITEM_DEPTH = 0.2;
+    var ITEM_SPACING = 0.1;
+
+    var WIREFRAME = false;
+
+    var MATERIAL = 'phong';
+
+    var COLOR_BLACK = 0x000000;
+    var COLOR_GREEN = 0x2c7460;
+    var COLOR_LIME = 0xd4de64;
+    var COLOR_RED = 0xf66341;
+    var COLOR_CREAM = 0xEFF4E0;
+
+    var MATERIALS;
+
+    if (MATERIAL == 'phong') {
+        MATERIALS = {
+            0: new THREE.MeshPhongMaterial({color: COLOR_BLACK, wireframe: WIREFRAME}),
+            1: new THREE.MeshPhongMaterial({color: COLOR_GREEN, wireframe: WIREFRAME}),
+            2: new THREE.MeshPhongMaterial({color: COLOR_LIME, wireframe: WIREFRAME}),
+            3: new THREE.MeshPhongMaterial({color: COLOR_RED, wireframe: WIREFRAME}),
+            4: new THREE.MeshPhongMaterial({color: COLOR_CREAM, wireframe: WIREFRAME})
+        };
+    }
+    else {
+        MATERIALS = {
+            0: new THREE.MeshLambertMaterial({color: COLOR_BLACK, wireframe: WIREFRAME}),
+            1: new THREE.MeshLambertMaterial({color: COLOR_GREEN, wireframe: WIREFRAME}),
+            2: new THREE.MeshLambertMaterial({color: COLOR_LIME, wireframe: WIREFRAME}),
+            3: new THREE.MeshLambertMaterial({color: COLOR_RED, wireframe: WIREFRAME}),
+            4: new THREE.MeshLambertMaterial({color: COLOR_CREAM, wireframe: WIREFRAME})
+        };
+    }
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 6);
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x5F5F5F, 1);
+
+    document.body.appendChild(renderer.domElement);
+
+    var light = new THREE.AmbientLight(0x2c7460); // soft white light
+    scene.add(light);
+
+    var directionalLight = new THREE.PointLight(0xAAAAFF, 1);
+    directionalLight.position.set(0, 0, 6);
+    scene.add(directionalLight);
+
+    function add_box(row, col) {
+        var type = CONFIGURATION[row][col];
+
+        console.log(MATERIALS);
+
+        var geometry = new THREE.BoxGeometry(ITEM_WIDTH, ITEM_HEIGHT, ITEM_DEPTH);
+        var box = new THREE.Mesh(geometry, MATERIALS[type]);
+        scene.add(box);
+
+        var x = (START_POS_X + ((ITEM_SPACING * row) + (ITEM_WIDTH * row)));
+        var y = (START_POS_Y - ((ITEM_SPACING * col) + (ITEM_HEIGHT * col)));
+        var z = START_POS_Z;
+
+        if (type == TYPE_RED) {
+            box.position.set(x, y, z+ 0.01);
+            box.rotation.z = 40.0;
+        }
+        else {
+            box.position.set(x, y, z);
+        }
+    }
+
+    for (var i = 0; i < CONFIGURATION.length; i++) {
+        for (var y = 0; y < CONFIGURATION[i].length; y++) {
+            add_box(y, i);
+        }
+    }
+
+    var render = function () {
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+    };
+
+    render();
+
+    // Create some controls to allow the camera to "orbit" the feature
+    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+</script>
+</body>
+</html>

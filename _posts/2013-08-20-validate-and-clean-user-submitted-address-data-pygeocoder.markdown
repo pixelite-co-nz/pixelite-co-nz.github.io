@@ -8,7 +8,7 @@ categories:
 - tutorial
 tags:
 - python
-- data validation
+- data-validation
 - geocoding
 ---
 

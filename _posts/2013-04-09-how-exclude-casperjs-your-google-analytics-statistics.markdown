@@ -7,8 +7,8 @@ author: "Sean Hamlin"
 categories:
 - tutorial
 tags:
-- CasperJS
-- Google Analytics
+- casperjs
+- google-analytics
 - drupalplanet
 - javascript
 ---

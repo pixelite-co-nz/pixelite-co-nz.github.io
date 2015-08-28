@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="row bottom">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">by <a href="/authors/{{ post.author | downcase | replace:' ','-' }}/index.html">{{ post.author }}</a>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">by <a href="/authors/{{ post.author | downcase | replace:' ','-' }}/">{{ post.author }}</a>
                 {% if post.twitter %}
                 <a href="http://www.twitter.com/{{ post.twitter }}" class="post-twitter"><img src="/img/twitter.png" alt="{{ post.author }} Twitter account"></a>
                 {% endif %}

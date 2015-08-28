@@ -7,7 +7,7 @@ author: "Craig Pearson"
 categories:
 - tutorial
 tags:
-- computer vision
+- computer-vision
 - introduction
 ---
 

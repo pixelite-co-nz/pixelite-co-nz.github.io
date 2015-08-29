@@ -9,7 +9,7 @@ categories:
 tags:
 - drupal
 - drupalplanet
-- Google Analytics
+- google-analytics
 ---
 
 So Google Analytics has a new version of Google Analytics dubbed "Universal Analytics", which has a bunch of new features, that could be handy for your website. I would dive into exactly what they are here, as you can read about them on [Google's own website](https://support.google.com/analytics/answer/2790010?hl=en).

@@ -12,7 +12,6 @@ tags:
 - drupal
 - drupalplanet
 - menus
-- programming
 ---
 
 ## tl;dr;

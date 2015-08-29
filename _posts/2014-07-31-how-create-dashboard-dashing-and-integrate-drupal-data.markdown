@@ -10,7 +10,7 @@ tags:
 - drupal
 - dashing
 - dashboards
-- data visualisation
+- data-visualisation
 - drupalplanet
 ---
 

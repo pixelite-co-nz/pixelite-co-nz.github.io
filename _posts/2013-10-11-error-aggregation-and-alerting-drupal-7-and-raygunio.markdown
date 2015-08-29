@@ -9,7 +9,6 @@ categories:
 tags:
 - drupal
 - errors
-- thirdpartyintegration
 - drupalplanet
 ---
 

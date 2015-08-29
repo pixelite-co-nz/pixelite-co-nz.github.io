@@ -93,7 +93,9 @@
 </nav>
 
 
-    <article itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+
+<article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
     <meta itemprop="wordCount" content="599"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development"/>
@@ -106,7 +108,8 @@
                     <div class="post-heading">
                         <h1 itemprop="name headline">Installing and configuring PostgreSQL 9.1 on Ubuntu 12.04 for local Drupal development</h1>
                         
-                        <span class="meta">Posted by <span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span> on <time datetime="2012-07-12T00:00:00" itemprop="datePublished">July 12, 2012</time></span>
+
+                        <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2012-07-12T00:00:00" itemprop="datePublished">July 12, 2012</time></span>
                         <ul class="social-buttons cf">
                             <li>
                                 <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Installing and configuring PostgreSQL 9.1 on Ubuntu 12.04 for local Drupal development" data-url="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
@@ -179,6 +182,7 @@ listen_addresses = 'localhost'    # what IP address(es) to listen on;
 <h3>Restoring the database</h3>
 <pre class="brush: bash; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">pg_restore -p 5432 -h localhost -Fc -d testingsiteone -U drupal --no-owner &lt; /tmp/path-to-the-file.pgdump</pre>
 <h2>Comments</h2><p>Are there any other steps you normally take when setting up PostgreSQL for Drupal development? If so, let me know in the comments.</p>
+
                 </div>
 
                 <hr>

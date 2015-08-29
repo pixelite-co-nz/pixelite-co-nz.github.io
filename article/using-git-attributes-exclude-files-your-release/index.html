@@ -93,7 +93,9 @@
 </nav>
 
 
-    <article itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+
+<article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
     <meta itemprop="wordCount" content="498"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/using-git-attributes-exclude-files-your-release"/>
@@ -108,7 +110,8 @@
                         
                         <h2 class="subheading" itemprop="description">Exclude files from your exports</h2>
                         
-                        <span class="meta">Posted by <span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span> on <time datetime="2012-08-22T00:00:00" itemprop="datePublished">August 22, 2012</time></span>
+
+                        <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2012-08-22T00:00:00" itemprop="datePublished">August 22, 2012</time></span>
                         <ul class="social-buttons cf">
                             <li>
                                 <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Using git attributes to exclude files from your release" data-url="http://www.pixelite.co.nz/article/using-git-attributes-exclude-files-your-release" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
@@ -201,6 +204,7 @@ sites/all/libraries/colorbox/jquery.colorbox.js export-ignore
 sites/all/modules/contrib/ckeditor/images/buttons/index.html export-ignore
 sites/all/modules/contrib/openlayers/tests/js/qunit/index.html export-ignore</pre>
 <p>The sample git attributes file is rather long and exhaustive, and it covers a wide range of core and contributed modules for Drupal 7. The plupload module is especially dangerous, as the library actually comes with several PHP scripts that if your webserver allowed it to execute, it would allow anyone (anonymous included) to upload unlimited files to the webserver.</p><p>You could take the export to the next level and remove several core PHP files from the release like:</p><ul><li>cron.php</li><li>install.php</li><li>update.php etc</li></ul><h2>Comments</h2><p>If you have any suggestions for improvements, let me know in the comments.</p>
+
                 </div>
 
                 <hr>

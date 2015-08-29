@@ -6,7 +6,6 @@ excerpt: "How to size the PHP setting max_memory is actually really important fo
 header-img: "img/profile/back.jpg"
 permalink: /article/how-to-profile-php-memory-with-drupal/
 author: "Sean Hamlin"
-twitter: "@wiifm"
 categories:
 - tutorial
 tags:

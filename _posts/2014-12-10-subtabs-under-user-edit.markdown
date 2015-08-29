@@ -5,7 +5,6 @@ excerpt: "To get your tabs to appear on the user edit page use hook_user_categor
 header-img: "img/post-bg-tabs-under-tabs.png"
 permalink: /article/subtabs-under-user-edit
 author: "Gold"
-twitter: "@unifex"
 categories:
 - tutorial
 tags:

@@ -6,7 +6,6 @@ excerpt: "CasperJS is very useful for automating what is normally done by real p
 header-img: "img/casperjs.jpg"
 permalink: /article/starter-regression-test-suite-powered-by-casperjs/
 author: "Sean Hamlin"
-twitter: "@wiifm"
 categories:
 - tutorial
 tags:

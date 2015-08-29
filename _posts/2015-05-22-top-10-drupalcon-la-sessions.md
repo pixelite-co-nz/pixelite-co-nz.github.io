@@ -6,7 +6,6 @@ excerpt: "Some of the sessions I found entertaining and insightful and would rec
 header-img: "img/post-bg-06.jpg"
 permalink: /article/top-10-drupalcon-la-sessions/
 author: "Sean Hamlin"
-twitter: "@wiifm"
 categories:
 - tutorial
 tags:

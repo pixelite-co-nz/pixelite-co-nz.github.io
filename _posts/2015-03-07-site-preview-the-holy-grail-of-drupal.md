@@ -6,7 +6,6 @@ excerpt: "So recently I did a talk at DrupalSouth Melbourne on site preview solu
 header-img: "img/post-bg-01.jpg"
 permalink: /article/site-preview-the-holy-grail-of-drupal
 author: "Sean Hamlin"
-twitter: "@wiifm"
 categories:
 - tutorial
 tags:

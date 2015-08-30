@@ -6,7 +6,6 @@ excerpt: "BDD allows you to write human readable stories that describe the behav
 header-img: "img/plane.jpg"
 permalink: /article/using-behat-for-behavioral-driven-development-bdd-in-drupal
 author: "Sean Hamlin"
-twitter: "@wiifm"
 categories:
 - tutorial
 tags:

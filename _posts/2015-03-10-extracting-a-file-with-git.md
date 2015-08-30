@@ -6,7 +6,6 @@ excerpt: "Rather that performing a simple file copy and losing all git history, 
 header-img: "img/post-bg-05.jpg"
 permalink: /article/extracting-file-folder-from-git-repository-with-full-git-history
 author: "Sean Hamlin"
-twitter: "@wiifm"
 categories:
 - tutorial
 tags:

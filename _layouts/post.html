@@ -2,6 +2,8 @@
 layout: default
 ---
 
+{% assign author = site.authors[page.author] %}
+
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
     <meta itemprop="wordCount" content="{{ page.content | number_of_words }}"/>
@@ -17,7 +19,8 @@ layout: default
                         {% if page.subtitle %}
                         <h2 class="subheading" itemprop="description">{{ page.subtitle }}</h2>
                         {% endif %}
-                        <span class="meta">Posted by <span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span> on <time datetime="{{ page.date | date: "%Y-%m-%dT%H:%M:00" }}" itemprop="datePublished">{{ page.date | date: "%B %-d, %Y" }}</time></span>
+
+                        <span class="meta">Posted by <a href="/authors/{{ page.author | downcase | replace:' ','-' }}/" title="View {{ page.author }}'s profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span></a> on <time datetime="{{ page.date | date: "%Y-%m-%dT%H:%M:00" }}" itemprop="datePublished">{{ page.date | date: "%B %-d, %Y" }}</time></span>
                         <ul class="social-buttons cf">
                             <li>
                                 <a href="http://twitter.com/share" class="socialite twitter-share" data-text="{{ page.title }}" data-url="{{ site.url }}{{ page.permalink }}" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>

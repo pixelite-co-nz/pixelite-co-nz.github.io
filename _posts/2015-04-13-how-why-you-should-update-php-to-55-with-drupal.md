@@ -6,7 +6,6 @@ excerpt: "Security, performance and new features are wins all around."
 header-img: "img/post-bg-04.jpg"
 permalink: /article/how-why-you-should-update-php-to-55-with-drupal/
 author: "Sean Hamlin"
-twitter: "@wiifm"
 categories:
 - tutorial
 tags:

@@ -6,7 +6,6 @@ excerpt: "Drupal performance relies on cache but poor Drupal code can break your
 header-img: "img/post-bg-hero.png"
 permalink: /article/debugging-drupal-performance-with-cache-debug/
 author: "Josh Waihi"
-twitter: "@joshwaihi"
 categories:
 - tutorial
 tags:

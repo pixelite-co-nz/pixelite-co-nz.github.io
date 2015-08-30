@@ -5,7 +5,6 @@ subtitle: "Simple Solr server setup for use while developing"
 header-img: "img/solr/solr1.jpg"
 permalink: /article/installing-solr-development
 author: "Craig Pearson"
-twitter: "@thepearson"
 categories:
 - tutorial
 tags:

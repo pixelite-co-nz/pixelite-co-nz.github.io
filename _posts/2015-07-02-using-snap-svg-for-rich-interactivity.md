@@ -5,7 +5,6 @@ subtitle: "A quick intro into using Snap.svg"
 header-img: "img/snap/background.jpg"
 permalink: /article/using-snap-svg-for-rich-interactivity
 author: "Craig Pearson"
-twitter: "@thepearson"
 categories:
 - tutorial
 tags:

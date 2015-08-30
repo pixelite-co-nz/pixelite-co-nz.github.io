@@ -16,6 +16,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;
+    background-color: #FDFDFD;
 }
 
 .navbar-pixelite {
@@ -49,81 +50,90 @@ footer {
     }
 }
 
-
-
 .post-preview {
-     margin-bottom: 35px;
- }
-
-.post-preview .inner {
-    min-height: 290px;
-    background-color: rgb(225, 225, 225);
-    background-size: cover;
-    background-position: center;
-    position: relative;
+    background-color: #fff;
+    margin-bottom: 50px;
+    box-shadow: 0px 5px 10px #DDDDDD;
 }
 
-.post-preview .top {
-    min-height: 180px;
+.post-preview h2 {
+    font-size: 36px;
 }
 
-.post-preview .tags {
-    min-height: 30px;
+.post-preview .byline {
+    padding-top: 10px;
+    font-size: 14px;
 }
 
-.post-preview .tags {
-    padding-right: 5px;
+.img-wrapper {
+    display: inline-block;
+    overflow: hidden;
+}
+
+.img-wrapper img {
+    -webkit-transition: all 2s ease;
+    -moz-transition: all 2s ease;
+    -ms-transition: all 2s ease;
+    -o-transition: all 2s ease;
+    transition: all 2s ease;
+    vertical-align: middle;
+}
+
+.img-wrapper img:hover {
+    transform:scale(1.1);
+    -ms-transform:scale(1.1); /* IE 9 */
+    -moz-transform:scale(1.1); /* Firefox */
+    -webkit-transform:scale(1.1); /* Safari and Chrome */
+    -o-transform:scale(1.1); /* Opera */
+}
+
+.top {
+    padding-bottom: 15px;
+    color: #555;
+}
+
+.top .byline a {
+    color: #555;
+}
+
+.main {
+    border-top:1px solid #eee;
+}
+
+.main .post-subtitle {
+    font-size: 16px;
+}
+
+.tags {
+    background-color: #EFEFEF;
+    padding-top: 10px;
 }
 
 .tags li {
     padding-left: 1px;
 }
 
-.tags li a {
+a.tag {
+    box-shadow: 0px 1px 1px #777777;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+    vertical-align: middle;
+
     font-size: 0.8em;
+    text-decoration: none;
     border-radius: 3px;
-    padding: 3px;
+    padding: 3px 10px;
     color: #fff;
     background-color: dodgerblue;
 }
 
-.tags li a:hover {
+
+a.tag:hover {
     color: #fff;
     background-color: cornflowerblue;
+    box-shadow: 0px 2px 2px #777777;
 }
 
-.post-preview h2 a {
-    color: #fff;
-}
-.post-preview h2 a:hover {
-    color: #dddddd;
-    text-decoration: none;
-}
-.post-preview h2 {
-    text-shadow: 1px 1px 2px #000;
-    margin: 10px;
-}
-
-.post-preview .post-subtitle {
-    color: #fff;
-    text-shadow: 1px 1px 2px #000;
-    margin: 15px 10px 0;
-}
-
-.post-preview .bottom {
-    margin: 0;
-    padding-top: 10px;
-    min-height: 40px;
-    border-top: 1px solid #bcbcbc;
-    background-color: rgba(255, 255, 255, 0.9);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    font-size: 0.8em;
-}
-
-.search .search-row {
-    padding: 0 15px;
-    margin: 0 0 35px;
-}

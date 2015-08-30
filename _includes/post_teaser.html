@@ -1,6 +1,20 @@
-<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 post-preview">
-    <div class="inner" {% if post.header-img %}style="background-image: url(/{{ post.header-img | replace:'img/','img/thumbnail/' }} );"{% endif %}>
+<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 post-preview">
+    <div class="inner">
         <div class="row top">
+            <div class="img-wrapper">
+                <a href="{{ post.permalink }}"><img class="img-responsive" src="/{{ post.header-img | replace:'img/','img/thumbnail/' }}" /></a>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 byline">
+                <time datetime="{{ post.date | date: "%Y-%m-%dT%H:%M:00" }}">{{ post.date | date: "%B %-d, %Y" }}</time>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right byline">
+                <a href="/authors/{{ post.author | downcase | replace:' ','-' }}/">{{ post.author }}</a>
+                {% if post.twitter %}
+                    <a href="http://www.twitter.com/{{ post.twitter }}" class="post-twitter"><i class="fa fa-twitter"></i></a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row main">
             <div class="col-lg-12">
                 <h2 class="post-title">
                     <a href="{{ post.permalink }}">{{ post.title }}</a>
@@ -14,18 +28,11 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
                 <ul class="list-inline">
                     {% for tag in post.tags %}
-                      {% if tag != 'drupalplanet' %}
-                        <li><a href="/tag/{{ tag }}">{{ tag }}</a></li>
-                      {% endif %}
+                    {% if tag != 'drupalplanet' %}
+                    <li>{% include tag.html %}</li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
-            </div>
-        </div>
-        <div class="row bottom">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">by <a href="/authors/{{ post.author | downcase | replace:' ','-' }}/" title="View {{ post.author }}'s profile">{{ post.author }}</a>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
-                <time datetime="{{ post.date | date: "%Y-%m-%dT%H:%M:00" }}">{{ post.date | date: "%B %-d, %Y" }}</time>
             </div>
         </div>
     </div>

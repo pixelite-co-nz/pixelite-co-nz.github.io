@@ -20,9 +20,8 @@ mini_magick:
   thumbnail:
     source: "img"
     destination: "img/thumbnail"
-    resize: "640x480"
+    resize: "800x520"
 
-# Authors.
 authors:
   Sean Hamlin:
     display_name: Sean Hamlin

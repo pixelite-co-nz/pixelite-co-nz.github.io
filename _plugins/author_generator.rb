@@ -67,7 +67,7 @@ module Jekyll
       index.render(self.layouts, site_payload)
       index.write(self.dest)
       # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index ## Disabled by craig cause we dont want these pages in the menu
+      self.pages << index
 
     end
 

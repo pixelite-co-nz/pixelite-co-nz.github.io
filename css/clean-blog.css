@@ -76,7 +76,7 @@ hr.small {
   }
   .navbar-pixelite .navbar-brand {
     color: white;
-    padding: 20px;
+    padding: 0;
   }
   .navbar-pixelite .navbar-brand:hover,
   .navbar-pixelite .navbar-brand:focus {

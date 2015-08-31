@@ -3,10 +3,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     {% if page.excerpt %}
-    <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines }}">
+        <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines }}">
     {% else %}
-    <meta name="description" content="{{ site.description }}">
+        <meta name="description" content="{{ site.description }}">
     {% endif %}
 
 
@@ -28,6 +29,30 @@
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content="{{ page.title }}" />
+    <meta property="og:site_name" content="Pixelite" />
+    <meta property="og:url" content="{{ page.permalink | prepend: site.url }}" />
+    <meta property="og:description" content="{{ page.subtitle }}" />
+    <meta property="fb:app_id" content="410615979137383" />
+    <meta property="og:type" content="article" />
+
+    <meta property="og:locale" content="en_US" />
+    {% if page.author %}
+        <meta property="article:author" content="{{ page.author }}" />
+    {% endif %}
+    <meta property="og:image" content="{{ site.url }}/{{ page.header-img }}" />
+
+    <!-- Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pixelite_">
+    {% if page.author %}
+        <meta name="twitter:creator" content="@{{ site.authors[page.author].twitter }}">
+    {% endif %}
+    <meta name="twitter:title" content="{{ page.title }}">
+    <meta name="twitter:description" content="{{ page.subtitle }}">
+    <meta name="twitter:image" content="{{ site.url }}/{{ page.header-img }}">
 
     <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 

@@ -1,7 +1,6 @@
 ---
 layout: post
 title: How to find and debug large variables in Drupal 7
-header-img: ""
 permalink: /article/how-find-and-debug-large-variables-drupal-7
 author: "Sean Hamlin"
 categories:

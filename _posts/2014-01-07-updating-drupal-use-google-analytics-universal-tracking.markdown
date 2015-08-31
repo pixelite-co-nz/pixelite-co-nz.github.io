@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Updating Drupal to use Google Analytics Universal tracking
-header-img: ""
 permalink: /article/updating-drupal-use-google-analytics-universal-tracking
 author: "Sean Hamlin"
 categories:

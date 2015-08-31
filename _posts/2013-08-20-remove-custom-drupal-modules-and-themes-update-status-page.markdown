@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Remove custom Drupal modules and themes from the update status page
-header-img: ""
 permalink: /article/remove-custom-drupal-modules-and-themes-update-status-page
 author: "Sean Hamlin"
 categories:

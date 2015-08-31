@@ -1,7 +1,6 @@
 ---
 layout: post
 title: How to exclude CasperJS from your Google Analytics statistics
-header-img: ""
 permalink: /article/how-exclude-casperjs-your-google-analytics-statistics
 author: "Sean Hamlin"
 categories:

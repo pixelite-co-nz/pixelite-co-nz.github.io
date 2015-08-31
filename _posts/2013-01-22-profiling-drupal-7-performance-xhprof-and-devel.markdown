@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Profiling Drupal 7 performance with XHProf and Devel"
-header-img: ""
 permalink: /article/profiling-drupal-7-performance-xhprof-and-devel
 author: "Craig Pearson"
 categories:

@@ -10,21 +10,23 @@
     <meta name="description" content="On larger Drupal sites, the Token module quickly becomes unwieldy, and the UI can consume precious resources while    often being never used. Here are some options for mitigation of this.Token_tweaks moduleWritten by    the same guy who wrote token, token_tweaks aims to reduce the    recursiveness of the theme_token_tree() function. This simple fix is enough on most sites to speed up page loads,    and reduce memory consumption.This is a real life example from a current (large) Drupal project I am working    on. With vanilla token module installed, and viewing an admin page with a theme_token_tree() rendered on it (it    happens to be a webform configuration page).&nbsp;I used devel to    produce these metrics.Page execution time was 2850.96 ms. Memory used at: devel_boot()=9.4 MB, devel_shutdown()=116.07 MB, PHP peak=163.25 MB.And there was one really insane database query happening (yes that is 244ms!):    After token_tweaksPage execution time was 848.18 ms. Memory used at: devel_boot()=8.03 MB, devel_shutdown()=76.9 MB, PHP peak=77.75 MB.And now the query is much more manageable (0.64ms!):    How to install token_tweaksdrush dl token_tweaksdrush en token_tweaks -ydrush vset token_tree_recursion_limit 1The above code will set the recursion limit to only 1 level deep. This is the minimum allowed.Patching    contrib to support the new dialog that renders the tokensRecently there was a commit that introduced a new theme function    for rendering the the token_tree using theme_token_tree_link(). This essentially stops rendering the jQuery table    expand fieldset, and replaces it with an on-demand modal dialog. The beautiful part is that you only need to include    one additional parameter in the form element, in the case of the webform module, the token_tree form API element    went from$fieldset['token_tree'] = array(  '#theme' =&gt; 'token_tree',  '#token_types' =&gt; $groups,);to:$fieldset['token_tree'] = array(  '#theme' =&gt; 'token_tree',  '#dialog' =&gt; TRUE,  '#token_types' =&gt; $groups,);The new token dialog UIHere is a few screenshots of the new token dialog UI in action:    And when you click on the "Browse available tokens" link, this appears    There is a patch for webform that is listed at http://drupal.org/node/1801782 - hopefully contrib will start to adopt    this shortly.The best part about this is that the token_tweaks module and the new dialog work in tandem with    each other, and together they will help reduce your Drupal memory footprint, and speed up the administration side of    your site.Forcing all contrib to use the new theme_token_tree_link() functionUPDATE 18th    January 2013: Say you do want to go through the arduous task of patching all contrib that has    integration with token, there is a simplier option for you. You can instead create a custom module to override the    the theme implementation of theme_token_tree() all together./** * Implements hook_theme_registry_alter(). */function MYMODULE_theme_registry_alter(&amp;$theme_registry) {  // Prevent theme('token_tree') from generating ridiculous amounts of  // inline markup.  $theme_registry['token_tree']['function'] = 'MYMODULE_theme_token_tree';}">
     
 
+
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-    <meta name="msapplication-TileColor" content="#ffffff">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
 

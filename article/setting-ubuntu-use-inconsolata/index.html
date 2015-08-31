@@ -10,21 +10,23 @@
     <meta name="description" content="When I run Windows, consolas is my monospace font of choice. It is great for programming, and really helps to distinguish characters that look all too much alike.On Ubuntu there is a similar font available for free called inconsolata. The differences are relatively minor (a side-by-side comparison can be found here)Installation of inconsolata on Ubuntu 12.04sudo apt-get install ttf-inconsolataRegenerate the fonts cache by issuing the following command:sudo fc-cache -fvSetting up UbuntuIn order to get Ubuntu to use this font, the easiest way is with MyUnity (for more information on MyUnity see the authors website http://www.uielinux.org/myunity/). On Ubuntu 12.04 installation is easysudo apt-get install myunityUbuntu 11.10 and below require a PPA thoughsudo add-apt-repository ppa:myunity/ppasudo apt-get updatesudo apt-get install myunityVisit MyUnity through the icon on the settings application in Ubuntu, and visit the font tab.Setting up ChromeVisit chrome://settings/fonts and change the monospace font thereSetting up FirefoxVisit Edit -&gt; Preferences -&gt; Content -&gt; Fonts &amp; colors -&gt; AdvancedSetting up Vim" font settingsif has("gui_running")&nbsp; if has("gui_gtk2")&nbsp;&nbsp;&nbsp; set guifont=Inconsolata\ 12&nbsp; elseif has("gui_win32")&nbsp;&nbsp;&nbsp; set guifont=Consolas:h11:cANSI&nbsp; endifendifIf anyone has any other favourite fonts for programming on Ubuntu, let me know in the comments.">
     
 
+
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-    <meta name="msapplication-TileColor" content="#ffffff">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
 

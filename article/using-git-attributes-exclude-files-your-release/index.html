@@ -10,21 +10,23 @@
     <meta name="description" content="Deploying your development codebase to production seems like it has been solved many different ways, and often those ways are terrible from a security perspective.Clone the whole repository on the production webserversQuite possibly the worst idea ever, as not only is every single file on the production web servers, also every single revision of every single file is on the web server. Even worse, if the root .git directory is accessible over HTTP, the whole website can be cloned over HTTP as well.Yes you can remove the .git directory, but this will not solve all your problems.Use git archive to create a snapshot of the repositoryOne step better is to create just a snapshot of the repository using git archive. You can create a snapshot easily using git archiveZip formatgit archive master -o latest.zipCompressed tar formatgit archive master | bzip2 -9 &gt; latest.tar.bz2this will still contain files you do not want on the webserver, e.g..gitignore.gitattributespotentially other redundant files that are not needed on productionUsing git attributes combined with git archiveWe have recently switched to using git attributes on all releases to ensure only the needed files for production are sent there during a release.Sample git attributes file for Drupal 7Here is a sample git attributes file that we use for Drupal 7:# used to remove files from deployment using `git archive`# git files.gitattributes export-ignore.gitignore export-ignore# drush filesbuild.make export-ignorepatches.txt export-ignore# zen 5.x filessites/all/themes/*/sass export-ignoresites/all/themes/*/sass-extensions export-ignoresites/all/themes/*/images-source export-ignoresites/all/themes/*/fonts export-ignoresites/all/themes/*/config.rb export-ignoresites/all/themes/*/STARTERKIT export-ignore# drupal directoriesscripts export-ignoreprofiles/minimal export-ignoreprofiles/standard export-ignoreprofiles/testing export-ignore# general text files*README.txt export-ignore*readme.md export-ignore*README.md export-ignore*README export-ignore*LICENSE.txt export-ignore*license.txt export-ignore*LICENSE.html export-ignoreCOPYRIGHT.txt export-ignoreCHANGELOG.txt export-ignore*changelog.txt export-ignore*changelog.html export-ignore*CHANGES.html export-ignore*INSTALL.html export-ignore*TODO.txt export-ignore*API.txt export-ignore*api.html export-ignore*KNOWN_ISSUES.txt export-ignoreUPGRADE.txt export-ignoreweb.config export-ignoreMAINTAINERS.txt export-ignoreINSTALL*.txt export-ignore# patches*.patch export-ignore# tests*.test export-ignore# contrib (these could be security holes)sites/all/libraries/plupload/examples export-ignoresites/all/libraries/plupload/docs export-ignoresites/all/libraries/jquery.jcarousel/examples export-ignoresites/all/libraries/jquery.jcarousel/index.html export-ignoresites/all/libraries/jquery.jcarousel/style.css export-ignoresites/all/libraries/jquery.jcarousel/skins export-ignoresites/all/libraries/jquery.jcarousel/lib/jquery.jcarousel.js export-ignoresites/all/libraries/jquery.jcarousel/lib/jquery-1.4.2.min.js export-ignoresites/all/libraries/colorbox/colorbox.ai export-ignoresites/all/libraries/colorbox/*/*.html export-ignoresites/all/libraries/colorbox/content export-ignoresites/all/libraries/colorbox/jquery.colorbox.js export-ignoresites/all/modules/contrib/ckeditor/images/buttons/index.html export-ignoresites/all/modules/contrib/openlayers/tests/js/qunit/index.html export-ignoreThe sample git attributes file is rather long and exhaustive, and it covers a wide range of core and contributed modules for Drupal 7. The plupload module is especially dangerous, as the library actually comes with several PHP scripts that if your webserver allowed it to execute, it would allow anyone (anonymous included) to upload unlimited files to the webserver.You could take the export to the next level and remove several core PHP files from the release like:cron.phpinstall.phpupdate.php etcCommentsIf you have any suggestions for improvements, let me know in the comments.">
     
 
+
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-    <meta name="msapplication-TileColor" content="#ffffff">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
 

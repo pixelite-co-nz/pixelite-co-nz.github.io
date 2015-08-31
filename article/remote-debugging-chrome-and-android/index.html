@@ -10,21 +10,23 @@
     <meta name="description" content="As developers, many of you may have encountered the Chrome Developer Tools&nbsp;(CDT)    at one time or another. You may also be aware of the Remote Debugging    functionality which opens up an API and allows you to run the developer tools in another browser. Which, to be    honest I haven't found a use for yet.What you may not know is that Remote Debugging is also includded in    Android's version of Chrome. This feature allows developers to run CDT in their desktop browser, but for sites    loaded in Chrome on their Android device. This can be a powerful tool for developing responsive and/or mobile web    layouts.SetupIn order to get things started, first we will need to install the Android SDK. The    installation of which is out of scope for this post but there are some fantastic resources over at the Android    Developer site.Once you have the android    SDK installed and your device set up, you'll need to    enable remote debugging on the device. This is easilly done by opening Chrome on your android device and fingering    on:&nbsp;Menu &gt; Settings &gt; Developer Tools &gt;        Enable USB Web Debugging.            Connecting to your deviceNow that you've set up yout device and environment we need to connect to it. So    plug your device in and issue the command: $ adb forward tcp:9222 localabstract:chrome_devtools_remoteThis tells adb to forward any requests on localhost:9222 to the chrome_devtools_remote port on the android    device.Now all one has to do is open their Chrome browser on the desktop and navigate to&nbsp;http://localhost:9222You will be presented with a list of tabs that are    open on Chrome running on the Android device.    Selecting a site opens up CDT for that site like so.    On the device you see the same hover tool tips you get when debugging locally.    Even plugins like PageSpeed&nbsp;work! So you can easily    test performance on different media queries.    With the latest release of iOS Apple also has an offering to help out the iDevice kids. Safari and iOS6 offer up a    similar offering, More info can be found on the Apple        Developer page.What other ways do you debug your mobile web apps? Leave a comment.">
     
 
+
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-    <meta name="msapplication-TileColor" content="#ffffff">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
 

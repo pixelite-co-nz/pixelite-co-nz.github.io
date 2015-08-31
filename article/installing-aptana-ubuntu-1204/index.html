@@ -10,21 +10,23 @@
     <meta name="description" content="There is no official repository for Aptana in Ubuntu, so some manual steps are required in order to get Aptana to    work. There is also a weird Unity menu display issue, fortuantely this can be worked around by the custom desktop    launcher created below.InstallationVisit http://www.aptana.com/downloads/start and download the    latest zip file of AptanaOr use wget (current as of time of writing) wget -P ~/Downloads http://download.aptana.com/studio3/standalone/3.2.2/linux/Aptana_Studio_3_Setup_Linux_x86_64_3.2.2.zipUnzip Aptana to /opt/aptanasudo unzip ~/Downloads/Aptana_Studio_3_Setup_Linux* -d /opt -qsudo mv /opt/Aptana_Studio_3/ /opt/aptana/Make sure you own it correctly (so updates will work)sudo chown -R $(whoami):$(whoami) /opt/aptana/Create the custom desktop launcher sudo vim /usr/share/applications/aptana.desktopand insert the follwing text:[Desktop Entry]Encoding=UTF-8Name=Aptana Studio 3Comment=IDE for Rails, Python, PHPExec=/opt/aptana/AptanaStudio3Icon=/opt/aptana/icon.xpmTerminal=falseType=ApplicationCategories=GNOME;Application;Development;StartupNotify=trueFinishing touchesYou should now be able to find it in the unity launcher    Pinning it to the unity bar is a good idea    Hope this helps you, get cracking with Aptana in Ubuntu.">
     
 
+
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-    <meta name="msapplication-TileColor" content="#ffffff">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
 

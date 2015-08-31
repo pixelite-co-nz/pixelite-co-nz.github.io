@@ -37,12 +37,13 @@
     <meta property="og:description" content="{{ page.subtitle }}" />
     <meta property="fb:app_id" content="410615979137383" />
     <meta property="og:type" content="article" />
-
     <meta property="og:locale" content="en_US" />
-    {% if page.author %}
-        <meta property="article:author" content="{{ page.author }}" />
+
+    {% if page.header-img %}
+        <meta property="og:image" content="{{ site.url }}/{{ page.header-img }}" />
+    {% else %}
+        <meta property="og:image" content="{{ site.url }}/img/default.png" />
     {% endif %}
-    <meta property="og:image" content="{{ site.url }}/{{ page.header-img }}" />
 
     <!-- Twitter cards -->
     <meta name="twitter:card" content="summary_large_image">
@@ -52,7 +53,12 @@
     {% endif %}
     <meta name="twitter:title" content="{{ page.title }}">
     <meta name="twitter:description" content="{{ page.subtitle }}">
-    <meta name="twitter:image" content="{{ site.url }}/{{ page.header-img }}">
+    {% if page.header-img %}
+        <meta name="twitter:image" content="{{ site.url }}/{{ page.header-img }}">
+    {% else %}
+        <meta name="twitter:image" content="{{ site.url }}/img/default.png">
+    {% endif %}
+
 
     <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 

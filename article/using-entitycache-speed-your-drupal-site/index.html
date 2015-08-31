@@ -6,8 +6,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     
-    <meta name="description" content="As you are aware Drupal likes to query the database, a lot. On complex pages it is not uncommon to have over 1,000 database queries occur. With the introduction of fields into Drupal 7, now in order to fully load a node, Drupal now also needs to join across many tables. Quickly you can see there being a scalability issue here.Luckily with Drupal 7, there is a pluggable caching and entity loading system. This means you can replace Drupal's default entity loading mechanism with another. Out of the box, entitycache replaces the caching mechanism for core entities:commentfilenodetaxonomy_termtaxonomy_vocabularyuserUnder the hoodWhat entitycache is doing behind the scenes is writting the completely loaded entities to a caching table (cache_entity_[entity-type]). The selects from these tables is inherantly faster than stock Drupal's joining across many tables.Real life example page speedOn a complex site I am building now, one of the nodes, has another 12 nodes listed on there (this is currently done with EntityFieldQuery, but it could just as easily been views). Here are some metrics:No entitycache, page loaded​ first thing after a clear cacheExecuted 1590 queries in 1897.61 ms. Queries exceeding 5 ms are highlighted. Page execution time was 6728.64 ms. Memory used at: devel_boot()=8.95 MB, devel_shutdown()=144.97 MB, PHP peak=146.5 MB.No entitycache, cache primedExecuted 508 queries in 628.06 ms. Queries exceeding 5 ms are highlighted. Page execution time was 1799.17 ms. Memory used at: devel_boot()=9.31 MB, devel_shutdown()=89.94 MB, PHP peak=90.75 MB.Now we add entitycache.With entitycache, page loaded first thing after a clear cacheExecuted 1624 queries in 1964.65 ms. Queries exceeding 5 ms are highlighted. Page execution time was 6768.48 ms. Memory used at: devel_boot()=8.95 MB, devel_shutdown()=145.17 MB, PHP peak=146.75 MB.With entitycache, cache primedExecuted 396 queries in 564.3 ms. Queries exceeding 5 ms are highlighted. Page execution time was 1680.65 ms. Memory used at: devel_boot()=7.96 MB, devel_shutdown()=89.57 MB, PHP peak=90.5 MB.As you can see entitycache adds an initial overhead in order to populate the cache tables, but once this is done, all subsequent entity loads are much faster, and there is less database traffic overall (22% less SQL queries).Real life entity loading speedTo load 12 nodes using entitycache (this query was taken from the above page generation):SELECT cid, data, created, expire, serialized FROM cache_entity_node WHERE cid IN ('4370', '122', '2828', '120', '3648', '3045', '4356', '3642', '3379', '3067', '107', '4376')Takes 18.34ms.How to install entitycacheSimple with drush, I run the development build as it contains a number of new features and fixes.drush dl entitycache-7.x-1.x-devdrush en entitycache -yIf you have any success stories, let me know in the comments.">
+        <meta name="description" content="As you are aware Drupal likes to query the database, a lot. On complex pages it is not uncommon to have over 1,000 database queries occur. With the introduction of fields into Drupal 7, now in order to fully load a node, Drupal now also needs to join across many tables. Quickly you can see there being a scalability issue here.Luckily with Drupal 7, there is a pluggable caching and entity loading system. This means you can replace Drupal's default entity loading mechanism with another. Out of the box, entitycache replaces the caching mechanism for core entities:commentfilenodetaxonomy_termtaxonomy_vocabularyuserUnder the hoodWhat entitycache is doing behind the scenes is writting the completely loaded entities to a caching table (cache_entity_[entity-type]). The selects from these tables is inherantly faster than stock Drupal's joining across many tables.Real life example page speedOn a complex site I am building now, one of the nodes, has another 12 nodes listed on there (this is currently done with EntityFieldQuery, but it could just as easily been views). Here are some metrics:No entitycache, page loaded​ first thing after a clear cacheExecuted 1590 queries in 1897.61 ms. Queries exceeding 5 ms are highlighted. Page execution time was 6728.64 ms. Memory used at: devel_boot()=8.95 MB, devel_shutdown()=144.97 MB, PHP peak=146.5 MB.No entitycache, cache primedExecuted 508 queries in 628.06 ms. Queries exceeding 5 ms are highlighted. Page execution time was 1799.17 ms. Memory used at: devel_boot()=9.31 MB, devel_shutdown()=89.94 MB, PHP peak=90.75 MB.Now we add entitycache.With entitycache, page loaded first thing after a clear cacheExecuted 1624 queries in 1964.65 ms. Queries exceeding 5 ms are highlighted. Page execution time was 6768.48 ms. Memory used at: devel_boot()=8.95 MB, devel_shutdown()=145.17 MB, PHP peak=146.75 MB.With entitycache, cache primedExecuted 396 queries in 564.3 ms. Queries exceeding 5 ms are highlighted. Page execution time was 1680.65 ms. Memory used at: devel_boot()=7.96 MB, devel_shutdown()=89.57 MB, PHP peak=90.5 MB.As you can see entitycache adds an initial overhead in order to populate the cache tables, but once this is done, all subsequent entity loads are much faster, and there is less database traffic overall (22% less SQL queries).Real life entity loading speedTo load 12 nodes using entitycache (this query was taken from the above page generation):SELECT cid, data, created, expire, serialized FROM cache_entity_node WHERE cid IN ('4370', '122', '2828', '120', '3648', '3045', '4356', '3642', '3379', '3067', '107', '4376')Takes 18.34ms.How to install entitycacheSimple with drush, I run the development build as it contains a number of new features and fixes.drush dl entitycache-7.x-1.x-devdrush en entitycache -yIf you have any success stories, let me know in the comments.">
     
 
 
@@ -29,6 +30,30 @@
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content="Using EntityCache to speed up your Drupal site" />
+    <meta property="og:site_name" content="Pixelite" />
+    <meta property="og:url" content="http://www.pixelite.co.nz/article/using-entitycache-speed-your-drupal-site" />
+    <meta property="og:description" content="Make your Drupal sites faster" />
+    <meta property="fb:app_id" content="410615979137383" />
+    <meta property="og:type" content="article" />
+
+    <meta property="og:locale" content="en_US" />
+    
+        <meta property="article:author" content="Sean Hamlin" />
+    
+    <meta property="og:image" content="http://www.pixelite.co.nz/img/post-bg-02.jpg" />
+
+    <!-- Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pixelite_">
+    
+        <meta name="twitter:creator" content="@wiifm">
+    
+    <meta name="twitter:title" content="Using EntityCache to speed up your Drupal site">
+    <meta name="twitter:description" content="Make your Drupal sites faster">
+    <meta name="twitter:image" content="http://www.pixelite.co.nz/img/post-bg-02.jpg">
 
     <title>Using EntityCache to speed up your Drupal site - Pixelite</title>
 

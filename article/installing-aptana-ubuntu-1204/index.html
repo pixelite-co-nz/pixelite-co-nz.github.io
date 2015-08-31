@@ -6,8 +6,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     
-    <meta name="description" content="There is no official repository for Aptana in Ubuntu, so some manual steps are required in order to get Aptana to    work. There is also a weird Unity menu display issue, fortuantely this can be worked around by the custom desktop    launcher created below.InstallationVisit http://www.aptana.com/downloads/start and download the    latest zip file of AptanaOr use wget (current as of time of writing) wget -P ~/Downloads http://download.aptana.com/studio3/standalone/3.2.2/linux/Aptana_Studio_3_Setup_Linux_x86_64_3.2.2.zipUnzip Aptana to /opt/aptanasudo unzip ~/Downloads/Aptana_Studio_3_Setup_Linux* -d /opt -qsudo mv /opt/Aptana_Studio_3/ /opt/aptana/Make sure you own it correctly (so updates will work)sudo chown -R $(whoami):$(whoami) /opt/aptana/Create the custom desktop launcher sudo vim /usr/share/applications/aptana.desktopand insert the follwing text:[Desktop Entry]Encoding=UTF-8Name=Aptana Studio 3Comment=IDE for Rails, Python, PHPExec=/opt/aptana/AptanaStudio3Icon=/opt/aptana/icon.xpmTerminal=falseType=ApplicationCategories=GNOME;Application;Development;StartupNotify=trueFinishing touchesYou should now be able to find it in the unity launcher    Pinning it to the unity bar is a good idea    Hope this helps you, get cracking with Aptana in Ubuntu.">
+        <meta name="description" content="There is no official repository for Aptana in Ubuntu, so some manual steps are required in order to get Aptana to    work. There is also a weird Unity menu display issue, fortuantely this can be worked around by the custom desktop    launcher created below.InstallationVisit http://www.aptana.com/downloads/start and download the    latest zip file of AptanaOr use wget (current as of time of writing) wget -P ~/Downloads http://download.aptana.com/studio3/standalone/3.2.2/linux/Aptana_Studio_3_Setup_Linux_x86_64_3.2.2.zipUnzip Aptana to /opt/aptanasudo unzip ~/Downloads/Aptana_Studio_3_Setup_Linux* -d /opt -qsudo mv /opt/Aptana_Studio_3/ /opt/aptana/Make sure you own it correctly (so updates will work)sudo chown -R $(whoami):$(whoami) /opt/aptana/Create the custom desktop launcher sudo vim /usr/share/applications/aptana.desktopand insert the follwing text:[Desktop Entry]Encoding=UTF-8Name=Aptana Studio 3Comment=IDE for Rails, Python, PHPExec=/opt/aptana/AptanaStudio3Icon=/opt/aptana/icon.xpmTerminal=falseType=ApplicationCategories=GNOME;Application;Development;StartupNotify=trueFinishing touchesYou should now be able to find it in the unity launcher    Pinning it to the unity bar is a good idea    Hope this helps you, get cracking with Aptana in Ubuntu.">
     
 
 
@@ -29,6 +30,30 @@
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content="Installing Aptana on Ubuntu 12.04" />
+    <meta property="og:site_name" content="Pixelite" />
+    <meta property="og:url" content="http://www.pixelite.co.nz/article/installing-aptana-ubuntu-1204" />
+    <meta property="og:description" content="" />
+    <meta property="fb:app_id" content="410615979137383" />
+    <meta property="og:type" content="article" />
+
+    <meta property="og:locale" content="en_US" />
+    
+        <meta property="article:author" content="Sean Hamlin" />
+    
+    <meta property="og:image" content="http://www.pixelite.co.nz/img/aptana-hero.png" />
+
+    <!-- Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pixelite_">
+    
+        <meta name="twitter:creator" content="@wiifm">
+    
+    <meta name="twitter:title" content="Installing Aptana on Ubuntu 12.04">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="http://www.pixelite.co.nz/img/aptana-hero.png">
 
     <title>Installing Aptana on Ubuntu 12.04 - Pixelite</title>
 

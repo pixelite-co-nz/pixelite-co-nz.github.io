@@ -75,7 +75,7 @@ Rather than using any existing contrib modules, the code required to do what we 
  * Responsible for setting the cache TTL based on the content attributes.
  */
 function MYMODULE_page_build(&$page) {
-  $node = menu_get_object();
+  $node = menu_get_object('node');
   if (user_is_anonymous() && isset($node)) {
     $age_since_last_change = REQUEST_TIME - $node->changed;
 

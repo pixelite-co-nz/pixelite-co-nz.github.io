@@ -33,7 +33,7 @@ In this option, you set a global high cache TTL, so that all content lives in va
 * When you publish 1 node, often this node can potentially appear on dozens of pages (e.g. on landing pages as a teaser, or in a view), this means the purge rules get overly complex in a hurry. If you ever re-architect a portion of the site, often this means hundreds of purge rules need to be rewritten and tested, this can be very costly.
 * Running a <abbr title="Content Delivery Network">CDN</abbr> (e.g. Akamai, or Cloudflare) can complicate things further, as you need to purge varnish first, then the CDN *and never in the reverse order*, else the CDN will end up caching the stale content all over again
 * Having exposed filters on the page means you will need to use bans in varnish (to utlise regex), this is another topic for another day
-* All to often, content editors resort to *nuking the varnish cache from orbit* and dropping the whole lot when the rules do not function as desired. This is especially bad as it means all the content in there needs to be entirely rebuilt again. This can (and often does) take down busy sites when it occurs in production.
+* All too often, content editors resort to *nuking the varnish cache from orbit* and dropping the whole lot when the rules do not function as desired. This is especially bad as it means all the content in there needs to be entirely rebuilt again. This can (and often does) take down busy sites when it occurs in production.
 
 ## 2) Varnish with intelligent cache TTLs
 

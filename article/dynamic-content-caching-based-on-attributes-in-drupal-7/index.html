@@ -185,7 +185,7 @@
   <li>When you publish 1 node, often this node can potentially appear on dozens of pages (e.g. on landing pages as a teaser, or in a view), this means the purge rules get overly complex in a hurry. If you ever re-architect a portion of the site, often this means hundreds of purge rules need to be rewritten and tested, this can be very costly.</li>
   <li>Running a <abbr title="Content Delivery Network">CDN</abbr> (e.g. Akamai, or Cloudflare) can complicate things further, as you need to purge varnish first, then the CDN <em>and never in the reverse order</em>, else the CDN will end up caching the stale content all over again</li>
   <li>Having exposed filters on the page means you will need to use bans in varnish (to utlise regex), this is another topic for another day</li>
-  <li>All to often, content editors resort to <em>nuking the varnish cache from orbit</em> and dropping the whole lot when the rules do not function as desired. This is especially bad as it means all the content in there needs to be entirely rebuilt again. This can (and often does) take down busy sites when it occurs in production.</li>
+  <li>All too often, content editors resort to <em>nuking the varnish cache from orbit</em> and dropping the whole lot when the rules do not function as desired. This is especially bad as it means all the content in there needs to be entirely rebuilt again. This can (and often does) take down busy sites when it occurs in production.</li>
 </ul>
 
 <h2 id="varnish-with-intelligent-cache-ttls">2) Varnish with intelligent cache TTLs</h2>

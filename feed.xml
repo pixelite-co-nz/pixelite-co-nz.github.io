@@ -8,8 +8,8 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 07 Sep 2015 16:45:43 +1200</pubDate>
-    <lastBuildDate>Mon, 07 Sep 2015 16:45:43 +1200</lastBuildDate>
+    <pubDate>Mon, 07 Sep 2015 17:11:38 +1200</pubDate>
+    <lastBuildDate>Mon, 07 Sep 2015 17:11:38 +1200</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -32,7 +32,7 @@
   &lt;li&gt;When you publish 1 node, often this node can potentially appear on dozens of pages (e.g. on landing pages as a teaser, or in a view), this means the purge rules get overly complex in a hurry. If you ever re-architect a portion of the site, often this means hundreds of purge rules need to be rewritten and tested, this can be very costly.&lt;/li&gt;
   &lt;li&gt;Running a &lt;abbr title=&quot;Content Delivery Network&quot;&gt;CDN&lt;/abbr&gt; (e.g. Akamai, or Cloudflare) can complicate things further, as you need to purge varnish first, then the CDN &lt;em&gt;and never in the reverse order&lt;/em&gt;, else the CDN will end up caching the stale content all over again&lt;/li&gt;
   &lt;li&gt;Having exposed filters on the page means you will need to use bans in varnish (to utlise regex), this is another topic for another day&lt;/li&gt;
-  &lt;li&gt;All to often, content editors resort to &lt;em&gt;nuking the varnish cache from orbit&lt;/em&gt; and dropping the whole lot when the rules do not function as desired. This is especially bad as it means all the content in there needs to be entirely rebuilt again. This can (and often does) take down busy sites when it occurs in production.&lt;/li&gt;
+  &lt;li&gt;All too often, content editors resort to &lt;em&gt;nuking the varnish cache from orbit&lt;/em&gt; and dropping the whole lot when the rules do not function as desired. This is especially bad as it means all the content in there needs to be entirely rebuilt again. This can (and often does) take down busy sites when it occurs in production.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;varnish-with-intelligent-cache-ttls&quot;&gt;2) Varnish with intelligent cache TTLs&lt;/h2&gt;

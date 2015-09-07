@@ -8,9 +8,163 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 01 Sep 2015 00:30:23 +1200</pubDate>
-    <lastBuildDate>Tue, 01 Sep 2015 00:30:23 +1200</lastBuildDate>
+    <pubDate>Mon, 07 Sep 2015 15:06:50 +1200</pubDate>
+    <lastBuildDate>Mon, 07 Sep 2015 15:06:50 +1200</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Dynamic content caching based on attributes in Drupal 7</title>
+        <description>&lt;p&gt;Out of the box, Drupal 7 comes with the ability to set the global cache lifetime for all pages on the site. I find this works generally quite well with small sites with not a lot of content or complex caching requirements. &lt;a href=&quot;https://pantheon.io/docs/articles/drupal/drupal-performance-and-caching-settings/&quot;&gt;Pantheon have a nice write&lt;/a&gt; up on the performance settings page that comes with Drupal 7 core and what each of the settings mean.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;N.B.&lt;/strong&gt; In this article I am assuming you are running some form of reverse proxy (e.g. varnish) in front of Drupal (most Drupal managed cloud vendors like Acquia or Pantheon provide varnish as a part of it’s offering as standard).&lt;/p&gt;
+
+&lt;h2 id=&quot;the-problem-with-drupal-7-core-settings&quot;&gt;The problem with Drupal 7 core settings&lt;/h2&gt;
+
+&lt;p&gt;What happens when you are running a large site, with a very &lt;a href=&quot;https://en.wikipedia.org/wiki/Long_tail&quot;&gt;long tail of content&lt;/a&gt;? All of a sudden running a global cache &lt;abbr title=&quot;Time To Live&quot;&gt;TTL&lt;/abbr&gt; of 10 minutes can result in a very poor hit rate in varnish. Having a poor hit rate in varnish ultimately means your web servers end up doing more work, which often leads to having to shell out for additional hardware.&lt;/p&gt;
+
+&lt;p&gt;Generally, faced with this issue, you have 2 options:&lt;/p&gt;
+
+&lt;h2 id=&quot;varnish-with-purging&quot;&gt;1) Varnish with purging&lt;/h2&gt;
+
+&lt;p&gt;In this option, you set a global high cache TTL, so that all content lives in varnish for an excessively long time (say 12 hours), and when certain events occur (say a news article gets published), then purge requests occur telling varnish to drop certain URLs from it’s cache. I don’t want to go into detail to much on this, but I will say there are a number of drawbacks with this approach:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;When you publish 1 node, often this node can potentially appear on dozens of pages (e.g. on landing pages as a teaser, or in a view), this means the purge rules get overly complex in a hurry. If you ever re-architect a portion of the site, often this means hundreds of purge rules need to be rewritten and tested, this can be very costly.&lt;/li&gt;
+  &lt;li&gt;Running a &lt;abbr title=&quot;Content Delivery Network&quot;&gt;CDN&lt;/abbr&gt; (e.g. Akamai, or Cloudflare) can complicate things further, as you need to purge varnish first, then the CDN &lt;em&gt;and never in the reverse order&lt;/em&gt;, else the CDN will end up caching the stale content all over again&lt;/li&gt;
+  &lt;li&gt;Having exposed filters on the page means you will need to use bans in varnish (to utlise regex), this is another topic for another day&lt;/li&gt;
+  &lt;li&gt;All to often, content editors resort to &lt;em&gt;nuking the varnish cache from orbit&lt;/em&gt; and dropping the whole lot when the rules do not function as desired. This is especially bad as it means all the content in there needs to be entirely rebuilt again. This can (and often does) take down busy sites when it occurs in production.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;varnish-with-intelligent-cache-ttls&quot;&gt;2) Varnish with intelligent cache TTLs&lt;/h2&gt;
+
+&lt;p&gt;Another option to which I want to discuss in this blog post is around using the attributes of the node in order to determine at runtime how long this piece of content should be cached in varnish.&lt;/p&gt;
+
+&lt;p&gt;Attributes you can use to help you work out the most effective cache TTL:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;content type&lt;/li&gt;
+  &lt;li&gt;content created age (now - created)&lt;/li&gt;
+  &lt;li&gt;recency of most recent revision&lt;/li&gt;
+  &lt;li&gt;when the last comment was made&lt;/li&gt;
+  &lt;li&gt;current time of day&lt;/li&gt;
+  &lt;li&gt;any other attribute of the node&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What do I mean by this? Well let’s say you run a large digital media organisation, and publish hundreds of fresh news articles per day, but after a week or so, they generally get no edits done to them at all. Your cache TTL rules could be:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;if content type == ‘news_article’ then&lt;/li&gt;
+  &lt;li&gt;if age &amp;lt; 1 week, then the cache TTL inherits from the global configuration&lt;/li&gt;
+  &lt;li&gt;else if age &amp;gt; 1 week, then increase cache TTL to 1 week&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This way, your new content is able to get upgrades quite promptly, and your long tail of older news articles have a massively inflated cache TTL, meaning your varnish server should really be able to help out here. It is important to note, that these rules apply at a node by node level, and can be made to suit your business requirements.&lt;/p&gt;
+
+&lt;h3 id=&quot;modules-out-there-already&quot;&gt;Modules out there already&lt;/h3&gt;
+
+&lt;p&gt;I had a look around on Drupal.org to see what others had done in this area in the past, I was genuinely surprised at the lack of modules in this area, here is a short summary:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.drupal.org/project/cacheexclude&quot;&gt;cacheexclude&lt;/a&gt; - used to exclude certain URLs from cache, kind of the opposite of what we want here.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.drupal.org/project/max_age&quot;&gt;max_age&lt;/a&gt; - an (abandoned?) Drupal 6 module that aimed to provide different cache TTLs per content type in addition to the site wide default. This is close to what we want, there even is a &lt;a href=&quot;https://www.drupal.org/node/1322158&quot;&gt;patch to help port the module to Drupal 7&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;example-code&quot;&gt;Example code&lt;/h3&gt;
+
+&lt;p&gt;Rather than using any existing contrib modules, the code required to do what we want is very simple. Here is some simple custom code that can be used as a starting point for your code:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * Implements hook_page_build().&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; *&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * Responsible for setting the cache TTL based on the content attributes.&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MYMODULE_page_build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;menu_get_object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;user_is_anonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$age_since_last_change&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;REQUEST_TIME&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;changed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;news_article&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// If the news article has not been edited in a week, then set the cache&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// TTL to a week.&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$age_since_last_change&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;604800&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;nv&quot;&gt;$max_age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;604800&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+          &lt;span class=&quot;nx&quot;&gt;drupal_add_http_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Cache-Control&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;public,max-age=&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$max_age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+          &lt;span class=&quot;nx&quot;&gt;drupal_add_http_header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Expires&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;gmdate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;DATE_RFC1123&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;REQUEST_TIME&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$max_age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The above example is simple, but hopefully gives you a taste of what can be achieved with very little code.&lt;/p&gt;
+
+&lt;h3 id=&quot;how-to-test-your-code&quot;&gt;How to test your code&lt;/h3&gt;
+
+&lt;p&gt;I have a few cURL aliases in my &lt;code&gt;.bashrc&lt;/code&gt; that will come in handy if you do a lot of this type of thing:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# cURL&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; curlh&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; curl -sLIXGET &lt;span class=&quot;s2&quot;&gt;&amp;quot;$@&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; curlc&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; curl -sLIXGET &lt;span class=&quot;s2&quot;&gt;&amp;quot;$@&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep -E -i &lt;span class=&quot;s2&quot;&gt;&amp;quot;^(Cache-Control|Age|Expires|Set-Cookie|X-Cache|X-Varnish|X-Hits|Vary)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So if you are after all response headers you can:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curlh www.example.com
+HTTP/1.1 &lt;span class=&quot;m&quot;&gt;200&lt;/span&gt; OK
+Accept-Ranges: bytes
+Cache-Control: max-age&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;604800
+Content-Type: text/html
+Date: Sun, &lt;span class=&quot;m&quot;&gt;06&lt;/span&gt; Sep &lt;span class=&quot;m&quot;&gt;2015&lt;/span&gt; 22:52:40 GMT
+Etag: &lt;span class=&quot;s2&quot;&gt;&amp;quot;359670651&amp;quot;&lt;/span&gt;
+Expires: Sun, &lt;span class=&quot;m&quot;&gt;13&lt;/span&gt; Sep &lt;span class=&quot;m&quot;&gt;2015&lt;/span&gt; 22:52:40 GMT
+Last-Modified: Fri, &lt;span class=&quot;m&quot;&gt;09&lt;/span&gt; Aug &lt;span class=&quot;m&quot;&gt;2013&lt;/span&gt; 23:54:35 GMT
+Server: ECS &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;cpm/F9D5&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+X-Cache: HIT
+x-ec-custom-error: 1
+Content-Length: 1270
+Connection: Keep-Alive
+Age: 2265&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you just want the relevant caching response headers:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curlc www.example.com
+Cache-Control: max-age&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;604800
+Expires: Sun, &lt;span class=&quot;m&quot;&gt;13&lt;/span&gt; Sep &lt;span class=&quot;m&quot;&gt;2015&lt;/span&gt; 22:52:40 GMT
+X-Cache: HIT
+Age: 2249&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;what-this-technique-relies-on&quot;&gt;What this technique relies on&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Expectation setting&lt;/strong&gt; - you will need to ensure all content authors and stakeholders are aware what this means. If a really old news article is edited, there potentially will be lag before the changes are live.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Enough RAM in varnish&lt;/strong&gt; to house all your objects. If you are RAM constrained, and are seeing a lot of evictions at present, then this technique will not have the impact you will want it to. You might be better to upsize varnish first, then look at this technique.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;I am keen to hear what other large websites do in the area, especially around multiple layers of external cache invalidation and/or if custom cache TTL headers are used. Also if you know of any other contrib modules that can help here, let me know.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Sun, 06 Sep 2015 00:00:00 +1200</pubDate>
+        <link>http://www.pixelite.co.nz/article/dynamic-content-caching-based-on-attributes-in-drupal-7/</link>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/dynamic-content-caching-based-on-attributes-in-drupal-7/</guid>
+        
+        <category>drupal</category>
+        
+        <category>drupalplanet</category>
+        
+        <category>performance</category>
+        
+        <category>caching</category>
+        
+        <category>varnish</category>
+        
+        
+        <category>tutorial</category>
+        
+      </item>
     
       <item>
         <title>Starter regression test suite powered by CasperJS</title>
@@ -1161,83 +1315,6 @@ git am &amp;lt; /tmp/patch
         <category>sed</category>
         
         <category>bash</category>
-        
-        
-        <category>tutorial</category>
-        
-      </item>
-    
-      <item>
-        <title>Site preview - the holy grail of Drupal</title>
-        <description>&lt;h2 id=&quot;what-is-site-preview&quot;&gt;What is site preview&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;The ability to see (and have selected others see) changes to content and layout that is not yet visible to the general public&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;So recently I did a talk at &lt;a href=&quot;https://melbourne2015.drupal.org.au/session/site-preview-holy-grail-drupal&quot;&gt;DrupalSouth Melbourne&lt;/a&gt; on site preview solutions that exist within Drupal at present. I noticed that no one had managed to do a comparison between them as they stand at the moment, so I aimed to help out there.&lt;/p&gt;
-
-&lt;p&gt;Solutions compared in the talk:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Drupal 7 (stock)&lt;/li&gt;
-  &lt;li&gt;SPS&lt;/li&gt;
-  &lt;li&gt;CPS&lt;/li&gt;
-  &lt;li&gt;Zariz&lt;/li&gt;
-  &lt;li&gt;Live preview&lt;/li&gt;
-  &lt;li&gt;What is coming in Drupal 8&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I also wanted to introduce the new solution that was developed for the Ministry of Health New Zealand, that aimed to solve site preview in an entirely different manner.&lt;/p&gt;
-
-&lt;h2 id=&quot;slides&quot;&gt;Slides&lt;/h2&gt;
-
-&lt;p&gt;Here are my &lt;a href=&quot;http://bit.ly/drupalsouthsitepreview&quot;&gt;full slides&lt;/a&gt; from the talk if you want to read about the above options in more detail.&lt;/p&gt;
-
-&lt;h2 id=&quot;how-preview-sync-is-different&quot;&gt;How preview sync is different&lt;/h2&gt;
-
-&lt;p&gt;Instead of try to take over your production site, and pollute it with complex revisioning and access control, and altering your EFQ and views using magic, it instead works with your existing workflow (workbench_moderation integration is &lt;abbr title=&quot;out of the box&quot;&gt;OOTB&lt;/abbr&gt;), and aims to be a lightweight solution.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/site-preview/diagram.png&quot; alt=&quot;Preview sync syndicates your production database to a separate preview environment&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Preview sync, takes a live snapshot (optimised) of your production database, and imports this to a separate dedicated preview environment. Then a number of actions take place, all of which are entirely alterable, so you can add your own tasks in, and remove tasks you don’t need.&lt;/p&gt;
-
-&lt;p&gt;Example tasks in preview sync:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;environment switch to preview, this allows you to enable and disable modules, perform actions (e.g. redirecting email to a log). This is a powerful hook.&lt;/li&gt;
-  &lt;li&gt;publish the content currently in ‘Needs Review’, this allows your content approvers to see the content, including all surrounding content as if it was published on production, but in a safe and controlled environment&lt;/li&gt;
-  &lt;li&gt;re-index solr, if your site is largely driven by Apache Solr (which is not uncommon), this will allow the newly published content above to be inserted into the preview Solr index. This is a unique feature&lt;/li&gt;
-  &lt;li&gt;your task here, seriously, the task list is completely alterable, and any drush command can be remotely executed on the preview environment. Custom drush commands can be added. An example of which is the bundled workbench-moderation-publish drush command.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;security&quot;&gt;Security&lt;/h3&gt;
-
-&lt;p&gt;As all the complex access control is not needed on production (e.g. you are never sending un-published content to Solr), there is a huge security benefit to using preview sync. Access control to nodes is kept simple on production.&lt;/p&gt;
-
-&lt;p&gt;Also, as the preview environment is dedicated, you can lock down access, e.g. only allow access to your preview site from certain IPs. This way, your internal content approvers can still see the content, and no one else.&lt;/p&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;If preview sync sounds like it could be useful to you, I am keen to know - please leave a comment below. I am also keen to hear if&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;there is a missing feature that is needed for you to adopt preview sync&lt;/li&gt;
-  &lt;li&gt;key integrations with other contributed modules are missing&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Sat, 07 Mar 2015 00:00:00 +1300</pubDate>
-        <link>http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal</link>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal</guid>
-        
-        <category>drupal</category>
-        
-        <category>drupalplanet</category>
-        
-        <category>preview</category>
-        
-        <category>content-staging</category>
         
         
         <category>tutorial</category>

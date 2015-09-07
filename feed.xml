@@ -8,8 +8,8 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 07 Sep 2015 17:11:38 +1200</pubDate>
-    <lastBuildDate>Mon, 07 Sep 2015 17:11:38 +1200</lastBuildDate>
+    <pubDate>Tue, 08 Sep 2015 08:19:05 +1200</pubDate>
+    <lastBuildDate>Tue, 08 Sep 2015 08:19:05 +1200</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -80,7 +80,7 @@
 &lt;span class=&quot;sd&quot;&gt; * Responsible for setting the cache TTL based on the content attributes.&lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MYMODULE_page_build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;menu_get_object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;menu_get_object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;node&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;user_is_anonymous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nv&quot;&gt;$age_since_last_change&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;REQUEST_TIME&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;changed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 

@@ -76,7 +76,7 @@ Rather than using any existing contrib modules, the code required to do what we 
  */
 function MYMODULE_page_build(&$page) {
   $node = menu_get_object('node');
-  if (user_is_anonymous() && isset($node)) {
+  if (drupal_page_is_cacheable() && isset($node)) {
     $age_since_last_change = REQUEST_TIME - $node->changed;
 
     switch ($node->type) {

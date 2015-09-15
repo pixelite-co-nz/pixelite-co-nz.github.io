@@ -7,7 +7,7 @@ header-img: "img/migrate-d2d/migrate-d2d-header.png"
 permalink: /article/migrate-d2d-taxonomy-terms-on-nodes/
 author: "Gold"
 categories:
-- migration
+- tutorial
 tags:
 - drupal
 - drupalplanet

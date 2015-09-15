@@ -1,0 +1,11 @@
+<a href="/category/{{ category }}" class="tag">
+{% if category == "tutorial" %}
+    <i class="fa fa-graduation-cap"></i> {{ category }}
+{% endif %}
+{% if category == "demo" %}
+    <i class="fa fa-rocket"></i> {{ category }}
+{% endif %}
+{% if category == "review" %}
+    <i class="fa fa-edit"></i> {{ category }}
+{% endif %}
+</a>

@@ -48,34 +48,6 @@ footer {
     background-color: #000000;
 }
 
-@media (max-width: 767px) {
-    body {
-        padding-top: 50px;  /*Required padding for .navbar-fixed-top. Change if height of navigation changes.*/
-    }
-
-    .navbar-pixelite .icon-bar {
-       background-color: #DDDDDD;
-    }
-
-    .navbar-pixelite .navbar-brand {
-        padding: 0;
-    }
-
-    .navbar-pixelite .navbar-brand img {
-        margin: 15px 10px;
-        max-width:90px;
-        max-height:30px;
-    }
-
-    .navbar-pixelite ul.navbar-right li a {
-        color: #ffffff;
-    }
-
-    .navbar-pixelite ul.navbar-right li a:hover {
-        background-color: #000000;
-    }
-}
-
 .post-preview {
     background-color: #fff;
     margin-bottom: 50px;
@@ -130,16 +102,28 @@ footer {
     font-size: 16px;
 }
 
-.tags {
+.categories {
+    padding-left:24px;
+}
+
+.tag-bar {
     background-color: #EFEFEF;
     padding-top: 10px;
 }
 
-.tags li {
+.tag-bar li {
     padding-left: 1px;
 }
 
-a.tag {
+.tag-bar .tags {
+    text-align: right;
+}
+
+.tag-bar .categories {
+    text-align: left;
+}
+
+.tag-bar a.tag {
     box-shadow: 0px 1px 1px #777777;
     -webkit-transition: all 0.2s linear;
     -moz-transition: all 0.2s linear;
@@ -153,12 +137,62 @@ a.tag {
     border-radius: 3px;
     padding: 3px 10px;
     color: #fff;
-    background-color: dodgerblue;
 }
 
-a.tag:hover {
+.tag-bar a.tag:hover {
     color: #fff;
-    background-color: cornflowerblue;
     box-shadow: 0px 2px 2px #777777;
 }
 
+.tag-bar .tags a.tag {
+    background-color: #2b98f0;
+}
+
+.tag-bar .tags a.tag:hover {
+    background-color: #43a6f3;
+}
+
+.tag-bar .categories a.tag {
+    background-color: #50ae54;
+}
+
+.tag-bar .categories a.tag:hover {
+    background-color: #49c64f;
+}
+
+@media (max-width: 991px) {
+    .tag-bar .tags {
+        text-align: left;
+    }
+    .tag-bar .tags ul {
+        margin-left:3px;
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-top: 50px;  /*Required padding for .navbar-fixed-top. Change if height of navigation changes.*/
+    }
+
+    .navbar-pixelite .icon-bar {
+        background-color: #DDDDDD;
+    }
+
+    .navbar-pixelite .navbar-brand {
+        padding: 0;
+    }
+
+    .navbar-pixelite .navbar-brand img {
+        margin: 15px 10px;
+        max-width:90px;
+        max-height:30px;
+    }
+
+    .navbar-pixelite ul.navbar-right li a {
+        color: #ffffff;
+    }
+
+    .navbar-pixelite ul.navbar-right li a:hover {
+        background-color: #000000;
+    }
+}

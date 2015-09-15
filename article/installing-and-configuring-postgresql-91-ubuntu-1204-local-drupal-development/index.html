@@ -123,41 +123,40 @@
 
 
     
-
+<!-- Main Content -->
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
     <meta itemprop="wordCount" content="599"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development"/>
 
-    <!-- Post Header -->
     <header class="intro-header" style="background-image: url('/')">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="post-heading">
-                        <h1 itemprop="name headline">Installing and configuring PostgreSQL 9.1 on Ubuntu 12.04 for local Drupal development</h1>
-                        
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1 itemprop="name headline">Installing and configuring PostgreSQL 9.1 on Ubuntu 12.04 for local Drupal development</h1>
+                    
 
-                        <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2012-07-12T00:00:00" itemprop="datePublished">July 12, 2012</time></span>
-                        <ul class="social-buttons cf">
-                            <li>
-                                <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Installing and configuring PostgreSQL 9.1 on Ubuntu 12.04 for local Drupal development" data-url="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
-                            </li>
-                            <li>
-                                <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
-                            </li>
-                            <li>
-                                <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development&amp;t=Installing%20and%20configuring%20PostgreSQL%209.1%20on%20Ubuntu%2012.04%20for%20local%20Drupal%20development" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
-                            </li>
-                            <li>
-                                <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development&amp;title=Installing%20and%20configuring%20PostgreSQL%209.1%20on%20Ubuntu%2012.04%20for%20local%20Drupal%20development" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
-                            </li>
-                        </ul>
-                    </div>
+                    <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2012-07-12T00:00:00" itemprop="datePublished">July 12, 2012</time></span>
+                    <ul class="social-buttons cf">
+                        <li>
+                            <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Installing and configuring PostgreSQL 9.1 on Ubuntu 12.04 for local Drupal development" data-url="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development&amp;t=Installing%20and%20configuring%20PostgreSQL%209.1%20on%20Ubuntu%2012.04%20for%20local%20Drupal%20development" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development&amp;title=Installing%20and%20configuring%20PostgreSQL%209.1%20on%20Ubuntu%2012.04%20for%20local%20Drupal%20development" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/installing-and-configuring-postgresql-91-ubuntu-1204-local-drupal-development" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
     <!-- Post Content -->
     <div class="container">
@@ -253,6 +252,7 @@ listen_addresses = 'localhost'    # what IP address(es) to listen on;
 </article>
 
 <hr>
+
 
 
     <!-- Footer -->

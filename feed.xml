@@ -8,8 +8,8 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 08 Sep 2015 09:47:29 +1200</pubDate>
-    <lastBuildDate>Tue, 08 Sep 2015 09:47:29 +1200</lastBuildDate>
+    <pubDate>Tue, 15 Sep 2015 15:16:30 +1200</pubDate>
+    <lastBuildDate>Tue, 15 Sep 2015 15:16:30 +1200</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -978,7 +978,7 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
         <category>migrated2d</category>
         
         
-        <category>migration</category>
+        <category>tutorial</category>
         
       </item>
     

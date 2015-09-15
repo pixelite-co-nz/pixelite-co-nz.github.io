@@ -123,41 +123,40 @@
 
 
     
-
+<!-- Main Content -->
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
     <meta itemprop="wordCount" content="766"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7"/>
 
-    <!-- Post Header -->
     <header class="intro-header" style="background-image: url('/img/post-bg-02.jpg')">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="post-heading">
-                        <h1 itemprop="name headline">How to use Entity Metadata Wrappers with Drupal 7</h1>
-                        
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1 itemprop="name headline">How to use Entity Metadata Wrappers with Drupal 7</h1>
+                    
 
-                        <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2012-09-15T00:00:00" itemprop="datePublished">September 15, 2012</time></span>
-                        <ul class="social-buttons cf">
-                            <li>
-                                <a href="http://twitter.com/share" class="socialite twitter-share" data-text="How to use Entity Metadata Wrappers with Drupal 7" data-url="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
-                            </li>
-                            <li>
-                                <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
-                            </li>
-                            <li>
-                                <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7&amp;t=How%20to%20use%20Entity%20Metadata%20Wrappers%20with%20Drupal%207" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
-                            </li>
-                            <li>
-                                <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7&amp;title=How%20to%20use%20Entity%20Metadata%20Wrappers%20with%20Drupal%207" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
-                            </li>
-                        </ul>
-                    </div>
+                    <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2012-09-15T00:00:00" itemprop="datePublished">September 15, 2012</time></span>
+                    <ul class="social-buttons cf">
+                        <li>
+                            <a href="http://twitter.com/share" class="socialite twitter-share" data-text="How to use Entity Metadata Wrappers with Drupal 7" data-url="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7&amp;t=How%20to%20use%20Entity%20Metadata%20Wrappers%20with%20Drupal%207" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7&amp;title=How%20to%20use%20Entity%20Metadata%20Wrappers%20with%20Drupal%207" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/how-use-entity-metadata-wrappers-drupal-7" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
     <!-- Post Content -->
     <div class="container">
@@ -278,6 +277,7 @@ $body = $wrapper-&gt;language($language-&gt;language)-&gt;body-&gt;value-&gt;val
 </article>
 
 <hr>
+
 
 
     <!-- Footer -->

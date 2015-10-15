@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+        <meta name="description" content="There are a number of ways to do this, this post will help explain the pros and cons of each approach.">
+    
+
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content="Integrating multisite Drupal with Apache Solr" />
+    <meta property="og:site_name" content="Pixelite" />
+    <meta property="og:url" content="http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/" />
+    <meta property="og:description" content="Your options, the pros and the cons" />
+    <meta property="fb:app_id" content="410615979137383" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_US" />
+
+    
+        <meta property="og:image" content="http://www.pixelite.co.nz/img/swing.jpg" />
+    
+
+    <!-- Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pixelite_">
+    
+        <meta name="twitter:creator" content="@wiifm">
+    
+    <meta name="twitter:title" content="Integrating multisite Drupal with Apache Solr">
+    <meta name="twitter:description" content="Your options, the pros and the cons">
+    
+        <meta name="twitter:image" content="http://www.pixelite.co.nz/img/swing.jpg">
+    
+
+
+    <title>Integrating multisite Drupal with Apache Solr - Pixelite</title>
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="http://www.pixelite.co.nz/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="All Drupal planet posts" href="http://www.pixelite.co.nz/drupalplanet.xml" />
+
+    <link rel="canonical" href="http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-pixelite" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img alt="Pixelite homepage" src="/img/pixelite.svg" /></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/about.html">About</a>
+                </li>
+                <li>
+                    <a href="/contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+<!-- Main Content -->
+<article itemscope="" itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="inLanguage" content="en-GB"/>
+    <meta itemprop="wordCount" content="550"/>
+    <meta itemprop="url" content="http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/"/>
+
+    <header class="intro-header" style="background-image: url('/img/swing.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1 itemprop="name headline">Integrating multisite Drupal with Apache Solr</h1>
+                    
+                    <h2 class="subheading" itemprop="description">Your options, the pros and the cons</h2>
+                    
+
+                    <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2015-10-15T00:00:00" itemprop="datePublished">October 15, 2015</time></span>
+                    <ul class="social-buttons cf">
+                        <li>
+                            <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Integrating multisite Drupal with Apache Solr" data-url="http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/&amp;t=Integrating%20multisite%20Drupal%20with%20Apache%20Solr" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/&amp;title=Integrating%20multisite%20Drupal%20with%20Apache%20Solr" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <!-- Post Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <div itemprop="articleBody">
+                    <p>There are a number of ways this can be solved with Drupal 7:</p>
+
+<h2 id="use-a-search-core-per-site">1. Use a search core per site</h2>
+
+<p>Using this approach, you create an unique Solr core (N.B. a single Solr application can contain 0 or more cores) per site and either:</p>
+
+<ul>
+  <li><a href="https://www.drupal.org/project/acquia_search_multi_subs">Acquia Search Multiple Indexes</a> module (if using <a href="https://www.acquia.com/free">Acquia Cloud</a>)</li>
+  <li>settings.php switch statements to switch on domain</li>
+</ul>
+
+<p>to connect the appropriate search cores to the appropriate Drupal environments. Then you can enable (but not no need to configure) the <a href="https://www.drupal.org/project/apachesolr_multisitesearch">apachesolr_multisitesearch</a> module.</p>
+
+<h3 id="pros">Pros</h3>
+
+<ul>
+  <li>Each site’s index is isolate from each other, so there is no interfering with other indexes, and no ability to drop other indexes</li>
+  <li>You can customise the Solr config per core</li>
+</ul>
+
+<h3 id="cons">Cons</h3>
+
+<ul>
+  <li>Need to provision a new Solr core every time you add a new site</li>
+  <li>Need to change settings.php every time you add a new site</li>
+</ul>
+
+<h2 id="use-a-single-shared-core-and-apachesolrmultisitesearch">2. Use a single shared core, and apachesolr_multisitesearch</h2>
+
+<p>In this option you utilise a single shared Solr core, and send the documents from all sites into it. Using special attributes on the documents, you are able to query and get only the results you desire back out again.</p>
+
+<p>The module you need to enable is <a href="https://www.drupal.org/project/apachesolr_multisitesearch">apachesolr_multisitesearch</a>. Just enabling the module makes your standard search pages return results only for your site. This is accomplished internally by adding a filtering query to each Solr query using <a href="http://cgit.drupalcode.org/apachesolr_multisitesearch/tree/apachesolr_multisitesearch.module#n243">hook_apachesolr_query_alter()</a>.</p>
+
+<p>You can see the site hashes are different based on the <a href="http://cgit.drupalcode.org/apachesolr/tree/apachesolr.module#n577">base_url</a> in Drupal already.</p>
+
+<h3 id="example-of-this-working">Example of this working</h3>
+
+<p>Note the site hashes are different:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>drush --uri<span class="o">=</span>www.example1.com vget apachesolr_site_hash
+apachesolr_site_hash: <span class="s1">&#39;lm0ujj&#39;</span>
+
+<span class="nv">$ </span>drush --uri<span class="o">=</span>www.example2.com.au vget apachesolr_site_hash
+apachesolr_site_hash: <span class="s1">&#39;9qt6o6&#39;</span></code></pre></div>
+
+<h3 id="example-of-this-not-working">Example of this not working</h3>
+
+<p>Note the site hashes are the same, thus the search results will be blended:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>drush --uri<span class="o">=</span>www.example1.com vget apachesolr_site_hash
+apachesolr_site_hash: <span class="s1">&#39;92ub55&#39;</span>
+
+<span class="nv">$ </span>drush --uri<span class="o">=</span>www.example2.com vget apachesolr_site_hash
+apachesolr_site_hash: <span class="s1">&#39;92ub55&#39;</span></code></pre></div>
+
+<p>You will find yourself in this predicament if you clone new sites from old sites (thus the database variable persists).</p>
+
+<h3 id="in-order-to-fix-blended-site-hashes">In order to fix blended site hashes</h3>
+
+<ol>
+  <li>drop the current index (both sites)</li>
+  <li>delete the variable ‘apachesolr_site_hash’ (both sites)</li>
+  <li>visit the admin page solr page (both sites) - this will regenerate the site hash</li>
+  <li>verify the site hash is now different (both sites)</li>
+  <li>reindex (both sites)</li>
+</ol>
+
+<h3 id="pros-1">Pros</h3>
+
+<ul>
+  <li>No need to provision a new Solr core every time you add a new site</li>
+  <li>No need to change settings.php every time you add a new site</li>
+  <li>Hooks into the delete query to prevent dropping the entire index</li>
+</ul>
+
+<h3 id="cons-1">Cons</h3>
+
+<ul>
+  <li>You need to ensure the site hash is different for each site, so if you clone one, you will need to delete the variable <code>apachesolr_site_hash</code> straight away</li>
+  <li>If you ever drop Solr’s index, this will drop all documents across all sites. This should be hard to do (you will need to disable the apachesolr_multisitesearch module)</li>
+  <li>You must share Solr config (e.g. the <a href="https://wiki.apache.org/solr/SchemaXml">schema XML</a>), so you cannot change this per site</li>
+</ul>
+
+<h2 id="comments">Comments</h2>
+
+<p>If you run a multisite setup, and make use of Apache Solr, I am keen to hear how you integrated it, and if you have any tips or tricks to share.</p>
+
+                </div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+                <script type="text/javascript">
+                    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                    var disqus_shortname = 'pixelite'; // required: replace example with your forum shortname
+                    var disqus_url = 'http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/';
+
+                    /* * * DON'T EDIT BELOW THIS LINE * * */
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/article/dynamic-content-caching-based-on-attributes-in-drupal-7/" data-toggle="tooltip" data-placement="top" title="Dynamic content caching based on attributes in Drupal 7">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/pixelite_">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/pixelite-co-nz">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JS libs -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/js/socialite.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/js/clean-blog.js"></script>
+
+<!-- Social links -->
+<script type="text/javascript">
+    (function($) {
+        Socialite.load();
+    })(jQuery);
+</script>
+
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34737960-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>

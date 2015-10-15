@@ -10,6 +10,103 @@
     <language>en</language>
     
       <item>
+        <title>Integrating multisite Drupal with Apache Solr</title>
+        <link>http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/</link>
+        <description>&lt;p&gt;There are a number of ways this can be solved with Drupal 7:&lt;/p&gt;
+
+&lt;h2 id=&quot;use-a-search-core-per-site&quot;&gt;1. Use a search core per site&lt;/h2&gt;
+
+&lt;p&gt;Using this approach, you create an unique Solr core (N.B. a single Solr application can contain 0 or more cores) per site and either:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.drupal.org/project/acquia_search_multi_subs&quot;&gt;Acquia Search Multiple Indexes&lt;/a&gt; module (if using &lt;a href=&quot;https://www.acquia.com/free&quot;&gt;Acquia Cloud&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;settings.php switch statements to switch on domain&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;to connect the appropriate search cores to the appropriate Drupal environments. Then you can enable (but not no need to configure) the &lt;a href=&quot;https://www.drupal.org/project/apachesolr_multisitesearch&quot;&gt;apachesolr_multisitesearch&lt;/a&gt; module.&lt;/p&gt;
+
+&lt;h3 id=&quot;pros&quot;&gt;Pros&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Each site’s index is isolate from each other, so there is no interfering with other indexes, and no ability to drop other indexes&lt;/li&gt;
+  &lt;li&gt;You can customise the Solr config per core&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cons&quot;&gt;Cons&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Need to provision a new Solr core every time you add a new site&lt;/li&gt;
+  &lt;li&gt;Need to change settings.php every time you add a new site&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;use-a-single-shared-core-and-apachesolrmultisitesearch&quot;&gt;2. Use a single shared core, and apachesolr_multisitesearch&lt;/h2&gt;
+
+&lt;p&gt;In this option you utilise a single shared Solr core, and send the documents from all sites into it. Using special attributes on the documents, you are able to query and get only the results you desire back out again.&lt;/p&gt;
+
+&lt;p&gt;The module you need to enable is &lt;a href=&quot;https://www.drupal.org/project/apachesolr_multisitesearch&quot;&gt;apachesolr_multisitesearch&lt;/a&gt;. Just enabling the module makes your standard search pages return results only for your site. This is accomplished internally by adding a filtering query to each Solr query using &lt;a href=&quot;http://cgit.drupalcode.org/apachesolr_multisitesearch/tree/apachesolr_multisitesearch.module#n243&quot;&gt;hook_apachesolr_query_alter()&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can see the site hashes are different based on the &lt;a href=&quot;http://cgit.drupalcode.org/apachesolr/tree/apachesolr.module#n577&quot;&gt;base_url&lt;/a&gt; in Drupal already.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-of-this-working&quot;&gt;Example of this working&lt;/h3&gt;
+
+&lt;p&gt;Note the site hashes are different:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example1.com vget apachesolr_site_hash
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;lm0ujj&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example2.com.au vget apachesolr_site_hash
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;9qt6o6&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-of-this-not-working&quot;&gt;Example of this not working&lt;/h3&gt;
+
+&lt;p&gt;Note the site hashes are the same, thus the search results will be blended:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example1.com vget apachesolr_site_hash
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example2.com vget apachesolr_site_hash
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You will find yourself in this predicament if you clone new sites from old sites (thus the database variable persists).&lt;/p&gt;
+
+&lt;h3 id=&quot;in-order-to-fix-blended-site-hashes&quot;&gt;In order to fix blended site hashes&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;drop the current index (both sites)&lt;/li&gt;
+  &lt;li&gt;delete the variable ‘apachesolr_site_hash’ (both sites)&lt;/li&gt;
+  &lt;li&gt;visit the admin page solr page (both sites) - this will regenerate the site hash&lt;/li&gt;
+  &lt;li&gt;verify the site hash is now different (both sites)&lt;/li&gt;
+  &lt;li&gt;reindex (both sites)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;pros-1&quot;&gt;Pros&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;No need to provision a new Solr core every time you add a new site&lt;/li&gt;
+  &lt;li&gt;No need to change settings.php every time you add a new site&lt;/li&gt;
+  &lt;li&gt;Hooks into the delete query to prevent dropping the entire index&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cons-1&quot;&gt;Cons&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You need to ensure the site hash is different for each site, so if you clone one, you will need to delete the variable &lt;code&gt;apachesolr_site_hash&lt;/code&gt; straight away&lt;/li&gt;
+  &lt;li&gt;If you ever drop Solr’s index, this will drop all documents across all sites. This should be hard to do (you will need to disable the apachesolr_multisitesearch module)&lt;/li&gt;
+  &lt;li&gt;You must share Solr config (e.g. the &lt;a href=&quot;https://wiki.apache.org/solr/SchemaXml&quot;&gt;schema XML&lt;/a&gt;), so you cannot change this per site&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you run a multisite setup, and make use of Apache Solr, I am keen to hear how you integrated it, and if you have any tips or tricks to share.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 15 Oct 2015 00:00:00 +1300</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/</guid>
+        <comments>http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/#disqus_thread</comments>
+      </item>
+    
+      <item>
         <title>Dynamic content caching based on attributes in Drupal 7</title>
         <link>http://www.pixelite.co.nz/article/dynamic-content-caching-based-on-attributes-in-drupal-7/</link>
         <description>&lt;p&gt;Out of the box, Drupal 7 comes with the ability to set the global cache lifetime for all pages on the site. I find this works generally quite well with small sites with not a lot of content or complex caching requirements. &lt;a href=&quot;https://pantheon.io/docs/articles/drupal/drupal-performance-and-caching-settings/&quot;&gt;Pantheon have a nice write&lt;/a&gt; up on the performance settings page that comes with Drupal 7 core and what each of the settings mean.&lt;/p&gt;
@@ -976,73 +1073,6 @@ We can do this with the following, go back to your terminal, and run (change the
         <dc:creator>Sean Hamlin</dc:creator>
         <guid isPermaLink="true">http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal</guid>
         <comments>http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal#disqus_thread</comments>
-      </item>
-    
-      <item>
-        <title>How to add subtabs under the User Edit tab in Drupal</title>
-        <link>http://www.pixelite.co.nz/article/subtabs-under-user-edit</link>
-        <description>&lt;h2 id=&quot;tldr&quot;&gt;tl;dr;&lt;/h2&gt;
-
-&lt;p&gt;To get your tabs to appear on the user edit page use &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21user%21user.api.php/function/hook_user_categories/7&quot;&gt;hook_user_categories()&lt;/a&gt; and &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu_alter/7&quot;&gt;hook_menu_alter()&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-detail&quot;&gt;The detail&lt;/h2&gt;
-
-&lt;p&gt;Getting submenu items to appear within the user edit area of Drupal has not always worked as I would expect from reading the documentation around &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu/7&quot;&gt;hook_menu()&lt;/a&gt;. As it happens the user module provides hooks to make this quite simple.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21user%21user.api.php/function/hook_user_categories/7&quot;&gt;hook_user_categories()&lt;/a&gt; allows you to return a subset of the parameters you’d expect to see in &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu/7&quot;&gt;hook_menu()&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In this example we would have a new set of tabs added to the User Edit page.  The first is &lt;em&gt;Account&lt;/em&gt; and is now presented because we have more than one tab here now.  The second is &lt;em&gt;Report Settings&lt;/em&gt; and it would have a URL like &lt;code&gt;user/12345/edit/report_settings&lt;/code&gt; where &lt;em&gt;report_settings&lt;/em&gt; is taken from the name parameter.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt; * Implements hook_user_categories().&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_module_user_categories&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-      &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-      &lt;span class=&quot;s1&quot;&gt;&amp;#39;title&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Report settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-      &lt;span class=&quot;s1&quot;&gt;&amp;#39;weight&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-      &lt;span class=&quot;s1&quot;&gt;&amp;#39;access callback&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user_edit_access&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-      &lt;span class=&quot;s1&quot;&gt;&amp;#39;access arguments&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;At this point we have a new menu item presented as a tab on the user edit page and clicking it takes us to a blank form with a submit button. I think this is due to the way menu items can inherit behaviour from parent menu items. We’ll be wanting to overload that behaviour though and present our own form.  This can be done through &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu_alter/7&quot;&gt;hook_menu_alter()&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Checking the keys of the array passed to &lt;a href=&quot;https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu_alter/7&quot;&gt;hook_menu_alter()&lt;/a&gt; we should find that we have a new one called &lt;code&gt;user/%user_category/edit/report_settings&lt;/code&gt;. We can edit this one to point it at our preferred form built using the &lt;a href=&quot;https://api.drupal.org/api/drupal/includes%21form.inc/group/form_api/7&quot;&gt;Form API&lt;/a&gt; as usual.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt; * Implements hook_menu_alter().&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_module_menu_alter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$callbacks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;$callbacks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user/%user_category/edit/report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;page arguments&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;my_module_user_report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// We need to set the file path as it defaults to the user module.&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;$callbacks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user/%user_category/edit/report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;file path&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;drupal_get_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;module&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;my_module&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;nv&quot;&gt;$callbacks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user/%user_category/edit/report_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;file&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;my_module.user.inc&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;gotchas&quot;&gt;Gotchas&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;You will want to be clearing your menu cache a lot while getting this working. Every edit will require a &lt;code&gt;drush cc menu&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;Ensure you have set the &lt;code&gt;file path&lt;/code&gt; in the hook_menu_alter() if you have your have your page callback or form function for drupal_get_form() in a separate file.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;If you have found that this post has been helpful ping me in the comments, on twitter (&lt;a href=&quot;http://twitter.com/unifex&quot;&gt;@Unifex&lt;/a&gt;) or on &lt;a href=&quot;http://drupal.org&quot;&gt;D.o&lt;/a&gt; at &lt;a href=&quot;http://drupal.org/u/Gold&quot;&gt;Gold&lt;/a&gt;.&lt;/p&gt;
-
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Wed, 10 Dec 2014 00:00:00 +1300</pubDate>
-        <dc:creator>Gold</dc:creator>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/subtabs-under-user-edit</guid>
-        <comments>http://www.pixelite.co.nz/article/subtabs-under-user-edit#disqus_thread</comments>
       </item>
     
   </channel>

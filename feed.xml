@@ -8,9 +8,116 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 15 Sep 2015 15:16:30 +1200</pubDate>
-    <lastBuildDate>Tue, 15 Sep 2015 15:16:30 +1200</lastBuildDate>
+    <pubDate>Thu, 15 Oct 2015 20:07:16 +1300</pubDate>
+    <lastBuildDate>Thu, 15 Oct 2015 20:07:16 +1300</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Integrating multisite Drupal with Apache Solr</title>
+        <description>&lt;p&gt;There are a number of ways this can be solved with Drupal 7:&lt;/p&gt;
+
+&lt;h2 id=&quot;use-a-search-core-per-site&quot;&gt;1. Use a search core per site&lt;/h2&gt;
+
+&lt;p&gt;Using this approach, you create an unique Solr core (N.B. a single Solr application can contain 0 or more cores) per site and either:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.drupal.org/project/acquia_search_multi_subs&quot;&gt;Acquia Search Multiple Indexes&lt;/a&gt; module (if using &lt;a href=&quot;https://www.acquia.com/free&quot;&gt;Acquia Cloud&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;settings.php switch statements to switch on domain&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;to connect the appropriate search cores to the appropriate Drupal environments. Then you can enable (but not no need to configure) the &lt;a href=&quot;https://www.drupal.org/project/apachesolr_multisitesearch&quot;&gt;apachesolr_multisitesearch&lt;/a&gt; module.&lt;/p&gt;
+
+&lt;h3 id=&quot;pros&quot;&gt;Pros&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Each site’s index is isolate from each other, so there is no interfering with other indexes, and no ability to drop other indexes&lt;/li&gt;
+  &lt;li&gt;You can customise the Solr config per core&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cons&quot;&gt;Cons&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Need to provision a new Solr core every time you add a new site&lt;/li&gt;
+  &lt;li&gt;Need to change settings.php every time you add a new site&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;use-a-single-shared-core-and-apachesolrmultisitesearch&quot;&gt;2. Use a single shared core, and apachesolr_multisitesearch&lt;/h2&gt;
+
+&lt;p&gt;In this option you utilise a single shared Solr core, and send the documents from all sites into it. Using special attributes on the documents, you are able to query and get only the results you desire back out again.&lt;/p&gt;
+
+&lt;p&gt;The module you need to enable is &lt;a href=&quot;https://www.drupal.org/project/apachesolr_multisitesearch&quot;&gt;apachesolr_multisitesearch&lt;/a&gt;. Just enabling the module makes your standard search pages return results only for your site. This is accomplished internally by adding a filtering query to each Solr query using &lt;a href=&quot;http://cgit.drupalcode.org/apachesolr_multisitesearch/tree/apachesolr_multisitesearch.module#n243&quot;&gt;hook_apachesolr_query_alter()&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can see the site hashes are different based on the &lt;a href=&quot;http://cgit.drupalcode.org/apachesolr/tree/apachesolr.module#n577&quot;&gt;base_url&lt;/a&gt; in Drupal already.&lt;/p&gt;
+
+&lt;h3 id=&quot;example-of-this-working&quot;&gt;Example of this working&lt;/h3&gt;
+
+&lt;p&gt;Note the site hashes are different:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example1.com vget apachesolr_site_hash
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;lm0ujj&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example2.com.au vget apachesolr_site_hash
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;9qt6o6&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;example-of-this-not-working&quot;&gt;Example of this not working&lt;/h3&gt;
+
+&lt;p&gt;Note the site hashes are the same, thus the search results will be blended:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example1.com vget apachesolr_site_hash
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example2.com vget apachesolr_site_hash
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You will find yourself in this predicament if you clone new sites from old sites (thus the database variable persists).&lt;/p&gt;
+
+&lt;h3 id=&quot;in-order-to-fix-blended-site-hashes&quot;&gt;In order to fix blended site hashes&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;drop the current index (both sites)&lt;/li&gt;
+  &lt;li&gt;delete the variable ‘apachesolr_site_hash’ (both sites)&lt;/li&gt;
+  &lt;li&gt;visit the admin page solr page (both sites) - this will regenerate the site hash&lt;/li&gt;
+  &lt;li&gt;verify the site hash is now different (both sites)&lt;/li&gt;
+  &lt;li&gt;reindex (both sites)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;pros-1&quot;&gt;Pros&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;No need to provision a new Solr core every time you add a new site&lt;/li&gt;
+  &lt;li&gt;No need to change settings.php every time you add a new site&lt;/li&gt;
+  &lt;li&gt;Hooks into the delete query to prevent dropping the entire index&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cons-1&quot;&gt;Cons&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You need to ensure the site hash is different for each site, so if you clone one, you will need to delete the variable &lt;code&gt;apachesolr_site_hash&lt;/code&gt; straight away&lt;/li&gt;
+  &lt;li&gt;If you ever drop Solr’s index, this will drop all documents across all sites. This should be hard to do (you will need to disable the apachesolr_multisitesearch module)&lt;/li&gt;
+  &lt;li&gt;You must share Solr config (e.g. the &lt;a href=&quot;https://wiki.apache.org/solr/SchemaXml&quot;&gt;schema XML&lt;/a&gt;), so you cannot change this per site&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you run a multisite setup, and make use of Apache Solr, I am keen to hear how you integrated it, and if you have any tips or tricks to share.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 15 Oct 2015 00:00:00 +1300</pubDate>
+        <link>http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/</link>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/</guid>
+        
+        <category>drupal</category>
+        
+        <category>drupalplanet</category>
+        
+        <category>solr</category>
+        
+        <category>multisite</category>
+        
+        
+        <category>tutorial</category>
+        
+      </item>
     
       <item>
         <title>Dynamic content caching based on attributes in Drupal 7</title>
@@ -1268,53 +1375,6 @@ string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot
         <category>testing</category>
         
         <category>behat</category>
-        
-        
-        <category>tutorial</category>
-        
-      </item>
-    
-      <item>
-        <title>Extracting a file or a folder from a git repository with full git history</title>
-        <description>&lt;p&gt;This problem I find comes up several times in your development career. Rather that performing a simple file copy and losing all git history, it is actually quite simple to extract the file or folder with full commit history.&lt;/p&gt;
-
-&lt;h2 id=&quot;create-the-patch-file&quot;&gt;Create the patch file&lt;/h2&gt;
-
-&lt;p&gt;This step creates a single file with all the commits that touch the file or folder. The commits are ordered correctly so they will apply perfectly.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cd ~/repository/path
-git log --pretty=email --patch-with-stat --reverse --full-index --binary -- path/to/file_or_folder &amp;gt; /tmp/patch
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;perform-any-path-replacements-as-needed&quot;&gt;Perform any path replacements as needed&lt;/h2&gt;
-
-&lt;p&gt;Sometimes you want to alter the path in which your previous repository worked, before importing into your new repository, this can be done with sed (or vim, or any other editor). Note that with sed your must escape the forward slashes.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sed -i -e &#39;s/deep\/path\/that\/you\/want\/shorter/short\/path/g&#39; /tmp/patch
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;apply-the-commits-to-the-new-repository&quot;&gt;Apply the commits to the new repository&lt;/h2&gt;
-
-&lt;p&gt;For this step you will need to be in the root of another git repository, and from there you can apply the commits. This will apply fine as long as you do not have any files in the current repository with the same name.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cd ~/another_repository/path
-git am &amp;lt; /tmp/patch
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;Let me know if this helped you, or you have any other git tricks that you have found along the way here.&lt;/p&gt;
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Tue, 10 Mar 2015 00:00:00 +1300</pubDate>
-        <link>http://www.pixelite.co.nz/article/extracting-file-folder-from-git-repository-with-full-git-history</link>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/extracting-file-folder-from-git-repository-with-full-git-history</guid>
-        
-        <category>git</category>
-        
-        <category>sed</category>
-        
-        <category>bash</category>
         
         
         <category>tutorial</category>

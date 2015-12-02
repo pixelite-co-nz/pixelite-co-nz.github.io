@@ -16,10 +16,11 @@ exclude: ["node_modules"]
 highlighter: pygments
 
 # Thumbnail settings.
+# @see https://github.com/zroger/jekyll-minimagick
 mini_magick:
   thumbnail:
-    source: "img"
-    destination: "img/thumbnail"
+    source: img
+    destination: img/thumbnail
     resize: "800x520"
 
 authors:

@@ -8,9 +8,106 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 20 Oct 2015 14:11:37 +1300</pubDate>
-    <lastBuildDate>Tue, 20 Oct 2015 14:11:37 +1300</lastBuildDate>
+    <pubDate>Thu, 03 Dec 2015 11:52:43 +1300</pubDate>
+    <lastBuildDate>Thu, 03 Dec 2015 11:52:43 +1300</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Measuring Drupal content growth over time</title>
+        <description>&lt;p&gt;On a recent project I was tasked with working out why the database was so large, in particular certain tables like &lt;code&gt;field_revision_body&lt;/code&gt; and &lt;code&gt;field_data_body&lt;/code&gt; had grown to be several gigabytes in size.&lt;/p&gt;
+
+&lt;h2 id=&quot;sql-to-the-rescue&quot;&gt;SQL to the rescue&lt;/h2&gt;
+
+&lt;p&gt;Here is a simple SQL statement you can execute on your production database to retrieve a count of nodes created grouped by day.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example.com sqlq &lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT count(nid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&amp;#39;%d-%m-%Y&amp;#39;) AS month FROM node  GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-nodes.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;PostgreSQL users&lt;/strong&gt; - you can add a custom function to add &lt;code&gt;FROM_UNIXTIME&lt;/code&gt; functionality:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;from_unixtime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;integer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;RETURNS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;timestamp&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;     SELECT to_timestamp($1)::timestamp AS result&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;SQL&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;cleaning-up-results&quot;&gt;Cleaning up results&lt;/h3&gt;
+
+&lt;p&gt;The SQL will return in a few seconds, and now we need to clean up the data before it is graphed. First lets trim the start of the file, here you can see a few nodes with no valid date, and 1 created in 1980, we want to remove these lines.&lt;/p&gt;
+
+&lt;pre&gt;
+head /tmp/example-nodes.txt
+
+count	month
+662	NULL
+1	08-06-1980
+194	30-06-1992
+198	01-07-1992
+186	02-07-1992
+...
+&lt;/pre&gt;
+
+&lt;p&gt;Now if we look at the tail you can see a few nodes that are created in the future, I also like to remove these from the results as they tend to blow out the timescale of any graphs:&lt;/p&gt;
+
+&lt;pre&gt;
+tail /tmp/example-nodes.txt
+
+1	15-04-2022
+12	30-05-2022
+1	19-06-2022
+1	24-06-2022
+1	27-06-2022
+...
+&lt;/pre&gt;
+
+&lt;h3 id=&quot;conversion-to-csv&quot;&gt;Conversion to CSV&lt;/h3&gt;
+
+&lt;p&gt;By default the SQL will return a tab separated values file, and with blank lines in there, lets convert this to CSV and enforce consistent line endings:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cat /tmp/example-nodes.txt &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;$&amp;#39;s/\r//&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s2&quot;&gt;&amp;quot;\\t&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-nodes.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;graphing-results&quot;&gt;Graphing results&lt;/h2&gt;
+
+&lt;p&gt;Now that you have clean data you can import into your favourite graphing tool, here is Excel making a graph of that data. Here are the number of nodes created by day:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/growth/day.jpg&quot; alt=&quot;Drupal content growth by day over time&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And if you make the total cumulative, you can track total growth in Drupal, and use this to predict into the future:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/growth/total.jpg&quot; alt=&quot;Drupal total content growth over time&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;wait-what-about-taxonomy-terms&quot;&gt;Wait, what about taxonomy terms&lt;/h2&gt;
+
+&lt;p&gt;You can extend this method to work with taxonomy terms as well with a slight modification to the SQL (Drupal 7):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example.com sqlq &lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT count(tid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&amp;#39;%d-%m-%Y&amp;#39;) AS month FROM taxonomy_term_data GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-terms.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;where-to-from-here&quot;&gt;Where to from here&lt;/h2&gt;
+
+&lt;p&gt;Based on the analysis, you might be able to make recommendations to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;perhaps look at exporting (e.g. with &lt;a href=&quot;https://www.drupal.org/project/node_export&quot;&gt;node_export&lt;/a&gt;) and removing content from Drupal’s database after X number of years. This will reduce the database size immediately&lt;/li&gt;
+  &lt;li&gt;removing unused revisions from content where the content is older than X number of years&lt;/li&gt;
+  &lt;li&gt;predict into the future how many nodes you will have in 1 year, 5 years etc and be able to plan for this in terms of hardware capacity&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you are having challenges with Drupal content growing over time, how are you keeping track of this? Are there any other tips and tricks you know about?&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 03 Dec 2015 00:00:00 +1300</pubDate>
+        <link>http://www.pixelite.co.nz/article/measuring-drupal-content-growth-over-time/</link>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/measuring-drupal-content-growth-over-time/</guid>
+        
+        <category>drupal</category>
+        
+        <category>drupalplanet</category>
+        
+        <category>statistics</category>
+        
+        
+        <category>tutorial</category>
+        
+      </item>
     
       <item>
         <title>Integrating multisite Drupal with Apache Solr</title>
@@ -1247,134 +1344,6 @@ string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot
         <category>performance</category>
         
         <category>security</category>
-        
-        
-        <category>tutorial</category>
-        
-      </item>
-    
-      <item>
-        <title>Using Behat for Behavioral Driven Development (BDD) in Drupal</title>
-        <description>&lt;h2 id=&quot;what-is-bdd&quot;&gt;What is BDD&lt;/h2&gt;
-
-&lt;p&gt;&lt;abbr title=&quot;Behavior Driven Development&quot;&gt;BDD&lt;/abbr&gt; allows you to write human readable stories that describe the behavior of your website. These stories are written from an end user’s perspective, and can then be tested against your application to see if they pass or fail. This allow you to define functionality easily and up front, and often make sense in an agile environment, or where you are making constant changes to your application and you want some sort of re-assurance it is working as intended (i.e. regression tests).&lt;/p&gt;
-
-&lt;h2 id=&quot;behat-and-gherkin&quot;&gt;Behat and Gherkin&lt;/h2&gt;
-
-&lt;p&gt;Behat is a tool that make BDD possible. The language that behat stories are written in is called Gherkin. Gherkin is a line-oriented language that uses indentation to define structure. The start of each line is usually a special keyword, these all mean something in Gherkin.&lt;/p&gt;
-
-&lt;pre&gt;
-&lt;strong&gt;Feature:&lt;/strong&gt; Some terse yet descriptive text of what is desired
-  In order to realize a named business value
-  As an explicit system actor
-  I want to gain some beneficial outcome which furthers the goal
-
-  &lt;strong&gt;Scenario:&lt;/strong&gt; Some determinable business situation
-    &lt;strong&gt;Given&lt;/strong&gt; some precondition
-      &lt;strong&gt;And&lt;/strong&gt; some other precondition
-     &lt;strong&gt;When&lt;/strong&gt; some action by the actor
-      &lt;strong&gt;And&lt;/strong&gt; some other action
-      &lt;strong&gt;And&lt;/strong&gt; yet another action
-     &lt;strong&gt;Then&lt;/strong&gt; some testable outcome is achieved
-      &lt;strong&gt;And&lt;/strong&gt; something else we can check happens too
-
-  &lt;strong&gt;Scenario:&lt;/strong&gt; A different situation
-  ...
-&lt;/pre&gt;
-
-&lt;p&gt;A more concrete example, is the UNIX ls command. A stakeholder may say to you:&lt;/p&gt;
-
-&lt;pre&gt;
-&lt;strong&gt;Feature:&lt;/strong&gt; ls
-  In order to see the directory structure
-  As a UNIX user
-  I need to be able to list the current directory&#39;s contents
-
-  &lt;strong&gt;Scenario:&lt;/strong&gt; List 2 files in a directory
-    &lt;strong&gt;Given&lt;/strong&gt; I am in a directory &quot;test&quot;
-      &lt;strong&gt;And&lt;/strong&gt; I have a file named &quot;foo&quot;
-      &lt;strong&gt;And&lt;/strong&gt; I have a file named &quot;bar&quot;
-     &lt;strong&gt;When&lt;/strong&gt; I run &quot;ls&quot;
-     &lt;strong&gt;Then&lt;/strong&gt; I should get:
-       &quot;&quot;&quot;
-       bar
-       foo
-       &quot;&quot;&quot;
-&lt;/pre&gt;
-
-&lt;p&gt;The &lt;a href=&quot;http://behat.readthedocs.org/en/v2.5/guides/1.gherkin.html&quot;&gt;Gherkin documentation&lt;/a&gt; can be found online.&lt;/p&gt;
-
-&lt;h3 id=&quot;phpunit-and-behat&quot;&gt;PHPUnit and behat&lt;/h3&gt;
-
-&lt;p&gt;Because of their very different approaches to testing, PHPUnit and Behat actually complement each other very well. A growing number of enterprise-level PHP projects are using a combination of both to achieve the best-possible test coverage.&lt;/p&gt;
-
-&lt;h2 id=&quot;key-things-to-keep-in-mind-when-writing-tests&quot;&gt;Key things to keep in mind when writing tests&lt;/h2&gt;
-
-&lt;p&gt;To help write good behat tests, here are some good guidelines to keep in mind.&lt;/p&gt;
-
-&lt;h3 id=&quot;focus-on-business-value&quot;&gt;Focus on business value&lt;/h3&gt;
-
-&lt;p&gt;When defining features (or stories) ensure that you are focusing on delivering an item of value. If you only have a few tests for your application, ensure the features that give the most business value are created first.&lt;/p&gt;
-
-&lt;h3 id=&quot;focus-on-the-user&quot;&gt;Focus on the user&lt;/h3&gt;
-
-&lt;p&gt;A critical component of Gherkin style dictates that you speak with language that the target user can reasonably be expected to understand. This user-centric focus means that everyone will be drawn back from their domains of expertise to think about what the target user of the feature needs. There’s a wide variety of users, too. Features intended for a site visitor may differ from those intended for site administrators, editors, or moderators. As the user varies, it’s possible the language used in a scenario will vary as well.&lt;/p&gt;
-
-&lt;h2 id=&quot;integration-with-drupal&quot;&gt;Integration with Drupal&lt;/h2&gt;
-
-&lt;p&gt;So you have some BDD features written, and now you want to implement them. There is a Drupal module that will help with the creation of nodes, users, vocabularies and taxonomy terms.&lt;/p&gt;
-
-&lt;p&gt;There are 3 drivers available in the &lt;a href=&quot;https://www.drupal.org/project/drupalextension&quot;&gt;drupal behat extension&lt;/a&gt;, all with different pros and cons:&lt;/p&gt;
-
-&lt;figure&gt;
-  &lt;img src=&quot;http://www.pixelite.co.nz/img/behat/api.png&quot; alt=&quot;There are 3 different Drupal drivers within the drupalextension module&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;
-  &lt;figcaption&gt;&lt;small&gt;Table of driver comparisons taken from the &lt;a href=&quot;https://behat-drupal-extension.readthedocs.org/en/3.0/drivers.html&quot;&gt;documentation&lt;/a&gt;.&lt;/small&gt;&lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;The most fully featured driver is the Drupal API driver, it has the limitation that it must be run on the same server that the website is run on.&lt;/p&gt;
-
-&lt;h2 id=&quot;continuous-integration&quot;&gt;Continuous integration&lt;/h2&gt;
-
-&lt;p&gt;So now you have your Behat tests set up and running on your development environment, the next step is to automate the Behat tests so that they execute automatically on a dedicated testing server after a new commit is pushed. There are a number of ways to do this:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Github and TravisCI&lt;/li&gt;
-  &lt;li&gt;Jenkins and use git post-receive hooks (or &lt;a href=&quot;https://github.com/acquia/cloud-hooks&quot;&gt;Acquia cloud hooks&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;drupal-8-and-behat&quot;&gt;Drupal 8 and behat&lt;/h2&gt;
-
-&lt;p&gt;There is an issue open at the moment that aims to get Drupal 8 core tested with behat https://www.drupal.org/node/2232271 - this aims to introduce a new module called ‘behat’ and build in JavaScript automated testing for Drupal (at the moment this is all manual).&lt;/p&gt;
-
-&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
-
-&lt;p&gt;There is a lot of information out in the Drupal community around Behat that I would encourage you to read and watch:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Konstantin (from Inviqa) at &lt;a href=&quot;https://amsterdam2014.drupal.org/session/doing-behaviour-driven-development-behat&quot;&gt;DrupalCon Amsterdam 2014&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Drupal.org did a Drupal 6 to Drupal 7 upgrade, and for that they invested a lot of time into creating a &lt;a href=&quot;https://www.drupal.org/project/doobie&quot;&gt;full test suite (called doobie)&lt;/a&gt;, and now the test suite is used to help spot regressions in the site&lt;/li&gt;
-  &lt;li&gt;Large Scale Drupal (LSD) created a &lt;a href=&quot;http://drupalwatchdog.com/system/files/Behavior-Driven%20Development%20LSD%20Guide.pdf&quot;&gt;whitepaper on BDD with Behat and Drupal&lt;/a&gt; which is well worth the read&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.acquia.com/blog/high-quality-php-benjamin-eberlei&quot;&gt;High Quality PHP by Benjamin Eberlei&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.lullabot.com/blog/podcasts/drupalizeme-podcast/21-bdd-behat-and-drupal&quot;&gt;Drupalize me have a podcast on BDD and Drupal&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://behat.readthedocs.org/en/v2.5/quick_intro.html&quot;&gt;Behat documentation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;If you have any further information that can be added, feel free to let me know in the comments.&lt;/p&gt;
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Sat, 14 Mar 2015 00:00:00 +1300</pubDate>
-        <link>http://www.pixelite.co.nz/article/using-behat-for-behavioral-driven-development-bdd-in-drupal</link>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/using-behat-for-behavioral-driven-development-bdd-in-drupal</guid>
-        
-        <category>bdd</category>
-        
-        <category>drupal</category>
-        
-        <category>testing</category>
-        
-        <category>behat</category>
         
         
         <category>tutorial</category>

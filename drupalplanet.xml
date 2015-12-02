@@ -10,6 +10,95 @@
     <language>en</language>
     
       <item>
+        <title>Measuring Drupal content growth over time</title>
+        <link>http://www.pixelite.co.nz/article/measuring-drupal-content-growth-over-time/</link>
+        <description>&lt;p&gt;On a recent project I was tasked with working out why the database was so large, in particular certain tables like &lt;code&gt;field_revision_body&lt;/code&gt; and &lt;code&gt;field_data_body&lt;/code&gt; had grown to be several gigabytes in size.&lt;/p&gt;
+
+&lt;h2 id=&quot;sql-to-the-rescue&quot;&gt;SQL to the rescue&lt;/h2&gt;
+
+&lt;p&gt;Here is a simple SQL statement you can execute on your production database to retrieve a count of nodes created grouped by day.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example.com sqlq &lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT count(nid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&amp;#39;%d-%m-%Y&amp;#39;) AS month FROM node  GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-nodes.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;PostgreSQL users&lt;/strong&gt; - you can add a custom function to add &lt;code&gt;FROM_UNIXTIME&lt;/code&gt; functionality:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;from_unixtime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;integer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;RETURNS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;timestamp&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;     SELECT to_timestamp($1)::timestamp AS result&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;SQL&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;cleaning-up-results&quot;&gt;Cleaning up results&lt;/h3&gt;
+
+&lt;p&gt;The SQL will return in a few seconds, and now we need to clean up the data before it is graphed. First lets trim the start of the file, here you can see a few nodes with no valid date, and 1 created in 1980, we want to remove these lines.&lt;/p&gt;
+
+&lt;pre&gt;
+head /tmp/example-nodes.txt
+
+count	month
+662	NULL
+1	08-06-1980
+194	30-06-1992
+198	01-07-1992
+186	02-07-1992
+...
+&lt;/pre&gt;
+
+&lt;p&gt;Now if we look at the tail you can see a few nodes that are created in the future, I also like to remove these from the results as they tend to blow out the timescale of any graphs:&lt;/p&gt;
+
+&lt;pre&gt;
+tail /tmp/example-nodes.txt
+
+1	15-04-2022
+12	30-05-2022
+1	19-06-2022
+1	24-06-2022
+1	27-06-2022
+...
+&lt;/pre&gt;
+
+&lt;h3 id=&quot;conversion-to-csv&quot;&gt;Conversion to CSV&lt;/h3&gt;
+
+&lt;p&gt;By default the SQL will return a tab separated values file, and with blank lines in there, lets convert this to CSV and enforce consistent line endings:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cat /tmp/example-nodes.txt &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;$&amp;#39;s/\r//&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s2&quot;&gt;&amp;quot;\\t&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-nodes.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;graphing-results&quot;&gt;Graphing results&lt;/h2&gt;
+
+&lt;p&gt;Now that you have clean data you can import into your favourite graphing tool, here is Excel making a graph of that data. Here are the number of nodes created by day:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/growth/day.jpg&quot; alt=&quot;Drupal content growth by day over time&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And if you make the total cumulative, you can track total growth in Drupal, and use this to predict into the future:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/growth/total.jpg&quot; alt=&quot;Drupal total content growth over time&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;wait-what-about-taxonomy-terms&quot;&gt;Wait, what about taxonomy terms&lt;/h2&gt;
+
+&lt;p&gt;You can extend this method to work with taxonomy terms as well with a slight modification to the SQL (Drupal 7):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example.com sqlq &lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT count(tid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&amp;#39;%d-%m-%Y&amp;#39;) AS month FROM taxonomy_term_data GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-terms.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;where-to-from-here&quot;&gt;Where to from here&lt;/h2&gt;
+
+&lt;p&gt;Based on the analysis, you might be able to make recommendations to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;perhaps look at exporting (e.g. with &lt;a href=&quot;https://www.drupal.org/project/node_export&quot;&gt;node_export&lt;/a&gt;) and removing content from Drupal’s database after X number of years. This will reduce the database size immediately&lt;/li&gt;
+  &lt;li&gt;removing unused revisions from content where the content is older than X number of years&lt;/li&gt;
+  &lt;li&gt;predict into the future how many nodes you will have in 1 year, 5 years etc and be able to plan for this in terms of hardware capacity&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you are having challenges with Drupal content growing over time, how are you keeping track of this? Are there any other tips and tricks you know about?&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 03 Dec 2015 00:00:00 +1300</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/measuring-drupal-content-growth-over-time/</guid>
+        <comments>http://www.pixelite.co.nz/article/measuring-drupal-content-growth-over-time/#disqus_thread</comments>
+      </item>
+    
+      <item>
         <title>Integrating multisite Drupal with Apache Solr</title>
         <link>http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/</link>
         <description>&lt;p&gt;There are a number of ways this can be solved with Drupal 7:&lt;/p&gt;
@@ -975,104 +1064,6 @@ We can do this with the following, go back to your terminal, and run (change the
         <dc:creator>Craig Pearson</dc:creator>
         <guid isPermaLink="true">http://www.pixelite.co.nz/article/installing-solr-development</guid>
         <comments>http://www.pixelite.co.nz/article/installing-solr-development#disqus_thread</comments>
-      </item>
-    
-      <item>
-        <title>Adding Apple and Android favicons to Drupal</title>
-        <link>http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal</link>
-        <description>&lt;p&gt;As you end up building more and more websites that target mobile devices (e.g. iPhone, iPad, Android, Windows), you need to supply an ever increasing amount of favicons. This process can be complex if done by hand, luckily there is an easy way to introduce these into your Drupal site.&lt;/p&gt;
-
-&lt;h2 id=&quot;what-you-will-need&quot;&gt;What you will need&lt;/h2&gt;
-
-&lt;p&gt;Before we start you will need a high quality icon to begin with, the icon should be:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;260x260px (i.e. square)&lt;/li&gt;
-  &lt;li&gt;a PNG with transparency as needed&lt;/li&gt;
-  &lt;li&gt;recognizable when shrunk right done to your browser favicon (so don’t use your entire logo complete with words).&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;generating-the-favicons&quot;&gt;Generating the favicons&lt;/h2&gt;
-
-&lt;p&gt;This is where the really handy &lt;a href=&quot;http://realfavicongenerator.net/&quot;&gt;realfavicongenerator.net&lt;/a&gt; website comes into play. I have used many other websites that offer similar functionality, but this seems to be the best, and is dead simple to use.&lt;/p&gt;
-
-&lt;p&gt;You will need to upload the 260x260px PNG file, and also select a hex color for the Windows 8 tile, but this should be straight forward.&lt;/p&gt;
-
-&lt;p&gt;I also opt for the option “I will place favicon files (favicon.ico, apple-touch-icon.png, etc.) at the root of my web site.” as this seems the most sensible place for them anyway.&lt;/p&gt;
-
-&lt;p&gt;When you complete the process, you will be able to download a zip file containing a whole bunch of icons and XML files, this is fine, extract them to your docroot for Drupal.&lt;/p&gt;
-
-&lt;h2 id=&quot;adding-the-favicons-to-drupal&quot;&gt;Adding the favicons to Drupal&lt;/h2&gt;
-
-&lt;p&gt;You now will need to edit your &lt;code&gt;html.tpl.php&lt;/code&gt; inside your theme, and add the code that the generator provides. The code should resemble something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;57x57&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-57x57.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;114x114&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-114x114.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;72x72&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-72x72.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;144x144&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-144x144.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;60x60&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-60x60.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;120x120&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-120x120.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;76x76&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-76x76.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;152x152&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-152x152.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;apple-touch-icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;180x180&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/apple-touch-icon-180x180.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-192x192.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;192x192&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-160x160.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;160x160&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-96x96.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;96x96&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-16x16.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;16x16&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/favicon-32x32.png&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;sizes=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;32x32&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;msapplication-TileColor&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#b91d47&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;msapplication-TileImage&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/mstile-144x144.png&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;You will notice though that Drupal likes to place it’s default favicon into the &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; section of the page, we need to remove this in order for it not to mess up the above code you inserted.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;shortcut icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://[YOURSITE]/misc/favicon.ico&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;image/vnd.microsoft.icon&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code below can be inserted into your &lt;code&gt;template.php&lt;/code&gt; file for your theme to remove the default favicon from Drupal:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt; * Remove the unneeded favicon from the head section.&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;YOURTHEME_html_head_alter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$head_elements&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$head_elements&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;empty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#attributes&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;array_key_exists&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;href&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#attributes&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;strpos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#attributes&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;href&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;misc/favicon.ico&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;nb&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$head_elements&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;There you have it all done.&lt;/p&gt;
-
-&lt;h2 id=&quot;update-5-january&quot;&gt;Update 5 January&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.drupal.org/project/responsive_favicons&quot;&gt;We have created a simple module “Responsive Favicons”&lt;/a&gt; to help people new to Drupal get those metatags in the head section of the HTML, you can also upload the zip file and it will upload and extract them for you as well.&lt;/p&gt;
-
-&lt;h2 id=&quot;extra-for-experts---googles-theme-color-meta-tag&quot;&gt;Extra for experts - Google’s theme-color meta tag&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://updates.html5rocks.com/2014/11/Support-for-theme-color-in-Chrome-39-for-Android&quot;&gt;Google recently announced&lt;/a&gt; that from Chrome 39 onwards on Android Lollipop (5.0+), a new meta tag will be supported&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;theme-color&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#b91d47&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This is what your site’s title bar now looks like (instead of boring and grey).&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/favicon-theme-color.png&quot; alt=&quot;The theme-color meta tag in use on www.maoritelevision.com&quot; class=&quot;img-responsive img-thumbnail&quot; style=&quot;max-height:600px;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This meta tag can be added to your &lt;code&gt;html.tpl.php&lt;/code&gt; file as above.&lt;/p&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;Let me know if this has helped you, and also if you have any other tips and tricks when it comes to favicons on your mobile devices.&lt;/p&gt;
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Sat, 13 Dec 2014 00:00:00 +1300</pubDate>
-        <dc:creator>Sean Hamlin</dc:creator>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal</guid>
-        <comments>http://www.pixelite.co.nz/article/adding-apple-android-favicons-drupal#disqus_thread</comments>
       </item>
     
   </channel>

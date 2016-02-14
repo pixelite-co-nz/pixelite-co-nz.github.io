@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+        <meta name="description" content="As part of the series of blog posts on the top 10 OWASP web application security risks and how to defend against them in Drupal 7, here is the first post in the series. This post deals with the top security hole - classified as “injection”.">
+    
+
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content="SQL injection and Drupal 7 - top 1 of 10 OWASP security risks" />
+    <meta property="og:site_name" content="Pixelite" />
+    <meta property="og:url" content="http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/" />
+    <meta property="og:description" content="" />
+    <meta property="fb:app_id" content="410615979137383" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_US" />
+
+    
+        <meta property="og:image" content="http://www.pixelite.co.nz/img/sql-inject/query.png" />
+    
+
+    <!-- Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pixelite_">
+    
+        <meta name="twitter:creator" content="@wiifm">
+    
+    <meta name="twitter:title" content="SQL injection and Drupal 7 - top 1 of 10 OWASP security risks">
+    <meta name="twitter:description" content="">
+    
+        <meta name="twitter:image" content="http://www.pixelite.co.nz/img/sql-inject/query.png">
+    
+
+
+    <title>SQL injection and Drupal 7 - top 1 of 10 OWASP security risks - Pixelite</title>
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="http://www.pixelite.co.nz/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="All Drupal planet posts" href="http://www.pixelite.co.nz/drupalplanet.xml" />
+
+    <link rel="canonical" href="http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-pixelite" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img alt="Pixelite homepage" src="/img/pixelite.svg" /></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/about.html">About</a>
+                </li>
+                <li>
+                    <a href="/contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+<!-- Main Content -->
+<article itemscope="" itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="inLanguage" content="en-GB"/>
+    <meta itemprop="wordCount" content="896"/>
+    <meta itemprop="url" content="http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/"/>
+
+    <header class="intro-header" style="background-image: url('/img/sql-inject/query.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1 itemprop="name headline">SQL injection and Drupal 7 - top 1 of 10 OWASP security risks</h1>
+                    
+
+                    <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2013-12-11T00:00:00" itemprop="datePublished">December 11, 2013</time></span>
+                    <ul class="social-buttons cf">
+                        <li>
+                            <a href="http://twitter.com/share" class="socialite twitter-share" data-text="SQL injection and Drupal 7 - top 1 of 10 OWASP security risks" data-url="http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/&amp;t=SQL%20injection%20and%20Drupal%207%20-%20top%201%20of%2010%20OWASP%20security%20risks" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/&amp;title=SQL%20injection%20and%20Drupal%207%20-%20top%201%20of%2010%20OWASP%20security%20risks" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks/" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <!-- Post Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <div itemprop="articleBody">
+                    <p>As part of the <a href="http://www.pixelite.co.nz/tag/owasp">series of blog posts on the top 10 OWASP web application security risks</a> and how to defend against them in Drupal 7, here is the first post in the series. This post deals with the top security hole - classified as “injection”.</p>
+
+<p>From the <a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection">OWASP top 10 security risks</a>:</p>
+
+<blockquote>
+  <p>Injection flaws, such as SQL, OS, and LDAP injection occur when untrusted data is sent to an interpreter as part of a command or query.</p>
+</blockquote>
+
+<p>For this post I will cover what SQL injection is and how Drupal 7’s built in tools can help you avoid this.</p>
+
+<h2 id="what-is-sql-injection">What is SQL injection</h2>
+
+<h3 id="incorrectly-filtered-escape-characters">Incorrectly filtered escape characters</h3>
+
+<p>This form of SQL injection occurs when the user supplied input does not have the escape characters filtered from the query. This is easily demonstrated with this SQL query example (which you should never write), imagine the query:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&#39;SELECT nid FROM node WHERE nid = &#39; . $_GET[&#39;nid&#39;]</span></code></pre></figure>
+
+<p>What happens when the query parameter ‘nid’ is:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&#39; or &#39;1&#39;=&#39;1</span></code></pre></figure>
+
+<p>Or even worse, imagine this is the query parameter ‘nid’:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">1&#39;; DROP TABLE NODE; --</span></code></pre></figure>
+
+<h3 id="incorrect-type-handling">Incorrect type handling</h3>
+
+<p>This occurs when user supplied input is not strongly typed. For instance you may be expecting an integer but as a developer make no effort to enforce this. The above example shows this in action as well.</p>
+
+<h3 id="blind-sql-injection">Blind SQL injection</h3>
+
+<p>This is used when an application is vulnerable to SQL but the results are not visible to the attacker. A crafted query parameter ‘nid’ (for the above SQL query) might something like:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">5 AND substring(@@version,1,1) = 4</span></code></pre></figure>
+
+<p>If you received a non-error page it would indicate that the server was running MySQL 4.</p>
+
+<p>For more information see the <a href="http://en.wikipedia.org/wiki/SQL_injection">wikipedia page on SQL injection</a>.</p>
+
+<h2 id="database-abstraction-layer">Database abstraction layer</h2>
+
+<p>The easiest way is to use the database abstraction layer effectively. By writing your database queries in this manner not only are you defending against injection from unclean inputs, but you are also ensuring your query will execute on <em>all</em> supported databases (MySQL, PostgreSQL, SQLite and other contributed types e.g. <a href="https://drupal.org/project/oracle">Oracle</a>). So this method is great for portability and security.</p>
+
+<p>Example insert query showing the abstraction layer:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$nid = db_insert(&#39;node&#39;)</span>
+<span class="x">-&gt;fields(array(&#39;title&#39;, &#39;uid&#39;, &#39;created&#39;))</span>
+<span class="x">-&gt;values(array(</span>
+<span class="x">  &#39;title&#39; =&gt; &#39;Example&#39;,</span>
+<span class="x">  &#39;uid&#39; =&gt; 1,</span>
+<span class="x">  &#39;created&#39; =&gt; REQUEST_TIME,</span>
+<span class="x">))</span>
+<span class="x">-&gt;execute();</span></code></pre></figure>
+
+<p>See the <a href="https://drupal.org/developing/api/database">documentation for more information on the database abstraction layer</a>.</p>
+
+<p>Dynamic select queries are possible by adding to the query object:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">// Create an object of type SelectQuery.</span>
+<span class="x">$query = db_select(&#39;users&#39;, &#39;u&#39;);</span>
+<span class="x">// Add extra detail to this query object: a condition, fields and a range.</span>
+<span class="x">$query-&gt;condition(&#39;u.uid&#39;, 0, &#39;&lt;&gt;&#39;);</span>
+<span class="x">$query-&gt;fields(&#39;u&#39;, array(&#39;uid&#39;, &#39;name&#39;, &#39;status&#39;, &#39;created&#39;, &#39;access&#39;));</span>
+<span class="x">$query-&gt;range(0, 50);</span>
+<span class="x">$result = $query-&gt;execute();</span></code></pre></figure>
+
+<p>Adding tags to your queries allows you (or another module) to alter the query before executed. The best example of this is the node_access tag.</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$query-&gt;addTag(&#39;node_access&#39;);</span></code></pre></figure>
+
+<p>By adding that simple tag onto any SELECT query, it ensures that all returned node IDs node access restrictions placed on it. All queries that retrieve a list of nodes (or node IDs) for display to users should have this tag (this touches on a few other OWASP security risks).</p>
+
+<h2 id="static-or-custom-queries-with-dbquery">Static or custom queries with db_query()</h2>
+
+<p>If you do need to write static and fast (no placeholders) or extremely custom (multiple complex joins, sub-queries, temporary tables) SQL you can elect for the less standardised method db_query().</p>
+
+<p><strong>N.B. this should never be the first choice for dynamic (with placeholders) database queries - db_select() should be used where possible</strong>.</p>
+
+<p>Example static query that is perfect for db_query():</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$result = db_query(&quot;SELECT nid, title FROM {node}&quot;);</span></code></pre></figure>
+
+<p>With db_query() and dynamic queries you need to perform any sanitisation of the query yourself, luckily there are built in methods you can take advantage of here.</p>
+
+<p>Example select query showing the raw SQL:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$result = db_query(&#39;SELECT n.nid, n.title, n.created FROM {node} n WHERE n.uid = :uid&#39;, array(&#39;:uid&#39; =&gt; $uid))-&gt;fetchAll();</span></code></pre></figure>
+
+<p>With the above example you can see the uid parameter is escaped as it is passed in as an argument. In general if you are creating raw SQL with any form of string concatenation you are most likely doing it wrong.</p>
+
+<p>See the <a href="https://api.drupal.org/api/drupal/includes%21database%21database.inc/function/db_query/7">documentation for more information on db_query()</a>.</p>
+
+<h2 id="update-13-november">Update 13 November</h2>
+
+<ul>
+  <li>I have added a section on what SQL injection is, and the common attacks</li>
+  <li>I have made clearer that db_select() is the preferred method of querying the database over db_query()</li>
+  <li>Removed the section on db_escape_table() as it was seen as being not helpful.</li>
+</ul>
+
+<h2 id="further-reading">Further reading</h2>
+
+<p>Want to read more about this topic, here are a few resources that can help you:</p>
+
+<ul>
+  <li><a href="http://drupalsecurityreport.org/sites/drupalsecurityreport.org/files/drupal-security-white-paper-1-1.pdf">Drupal security whitepaper</a> (a little old 2010, but still worth a read)</li>
+  <li><a href="https://drupal.org/node/310072">Static queries using db_query() in Drupal</a></li>
+  <li><a href="https://drupal.org/node/310075">Dynamic queries using db_select() in Drupal</a></li>
+</ul>
+
+<h2 id="comments">Comments</h2>
+
+<p>If I have missed any techniques, or you know of any modules or automated tools that may help, let me know in the comments. I am also after better ‘further reading’ material, so if there are other blog posts that deal with SQL injection let me know.</p>
+
+                </div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+                <script type="text/javascript">
+                    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                    var disqus_shortname = 'pixelite'; // required: replace example with your forum shortname
+                    
+                        var disqus_url = 'http://www.pixelite.co.nz/article/sql-injection-and-drupal-7-top-1-10-owasp-security-risks';
+                    
+
+                    /* * * DON'T EDIT BELOW THIS LINE * * */
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/article/high-performance-ajax-callbacks-drupal-7-and-js-module/" data-toggle="tooltip" data-placement="top" title="High performance AJAX callbacks with Drupal 7 and the JS module">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="http://www.pixelite.co.nz/article/updating-drupal-use-google-analytics-universal-tracking/" data-toggle="tooltip" data-placement="top" title="Updating Drupal to use Google Analytics Universal tracking">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/pixelite_">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/pixelite-co-nz">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JS libs -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/js/socialite.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/js/clean-blog.js"></script>
+
+<!-- Social links -->
+<script type="text/javascript">
+    (function($) {
+        Socialite.load();
+    })(jQuery);
+</script>
+
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34737960-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>

@@ -126,7 +126,7 @@
 <!-- Main Content -->
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
-    <meta itemprop="wordCount" content="923"/>
+    <meta itemprop="wordCount" content="931"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/"/>
 
     <header class="intro-header" style="background-image: url('/img/post-bg-04.jpg')">
@@ -200,16 +200,16 @@
   <li>Short array syntax</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$array = [</span>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$array = [</span>
 <span class="x">  &quot;foo&quot; =&gt; &quot;bar&quot;,</span>
 <span class="x">  &quot;bar&quot; =&gt; &quot;foo&quot;,</span>
-<span class="x">];</span></code></pre></div>
+<span class="x">];</span></code></pre></figure>
 
 <ul>
   <li>Function array dereferencing</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$secondElement = getArray()[1];</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">  $secondElement = getArray()[1];</span></code></pre></figure>
 
 <ul>
   <li><a href="http://php.net/manual/en/language.oop5.traits.php">Traits</a></li>
@@ -229,10 +229,10 @@
 
 <p>If you are running the older Ubuntu Precise 12.04, you can add a PPA</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo add-apt-repository ppa:ondrej/php5
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo add-apt-repository ppa:ondrej/php5
 sudo apt-get update
 sudo apt-get install php5
-php5 -v</code></pre></div>
+php5 -v</code></pre></figure>
 
 <p>It would be worth considering a dist upgrade though, but this at least can buy you some time.</p>
 
@@ -259,13 +259,13 @@ php5 -v</code></pre></div>
 
 <p>If you have this in your code, you will have a bad time, as this is now a PHP fatal.</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">foo(&amp;$a); // Bad times.</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">foo(&amp;$a); // Bad times.</span></code></pre></figure>
 
 <h3 id="only-variables-can-be-passed-by-reference">Only variables can be passed by reference</h3>
 
 <p>This will cause PHP to throw notices.</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>php -a
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>php -a
 Interactive shell
 
 php &gt; ini_set<span class="o">(</span><span class="s1">&#39;error_reporting&#39;</span>, E_ALL<span class="o">)</span><span class="p">;</span>
@@ -273,18 +273,18 @@ php &gt; var_dump<span class="o">(</span>reset<span class="o">(</span>explode<sp
 PHP Strict Standards:  Only variables should be passed by reference in php shell code on line 1
 
 Strict Standards: Only variables should be passed by reference in php shell code on line 1
-string<span class="o">(</span>3<span class="o">)</span> <span class="s2">&quot;Jim&quot;</span></code></pre></div>
+string<span class="o">(</span>3<span class="o">)</span> <span class="s2">&quot;Jim&quot;</span></code></pre></figure>
 
 <p>Where you will likely find this in Drupal in my experience is when manually rendering nodes:</p>
 
 <p>This code works in PHP 5.3, but will throw notices in PHP 5.5:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$rendered = drupal_render(node_view(node_load(1), &#39;teaser&#39;));</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$rendered = drupal_render(node_view(node_load(1), &#39;teaser&#39;));</span></code></pre></figure>
 
 <p>The fix is to simply use a temporary variable:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$view = node_view(node_load(1), &#39;teaser&#39;);</span>
-<span class="x">$rendered = drupal_render($view);</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">$view = node_view(node_load(1), &#39;teaser&#39;);</span>
+<span class="x">$rendered = drupal_render($view);</span></code></pre></figure>
 
 <p>The reason being that <code>drupal_render()</code> expects a variable to be passed in (as it is passed by reference).</p>
 
@@ -389,7 +389,7 @@ string<span class="o">(</span>3<span class="o">)</span> <span class="s2">&quot;J
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
             </div>
         </div>
     </div>

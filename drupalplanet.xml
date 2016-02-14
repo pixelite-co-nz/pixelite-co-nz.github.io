@@ -10,6 +10,110 @@
     <language>en</language>
     
       <item>
+        <title>Estimating Drupal projects</title>
+        <link>http://www.pixelite.co.nz/article/estimating-drupal-projects/</link>
+        <description>&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;Estimating Drupal projects can be tricky, and there are a number of tools and guides out there to help make your life easier in this topic. I thought it would be a great idea to aggregate this data, and present some of the best information out there. It is up to you to choose the best match for your team.&lt;/p&gt;
+
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
+
+&lt;h3 id=&quot;palantirnet&quot;&gt;palantir.net&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/estimation/palantir.jpg&quot; alt=&quot;&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.palantir.net/blog/developing-drupal-sites-plan-or-perish&quot;&gt;Developing Drupal sites: Plan or Perish&lt;/a&gt; - by Larry Garfield (2013)&lt;/p&gt;
+
+&lt;p&gt;Even though this article is nearly 3 years old, it still is completely valid for Drupal. There is an &lt;a href=&quot;https://docs.google.com/spreadsheets/d/15htLLWLguhwiuTLg_nndQNpgWVdUMy6UaR_d1q-v6iw/edit#gid=0&quot;&gt;included spreadsheet&lt;/a&gt; that you get the tech lead, product owner and another engineer to collaborate on prior to building.&lt;/p&gt;
+
+&lt;p&gt;What I like about this:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Emphasis on involving tech leads early to perform scoping and breaking up functionality into tangible Drupal elements. This allows you to have less experienced developers do the actual build, as largely everything has been speced out.&lt;/li&gt;
+  &lt;li&gt;View modes are used extensively which is a great for re-usability of content and maintaining flexibility&lt;/li&gt;
+  &lt;li&gt;Questions, or opportunities for simplification can come up &lt;em&gt;before&lt;/em&gt; anything has been built&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;lullabotcom&quot;&gt;lullabot.com&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/estimation/lullabot.jpg&quot; alt=&quot;&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are 3 articles on lullabot.com that are worth reading, they all follow on from one another, so it would pay to start at the beginning and work your way to the end.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.lullabot.com/articles/the-art-of-estimation&quot;&gt;The Art of Estimation&lt;/a&gt; by Seth Brown (2011)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.lullabot.com/articles/an-update-on-the-art-of-estimation&quot;&gt;An Update on the Art of Estimation&lt;/a&gt; by Jerad Bitner (2012)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.lullabot.com/articles/handling-uncertainty-when-estimating-software-projects&quot;&gt;Handling Uncertainty When Estimating Software Projects&lt;/a&gt; by Darren Petersen (2015)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In here they introduce a &lt;a href=&quot;https://docs.google.com/spreadsheets/d/1y-3AliSRiHxnAkNhHa9JvQjX3EHpkiulxjlec4B7isA&quot;&gt;spreadsheet&lt;/a&gt; that attempts to combine 2 developers estimates into a single number with variance.&lt;/p&gt;
+
+&lt;p&gt;What I like about this:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It exposes the fact that all website builds have range to which it can be completed in&lt;/li&gt;
+  &lt;li&gt;It helps to explain the ‘Wideband Delphi’ method of estimation&lt;/li&gt;
+  &lt;li&gt;Excellent explanation on how to use the spreadsheet is provided&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;wunderkrautcom&quot;&gt;wunderkraut.com&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/estimation/wunderkraut.jpg&quot; alt=&quot;&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.wunderkraut.com/blog/resources-for-my-session-on-early-estimating/2010-08-24&quot;&gt;Resources for my session on early estimating&lt;/a&gt; by Jakob Persson (2010)&lt;/p&gt;
+
+&lt;p&gt;Included in the article here is the &lt;a href=&quot;https://docs.google.com/spreadsheets/d/13MGHIxFOtbJ2Qxygc_GxKzxqghLiK1-7YgNiq95ypWE/edit?hl=en#gid=0&quot;&gt;Drupal early estimation sheet v3&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;What I like about this:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Walks you through an actual example on how an email was turned into a concrete estimate, and how that was analysed&lt;/li&gt;
+  &lt;li&gt;Introduces often overlooked things such as:
+    &lt;ul&gt;
+      &lt;li&gt;migration of data&lt;/li&gt;
+      &lt;li&gt;producing help or documentation&lt;/li&gt;
+      &lt;li&gt;deployments&lt;/li&gt;
+      &lt;li&gt;third party system integration&lt;/li&gt;
+      &lt;li&gt;working with a third party (e.g. external design vendor)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;drupalizeme&quot;&gt;drupalize.me&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/estimation/drupalize.png&quot; alt=&quot;&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are several training videos on drupalize.me that would be worth checking out if you have some time:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://drupalize.me/videos/introduction-project-management?p=2203&quot;&gt;Introduction to Project Management&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://drupalize.me/videos/estimation-drupal-projects?p=2203&quot;&gt;Estimation in Drupal Projects&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If you have an existing Acquia subscription you might already have access to Drupalize.me, so this might be worth looking into.&lt;/p&gt;
+
+&lt;h2 id=&quot;personal-thoughts&quot;&gt;Personal thoughts&lt;/h2&gt;
+
+&lt;p&gt;Having been involved in doing a lot of this in my previous role, and one additional point I would like to make is to never start from a fresh Drupal install, it often makes sense to standardise on a Drupal technology suite, and installation profiles make this easy.&lt;/p&gt;
+
+&lt;p&gt;For instance, Acquia typically use an installation profile called &lt;a href=&quot;https://www.drupal.org/project/lightning&quot;&gt;lightning&lt;/a&gt; which provides built in ways to do lots of common tasks, e.g. layout, workflow, media management. This saves you having to re-invent the wheel on every project, and should help you provide more solid estimates when it comes to the base features of the site.&lt;/p&gt;
+
+&lt;p&gt;Another common theme across the different methods is to involve 1 or 2 tech leads early on to help break the requirements down into Drupal functionality. Having these early conversations with the product owner early on can often lead to a better solution not only in time to build, but feature set too.&lt;/p&gt;
+
+&lt;p&gt;Also remember, the above articles and spreadsheets may not work perfectly for you and your organsiation, so feel free to adapt them to suit your needs.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you know of some other method to help here, please let me know in the comments. Especially keen to know of any other training content or spreadsheets which other companies use to help estimate Drupal projects.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Fri, 12 Feb 2016 00:00:00 +1300</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/estimating-drupal-projects/</guid>
+        <comments>http://www.pixelite.co.nz/article/estimating-drupal-projects/#disqus_thread</comments>
+      </item>
+    
+      <item>
         <title>Measuring Drupal content growth over time</title>
         <link>http://www.pixelite.co.nz/article/measuring-drupal-content-growth-over-time/</link>
         <description>&lt;p&gt;On a recent project I was tasked with working out why the database was so large, in particular certain tables like &lt;code&gt;field_revision_body&lt;/code&gt; and &lt;code&gt;field_data_body&lt;/code&gt; had grown to be several gigabytes in size.&lt;/p&gt;
@@ -18,13 +122,13 @@
 
 &lt;p&gt;Here is a simple SQL statement you can execute on your production database to retrieve a count of nodes created grouped by day.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example.com sqlq &lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT count(nid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&amp;#39;%d-%m-%Y&amp;#39;) AS month FROM node  GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-nodes.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example.com sqlq &lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT count(nid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&amp;#39;%d-%m-%Y&amp;#39;) AS month FROM node  GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-nodes.txt&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;&lt;strong&gt;PostgreSQL users&lt;/strong&gt; - you can add a custom function to add &lt;code&gt;FROM_UNIXTIME&lt;/code&gt; functionality:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;from_unixtime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;integer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;RETURNS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;timestamp&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;from_unixtime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;integer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;RETURNS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;timestamp&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt;
 &lt;span class=&quot;s1&quot;&gt;     SELECT to_timestamp($1)::timestamp AS result&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;SQL&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;s1&quot;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;SQL&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;cleaning-up-results&quot;&gt;Cleaning up results&lt;/h3&gt;
 
@@ -59,7 +163,7 @@ tail /tmp/example-nodes.txt
 
 &lt;p&gt;By default the SQL will return a tab separated values file, and with blank lines in there, lets convert this to CSV and enforce consistent line endings:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cat /tmp/example-nodes.txt &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;$&amp;#39;s/\r//&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s2&quot;&gt;&amp;quot;\\t&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-nodes.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cat /tmp/example-nodes.txt &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;$&amp;#39;s/\r//&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s2&quot;&gt;&amp;quot;\\t&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-nodes.txt&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2 id=&quot;graphing-results&quot;&gt;Graphing results&lt;/h2&gt;
 
@@ -75,7 +179,7 @@ tail /tmp/example-nodes.txt
 
 &lt;p&gt;You can extend this method to work with taxonomy terms as well with a slight modification to the SQL (Drupal 7):&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example.com sqlq &lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT count(tid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&amp;#39;%d-%m-%Y&amp;#39;) AS month FROM taxonomy_term_data GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-terms.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example.com sqlq &lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT count(tid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&amp;#39;%d-%m-%Y&amp;#39;) AS month FROM taxonomy_term_data GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&amp;quot;&lt;/span&gt; &amp;gt; /tmp/example-terms.txt&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2 id=&quot;where-to-from-here&quot;&gt;Where to from here&lt;/h2&gt;
 
@@ -140,21 +244,21 @@ tail /tmp/example-nodes.txt
 
 &lt;p&gt;Note the site hashes are different:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example1.com vget apachesolr_site_hash
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example1.com vget apachesolr_site_hash
 apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;lm0ujj&amp;#39;&lt;/span&gt;
 
 &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example2.com.au vget apachesolr_site_hash
-apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;9qt6o6&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;9qt6o6&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;example-of-this-not-working&quot;&gt;Example of this not working&lt;/h3&gt;
 
 &lt;p&gt;Note the site hashes are the same, thus the search results will be blended:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example1.com vget apachesolr_site_hash
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example1.com vget apachesolr_site_hash
 apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&lt;/span&gt;
 
 &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush --uri&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www.example2.com vget apachesolr_site_hash
-apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;You will find yourself in this predicament if you clone new sites from old sites (thus the database variable persists).&lt;/p&gt;
 
@@ -257,7 +361,7 @@ apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&
 
 &lt;p&gt;Rather than using any existing contrib modules, the code required to do what we want is very simple. Here is some simple custom code that can be used as a starting point for your code:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt; * Implements hook_page_build().&lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt; *&lt;/span&gt;
@@ -281,7 +385,7 @@ apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;The above example is simple, but hopefully gives you a taste of what can be achieved with very little code.&lt;/p&gt;
 
@@ -289,13 +393,13 @@ apachesolr_site_hash: &lt;span class=&quot;s1&quot;&gt;&amp;#39;92ub55&amp;#39;&
 
 &lt;p&gt;I have a few cURL aliases in my &lt;code&gt;.bashrc&lt;/code&gt; that will come in handy if you do a lot of this type of thing:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# cURL&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# cURL&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; curlh&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; curl -sLIXGET &lt;span class=&quot;s2&quot;&gt;&amp;quot;$@&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; curlc&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; curl -sLIXGET &lt;span class=&quot;s2&quot;&gt;&amp;quot;$@&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep -E -i &lt;span class=&quot;s2&quot;&gt;&amp;quot;^(Cache-Control|Age|Expires|Set-Cookie|X-Cache|X-Varnish|X-Hits|Vary)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; curlc&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; curl -sLIXGET &lt;span class=&quot;s2&quot;&gt;&amp;quot;$@&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep -E -i &lt;span class=&quot;s2&quot;&gt;&amp;quot;^(Cache-Control|Age|Expires|Set-Cookie|X-Cache|X-Varnish|X-Hits|Vary)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;So if you are after all response headers you can:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curlh www.example.com
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curlh www.example.com
 HTTP/1.1 &lt;span class=&quot;m&quot;&gt;200&lt;/span&gt; OK
 Accept-Ranges: bytes
 Cache-Control: max-age&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;604800
@@ -309,15 +413,15 @@ X-Cache: HIT
 x-ec-custom-error: 1
 Content-Length: 1270
 Connection: Keep-Alive
-Age: 2265&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+Age: 2265&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;If you just want the relevant caching response headers:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curlc www.example.com
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curlc www.example.com
 Cache-Control: max-age&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;604800
 Expires: Sun, &lt;span class=&quot;m&quot;&gt;13&lt;/span&gt; Sep &lt;span class=&quot;m&quot;&gt;2015&lt;/span&gt; 22:52:40 GMT
 X-Cache: HIT
-Age: 2249&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+Age: 2249&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;what-this-technique-relies-on&quot;&gt;What this technique relies on&lt;/h3&gt;
 
@@ -369,19 +473,19 @@ Drupal has a caching layer to help with this. When you want to store something i
 &lt;h3 id=&quot;basic-configuration&quot;&gt;Basic configuration&lt;/h3&gt;
 &lt;p&gt;If you’ve used the memcache module before, this should feel familiar. In order to use Cache Debug, you need to set it as the cache handler:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_backends&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sites/all/modules/cache_debug/cache_debug.inc&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_default_class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;DrupalDebugCache&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;This tells Drupal that there is a cache backend located in the path provided (make sure its correct for your Drupal site!) and that the default class for all cache bins is the DrupalDebugCache class. If you only want to monitor a single bin you may want to omit this option.&lt;/p&gt;
 
 &lt;p&gt;Since Cache Debug is a logger and not an actual caching system, it needs to pass cache requests onto a real cache system. By default, Debug Cache will use Drupal core’s Database Cache system for cache storage, but if you’re using memcache, redis or similar, you may want to set that as the handler for Cache Debug:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;MemCacheDrupal&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_cache_debug_form&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;DrupalDatabaseCache&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;You need to also configure those modules accordingly.&lt;/p&gt;
 
@@ -391,38 +495,38 @@ Drupal has a caching layer to help with this. When you want to store something i
 
 &lt;p&gt;You may want to choose your own logging location. For example, if you use dblog, then you won’t want to log to watchdog because it will bloat your database. Likewise, if you don’t want to bloat  our php error log, then you may want to log to an arbitrary file. You can choose your logging location by setting &lt;code&gt;cache_debug_logging_destination&lt;/code&gt; to error_log (default), watchdog or file. For file you will also need to provide the location:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_logging_destination&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;file&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_filepath&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/tmp/cachedebug.log&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;configuring-logging-options&quot;&gt;Configuring logging options&lt;/h3&gt;
 
 &lt;p&gt;You can choose to log calls to cache get, getMulti, set and clear. You can also choose to log a stacktrace of these calls to show the stack that triggered the call. This is most useful for calls to SET and CLEAR. For a minimal logging option with the most about of insight, you might want to try this:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_get&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_getMulti&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_set&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_clear&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_stacktrace_set&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_stacktrace_clear&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;logging-per-cache-bin&quot;&gt;Logging per cache bin&lt;/h3&gt;
 
 &lt;p&gt;You don’t have to log the entire caching layer if you know which bin to look at for the caching issue you’re observing. For example, if you’re looking for misuse of variable_set, you only need to log the cache_bootstrap bin. In which case you could do this:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;# Do not log to all cache bins so ensure this line is removed (from above):&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;# $conf[&amp;#39;cache_default_class&amp;#39;] = &amp;#39;DrupalDebugCache&amp;#39;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_bootstrap_class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;DrupalDebugCache&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;configure-for-common-issues&quot;&gt;Configure for common issues&lt;/h3&gt;
 &lt;p&gt;Variable set calls and theme registry rebuilds are the two most common issues and so Cache Debug has use cases for these issues built in. So long as Cache Debug is the cache handler for the bin, you can turn off logging and turn on these features and Cache Debug will only log when these issues occur:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_default_class&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;DrupalDebugCache&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_common_settings&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
   &lt;span class=&quot;s1&quot;&gt;&amp;#39;variables&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
@@ -433,7 +537,7 @@ Drupal has a caching layer to help with this. When you want to store something i
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_getMulti&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_set&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;cache_debug_log_clear&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2 id=&quot;analysing-the-logged-data&quot;&gt;Analysing the logged data&lt;/h2&gt;
 
@@ -475,15 +579,15 @@ Some calls also log additional data, for example, cache clear also indicates if 
 
 &lt;h3 id=&quot;what-does-a-single-request-look-like&quot;&gt;What does a single request look like&lt;/h3&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n 1
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n 1
 
-May &lt;span class=&quot;m&quot;&gt;26&lt;/span&gt; 06:25:21 10.212.4.16 sitename: https://www.sitename.com&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;1432621521&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;memory profiler&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;1.152.97.17&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;https://www.sitename.com/&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;https://www.sitename.com/home&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;4.75 MB - home &lt;span class=&quot;nv&quot;&gt;request_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+May &lt;span class=&quot;m&quot;&gt;26&lt;/span&gt; 06:25:21 10.212.4.16 sitename: https://www.sitename.com&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;1432621521&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;memory profiler&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;1.152.97.17&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;https://www.sitename.com/&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;https://www.sitename.com/home&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;4.75 MB - home &lt;span class=&quot;nv&quot;&gt;request_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;This comes from your syslog format (which can be changed on a per site basis):&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush vget syslog_format
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush vget syslog_format
 
-syslog_format: &lt;span class=&quot;s1&quot;&gt;&amp;#39;!base_url|!timestamp|!type|!ip|!request_uri|!referer|!uid|!link|!message&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+syslog_format: &lt;span class=&quot;s1&quot;&gt;&amp;#39;!base_url|!timestamp|!type|!ip|!request_uri|!referer|!uid|!link|!message&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;extract-the-data-from-syslog&quot;&gt;Extract the data from syslog&lt;/h3&gt;
 
@@ -496,21 +600,21 @@ syslog_format: &lt;span class=&quot;s1&quot;&gt;&amp;#39;!base_url|!timestamp|!t
 
 &lt;p&gt;Using more bash foo&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt;
 
-https://www.sitename.com/,4.75 MB - home &lt;span class=&quot;nv&quot;&gt;request_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+https://www.sitename.com/,4.75 MB - home &lt;span class=&quot;nv&quot;&gt;request_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;On Acquia Cloud a request ID is added to all requests, we don’t need this. Also having the string ‘MB’ there is superfluous.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt;
 
-https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Perfect.&lt;/p&gt;
 
 &lt;p&gt;So in order to create a CSV for analysing in a spreadsheet you could do:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;request_uri,max_memory&amp;quot;&lt;/span&gt; &amp;gt; /tmp/memory.csv &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; /tmp/memory.csv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;request_uri,max_memory&amp;quot;&lt;/span&gt; &amp;gt; /tmp/memory.csv &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; /tmp/memory.csv&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;And then you can make pretty graphs if you want:&lt;/p&gt;
 
@@ -518,7 +622,7 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Or if you just want to find the top requests to your application by memory you can do&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sort -t, -k+2 -n -r &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n 20&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sort -t, -k+2 -n -r &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n 20&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
 
@@ -693,7 +797,7 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Once it was realised that the vid was from the destination vocabulary things got easier.  This is how the code looked in the end for me;&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;prepare&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;// The node&amp;#39;s terms are in an array under their destination vocab ID and&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;// this is different from environment to environment. However, we&amp;#39;ve only&lt;/span&gt;
@@ -718,7 +822,7 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
       &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;caveats&quot;&gt;Caveats&lt;/h3&gt;
 &lt;p&gt;This worked for me because I only had &lt;strong&gt;one&lt;/strong&gt; taxonomy field to worry about. The moment you get more than one you will want to revisit the assignment of $new_tid to the appropriate field. This shouldn’t be a problem to hand code and if you have migrated the vocabularies too you may be able to use the migrate_map table to make something more dynamic.&lt;/p&gt;
@@ -772,16 +876,16 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
   &lt;li&gt;Short array syntax&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$array = [&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$array = [&lt;/span&gt;
 &lt;span class=&quot;x&quot;&gt;  &amp;quot;foo&amp;quot; =&amp;gt; &amp;quot;bar&amp;quot;,&lt;/span&gt;
 &lt;span class=&quot;x&quot;&gt;  &amp;quot;bar&amp;quot; =&amp;gt; &amp;quot;foo&amp;quot;,&lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;x&quot;&gt;];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Function array dereferencing&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$secondElement = getArray()[1];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;  $secondElement = getArray()[1];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/language.oop5.traits.php&quot;&gt;Traits&lt;/a&gt;&lt;/li&gt;
@@ -801,10 +905,10 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;If you are running the older Ubuntu Precise 12.04, you can add a PPA&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo add-apt-repository ppa:ondrej/php5
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo add-apt-repository ppa:ondrej/php5
 sudo apt-get update
 sudo apt-get install php5
-php5 -v&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+php5 -v&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;It would be worth considering a dist upgrade though, but this at least can buy you some time.&lt;/p&gt;
 
@@ -831,13 +935,13 @@ php5 -v&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;If you have this in your code, you will have a bad time, as this is now a PHP fatal.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;foo(&amp;amp;$a); // Bad times.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;foo(&amp;amp;$a); // Bad times.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;only-variables-can-be-passed-by-reference&quot;&gt;Only variables can be passed by reference&lt;/h3&gt;
 
 &lt;p&gt;This will cause PHP to throw notices.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;php -a
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;php -a
 Interactive shell
 
 php &amp;gt; ini_set&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;error_reporting&amp;#39;&lt;/span&gt;, E_ALL&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -845,18 +949,18 @@ php &amp;gt; var_dump&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;reset&lt;span
 PHP Strict Standards:  Only variables should be passed by reference in php shell code on line 1
 
 Strict Standards: Only variables should be passed by reference in php shell code on line 1
-string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Jim&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Jim&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Where you will likely find this in Drupal in my experience is when manually rendering nodes:&lt;/p&gt;
 
 &lt;p&gt;This code works in PHP 5.3, but will throw notices in PHP 5.5:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$rendered = drupal_render(node_view(node_load(1), &amp;#39;teaser&amp;#39;));&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$rendered = drupal_render(node_view(node_load(1), &amp;#39;teaser&amp;#39;));&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;The fix is to simply use a temporary variable:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$view = node_view(node_load(1), &amp;#39;teaser&amp;#39;);&lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;$rendered = drupal_render($view);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$view = node_view(node_load(1), &amp;#39;teaser&amp;#39;);&lt;/span&gt;
+&lt;span class=&quot;x&quot;&gt;$rendered = drupal_render($view);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;The reason being that &lt;code&gt;drupal_render()&lt;/code&gt; expects a variable to be passed in (as it is passed by reference).&lt;/p&gt;
 
@@ -952,118 +1056,6 @@ string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot
         <dc:creator>Sean Hamlin</dc:creator>
         <guid isPermaLink="true">http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal</guid>
         <comments>http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal#disqus_thread</comments>
-      </item>
-    
-      <item>
-        <title>Installing Solr for development</title>
-        <link>http://www.pixelite.co.nz/article/installing-solr-development</link>
-        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://lucene.apache.org/solr/&quot;&gt;Solr&lt;/a&gt; is an open source search engine with many powerful &lt;a href=&quot;http://lucene.apache.org/solr/features.html&quot;&gt;features&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I encounter a lot of experienced developers that either don’t know how to use it or avoid it as it’s in the &lt;strong&gt;too hard/scary&lt;/strong&gt; basket.
-In this introductory article we’ll talk briefly about how to install Solr in order to use it for development.&lt;/p&gt;
-
-&lt;p&gt;There are many ways to install and configure Solr but in this article I’ll show you how to set it up quickly so you can get started developing with it. While the installation and setup will be generic to any framework you want to develop with, I’ll also, show you a couple of extra steps if you’re using Drupal.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;p&gt;The only real hard requirement/prerequisite for running Solr is Java. Version 1.6 is recommended for Solr version 4 and upward. &lt;a href=&quot;http://www.ubuntu.com/&quot;&gt;Ubuntu&lt;/a&gt; and Mac should come with Java pre-installed.&lt;/p&gt;
-
-&lt;p&gt;I’m not a windows guy so sorry you guys are on your own There’s plenty of resources out &lt;a href=&quot;https://www.google.co.nz/webhp?sourceid=chrome-instant&amp;amp;ion=1&amp;amp;espv=2&amp;amp;ie=UTF-8#safe=off&amp;amp;q=installing%20solr%20on%20windows&quot;&gt;there&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can find out the version of Java you are running with the following command.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;java -version
-
-java version &lt;span class=&quot;s2&quot;&gt;&amp;quot;1.7.0_72&amp;quot;&lt;/span&gt;
-Java&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TM&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; SE Runtime Environment &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;build 1.7.0_72-b14&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-Java HotSpot&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TM&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 64-Bit Server VM &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;build 24.72-b04, mixed mode&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;I am using Ubuntu 14.04 but the instructions in this article should work if you’re on a Mac or another variant of *nix&lt;/p&gt;
-
-&lt;h2 id=&quot;download&quot;&gt;Download&lt;/h2&gt;
-
-&lt;p&gt;Open a terminal and make a folder we can use for working in, and change to that directory:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mkdir solr
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;solr&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Navigate to the &lt;a href=&quot;http://lucene.apache.org/solr/mirrors-solr-latest-redir.html&quot;&gt;Solr download page&lt;/a&gt; and find the closest mirror for you. At the time of this article the latest version of Solr is 4.10.2.&lt;/p&gt;
-
-&lt;p&gt;Copy the download link for either the solr-VERSION.tar.gz or the solr-VERSION.zip. You don’t want the solr-VERSION-src.tgz (this is the source code and will need to be compiled) and download it with wget.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;wget -c http://mirrors.sonic.net/apache/lucene/solr/4.10.4/solr-4.10.4.tgz&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;unpack&quot;&gt;Unpack&lt;/h2&gt;
-
-&lt;p&gt;Once downloaded (it’ll be about 150M) we can un-compress it and change into the directory.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;tar -zxvf solr-4.10.2.tgz
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;solr-4.10.2/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;make-a-working-copy&quot;&gt;Make a working copy&lt;/h2&gt;
-
-&lt;p&gt;In the current directory there is a folder called &lt;strong&gt;example&lt;/strong&gt; we want to make a copy of this folder.&lt;/p&gt;
-
-&lt;p&gt;We could just use the &lt;strong&gt;example&lt;/strong&gt; folder but it’s nice to leave that clean on case you want to use this copy of Solr for other sites as well. So we’ll make a copy and then change directory into the newly created copy.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cp -prv example my_solr
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;my_solr&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;make-it-work&quot;&gt;Make it work&lt;/h2&gt;
-
-&lt;p&gt;Now we’re ready to run it for the first time. To run Solr it’s really simple. Simply run:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;java -jar start.jar&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;You should see a whole bunch of output (to stop solr press &lt;strong&gt;CTRL^C&lt;/strong&gt;).
-After a few seconds if you open your browser and navigate to &lt;a href=&quot;http://0.0.0.0:8983/solr/&quot;&gt;http://0.0.0.0:8983/solr/&lt;/a&gt; you should see something similar to the following (the actual screen may differ depending on your version)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/solr/dashboard.png&quot; alt=&quot;Solr dashboard&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;That’s it. Solr is now set up and ready to use.
-Depending on your client frame work you may need to makes some config changes to Solr itself.
-Consult the installation instructions of your chosen framework.
-If you’re using Drupal keep reading and I’ll show you the steps required to make Solr ready for Drupal integration.
-First lets stop SOlr from running by hitting &lt;strong&gt;CTRL^C&lt;/strong&gt; in your terminal.&lt;/p&gt;
-
-&lt;h2 id=&quot;modules&quot;&gt;Modules&lt;/h2&gt;
-
-&lt;p&gt;There are a couple of modules you can use for Drupal integration with Solr.
-I wont go into the Drupal configuration side of things (I’ll leave that for another day) but will talk about the steps required to get the Solr server we’ve set up ready for Drupal usage depending on the Solr module you’ve chosen.&lt;/p&gt;
-
-&lt;h3 id=&quot;search-api-and-apachesolr&quot;&gt;Search API and ApacheSolr&lt;/h3&gt;
-
-&lt;p&gt;If you’re using the &lt;a href=&quot;http://drupal.org/project/search_api&quot;&gt;search_api&lt;/a&gt; you will need to ensure you have the &lt;a href=&quot;http://drupal.org/project/search_api_solr&quot;&gt;search_api_solr&lt;/a&gt; module installed. Otherwise the &lt;a href=&quot;http://drupal.org/project/apachesolr&quot;&gt;apachesolr&lt;/a&gt; module is the way to go.&lt;/p&gt;
-
-&lt;p&gt;In both the &lt;a href=&quot;http://drupal.org/project/search_api_solr&quot;&gt;search_api_solr&lt;/a&gt; and &lt;a href=&quot;http://drupal.org/project/apachesolr&quot;&gt;apachesolr&lt;/a&gt; modules, you’ll find a folder called &lt;strong&gt;solr-conf&lt;/strong&gt; in this folder there will be version folders &lt;strong&gt;4.x&lt;/strong&gt;, &lt;strong&gt;3.x&lt;/strong&gt; etc.
-Choose the version of Solr you downloaded. This folder contains all the config files you need to install in your Solr install.
-I could probably write a whole bunch of articles about the contents of these files but since this is a beginner tutorial we’ll just take the easiest route.&lt;/p&gt;
-
-&lt;p&gt;You want to copy the contents of the &lt;strong&gt;solr-conf/4.x/&lt;/strong&gt; folder into your solder core.
-We can do this with the following, go back to your terminal, and run (change the path to your Drupal module):&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;cp -v **/path/to/apachesolr/or/search_api_solr/**solr-conf/4.x/* solr/collection1/conf/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;That will copy the config for your Drupal site into the &lt;strong&gt;my_solr/solr/collection1/conf/&lt;/strong&gt; directory.&lt;/p&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Solr is now ready for use by your Drupal install. You can run it whenever you like by changing into the &lt;strong&gt;my_solr&lt;/strong&gt; directory and starting it.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;java -jar start.jar&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;I wouldn’t recommend using this setup in production. However, for developing on your local machine, it’s perfectly fine.&lt;/p&gt;
-
-&lt;p&gt;In the next article, I’ll talk about how to configure the &lt;a href=&quot;http://drupal.org/project/search_api&quot;&gt;search_api&lt;/a&gt; and &lt;a href=&quot;http://drupal.org/project/search_api_solr&quot;&gt;search_api_solr&lt;/a&gt; to use Solr as a search engine for your Drupal site.&lt;/p&gt;
-
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Thu, 18 Dec 2014 00:00:00 +1300</pubDate>
-        <dc:creator>Craig Pearson</dc:creator>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/installing-solr-development</guid>
-        <comments>http://www.pixelite.co.nz/article/installing-solr-development#disqus_thread</comments>
       </item>
     
   </channel>

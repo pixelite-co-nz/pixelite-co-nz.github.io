@@ -126,7 +126,7 @@
 <!-- Main Content -->
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
-    <meta itemprop="wordCount" content="550"/>
+    <meta itemprop="wordCount" content="556"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/integrating-multisite-drupal-with-apache-solr/"/>
 
     <header class="intro-header" style="background-image: url('/img/swing.jpg')">
@@ -205,21 +205,21 @@
 
 <p>Note the site hashes are different:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>drush --uri<span class="o">=</span>www.example1.com vget apachesolr_site_hash
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>drush --uri<span class="o">=</span>www.example1.com vget apachesolr_site_hash
 apachesolr_site_hash: <span class="s1">&#39;lm0ujj&#39;</span>
 
 <span class="nv">$ </span>drush --uri<span class="o">=</span>www.example2.com.au vget apachesolr_site_hash
-apachesolr_site_hash: <span class="s1">&#39;9qt6o6&#39;</span></code></pre></div>
+apachesolr_site_hash: <span class="s1">&#39;9qt6o6&#39;</span></code></pre></figure>
 
 <h3 id="example-of-this-not-working">Example of this not working</h3>
 
 <p>Note the site hashes are the same, thus the search results will be blended:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>drush --uri<span class="o">=</span>www.example1.com vget apachesolr_site_hash
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>drush --uri<span class="o">=</span>www.example1.com vget apachesolr_site_hash
 apachesolr_site_hash: <span class="s1">&#39;92ub55&#39;</span>
 
 <span class="nv">$ </span>drush --uri<span class="o">=</span>www.example2.com vget apachesolr_site_hash
-apachesolr_site_hash: <span class="s1">&#39;92ub55&#39;</span></code></pre></div>
+apachesolr_site_hash: <span class="s1">&#39;92ub55&#39;</span></code></pre></figure>
 
 <p>You will find yourself in this predicament if you clone new sites from old sites (thus the database variable persists).</p>
 
@@ -334,7 +334,7 @@ apachesolr_site_hash: <span class="s1">&#39;92ub55&#39;</span></code></pre></div
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
             </div>
         </div>
     </div>

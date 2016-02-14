@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+        <meta name="description" content="So recently I did a talk at DrupalSouth Melbourne on site preview solutions that exist within Drupal at present. I noticed that no one had managed to do a comparison between them as they stand at the moment, so I aimed to help out there.">
+    
+
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content="Site preview - the holy grail of Drupal" />
+    <meta property="og:site_name" content="Pixelite" />
+    <meta property="og:url" content="http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal/" />
+    <meta property="og:description" content="Also introducing a new module preview sync" />
+    <meta property="fb:app_id" content="410615979137383" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_US" />
+
+    
+        <meta property="og:image" content="http://www.pixelite.co.nz/img/post-bg-01.jpg" />
+    
+
+    <!-- Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pixelite_">
+    
+        <meta name="twitter:creator" content="@wiifm">
+    
+    <meta name="twitter:title" content="Site preview - the holy grail of Drupal">
+    <meta name="twitter:description" content="Also introducing a new module preview sync">
+    
+        <meta name="twitter:image" content="http://www.pixelite.co.nz/img/post-bg-01.jpg">
+    
+
+
+    <title>Site preview - the holy grail of Drupal - Pixelite</title>
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="http://www.pixelite.co.nz/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="All Drupal planet posts" href="http://www.pixelite.co.nz/drupalplanet.xml" />
+
+    <link rel="canonical" href="http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-pixelite" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img alt="Pixelite homepage" src="/img/pixelite.svg" /></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/about.html">About</a>
+                </li>
+                <li>
+                    <a href="/contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+<!-- Main Content -->
+<article itemscope="" itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="inLanguage" content="en-GB"/>
+    <meta itemprop="wordCount" content="540"/>
+    <meta itemprop="url" content="http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal"/>
+
+    <header class="intro-header" style="background-image: url('/img/post-bg-01.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1 itemprop="name headline">Site preview - the holy grail of Drupal</h1>
+                    
+                    <h2 class="subheading" itemprop="description">Also introducing a new module preview sync</h2>
+                    
+
+                    <span class="meta">Posted by <a href="/authors/sean-hamlin/" title="View Sean Hamlin's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Sean Hamlin</span></span></a> on <time datetime="2015-03-07T00:00:00" itemprop="datePublished">March 7, 2015</time></span>
+                    <ul class="social-buttons cf">
+                        <li>
+                            <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Site preview - the holy grail of Drupal" data-url="http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal&amp;t=Site%20preview%20-%20the%20holy%20grail%20of%20Drupal" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal&amp;title=Site%20preview%20-%20the%20holy%20grail%20of%20Drupal" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <!-- Post Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <div itemprop="articleBody">
+                    <h2 id="what-is-site-preview">What is site preview</h2>
+
+<blockquote>
+  <p>The ability to see (and have selected others see) changes to content and layout that is not yet visible to the general public</p>
+</blockquote>
+
+<p>So recently I did a talk at <a href="https://melbourne2015.drupal.org.au/session/site-preview-holy-grail-drupal">DrupalSouth Melbourne</a> on site preview solutions that exist within Drupal at present. I noticed that no one had managed to do a comparison between them as they stand at the moment, so I aimed to help out there.</p>
+
+<p>Solutions compared in the talk:</p>
+
+<ul>
+  <li>Drupal 7 (stock)</li>
+  <li>SPS</li>
+  <li>CPS</li>
+  <li>Zariz</li>
+  <li>Live preview</li>
+  <li>What is coming in Drupal 8</li>
+</ul>
+
+<p>I also wanted to introduce the new solution that was developed for the Ministry of Health New Zealand, that aimed to solve site preview in an entirely different manner.</p>
+
+<h2 id="slides">Slides</h2>
+
+<p>Here are my <a href="http://bit.ly/drupalsouthsitepreview">full slides</a> from the talk if you want to read about the above options in more detail.</p>
+
+<h2 id="how-preview-sync-is-different">How preview sync is different</h2>
+
+<p>Instead of try to take over your production site, and pollute it with complex revisioning and access control, and altering your EFQ and views using magic, it instead works with your existing workflow (workbench_moderation integration is <abbr title="out of the box">OOTB</abbr>), and aims to be a lightweight solution.</p>
+
+<p><img src="http://www.pixelite.co.nz/img/site-preview/diagram.png" alt="Preview sync syndicates your production database to a separate preview environment" class="img-responsive img-thumbnail" /></p>
+
+<p>Preview sync, takes a live snapshot (optimised) of your production database, and imports this to a separate dedicated preview environment. Then a number of actions take place, all of which are entirely alterable, so you can add your own tasks in, and remove tasks you don’t need.</p>
+
+<p>Example tasks in preview sync:</p>
+
+<ul>
+  <li>environment switch to preview, this allows you to enable and disable modules, perform actions (e.g. redirecting email to a log). This is a powerful hook.</li>
+  <li>publish the content currently in ‘Needs Review’, this allows your content approvers to see the content, including all surrounding content as if it was published on production, but in a safe and controlled environment</li>
+  <li>re-index solr, if your site is largely driven by Apache Solr (which is not uncommon), this will allow the newly published content above to be inserted into the preview Solr index. This is a unique feature</li>
+  <li>your task here, seriously, the task list is completely alterable, and any drush command can be remotely executed on the preview environment. Custom drush commands can be added. An example of which is the bundled workbench-moderation-publish drush command.</li>
+</ul>
+
+<h3 id="security">Security</h3>
+
+<p>As all the complex access control is not needed on production (e.g. you are never sending un-published content to Solr), there is a huge security benefit to using preview sync. Access control to nodes is kept simple on production.</p>
+
+<p>Also, as the preview environment is dedicated, you can lock down access, e.g. only allow access to your preview site from certain IPs. This way, your internal content approvers can still see the content, and no one else.</p>
+
+<h2 id="comments">Comments</h2>
+
+<p>If preview sync sounds like it could be useful to you, I am keen to know - please leave a comment below. I am also keen to hear if</p>
+
+<ul>
+  <li>there is a missing feature that is needed for you to adopt preview sync</li>
+  <li>key integrations with other contributed modules are missing</li>
+</ul>
+
+                </div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+                <script type="text/javascript">
+                    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                    var disqus_shortname = 'pixelite'; // required: replace example with your forum shortname
+                    var disqus_url = 'http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal';
+
+                    /* * * DON'T EDIT BELOW THIS LINE * * */
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/article/analyse-apache-traffic-with-asql-log-interface" data-toggle="tooltip" data-placement="top" title="Analyse Apache traffic with asql log interface">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="http://www.pixelite.co.nz/article/extracting-file-folder-from-git-repository-with-full-git-history" data-toggle="tooltip" data-placement="top" title="Extracting a file or a folder from a git repository with full git history">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/pixelite_">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/pixelite-co-nz">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JS libs -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/js/socialite.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/js/clean-blog.js"></script>
+
+<!-- Social links -->
+<script type="text/javascript">
+    (function($) {
+        Socialite.load();
+    })(jQuery);
+</script>
+
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34737960-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>

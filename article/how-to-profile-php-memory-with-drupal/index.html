@@ -126,7 +126,7 @@
 <!-- Main Content -->
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
-    <meta itemprop="wordCount" content="594"/>
+    <meta itemprop="wordCount" content="635"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/how-to-profile-php-memory-with-drupal/"/>
 
     <header class="intro-header" style="background-image: url('/img/profile/back.jpg')">
@@ -182,15 +182,15 @@
 
 <h3 id="what-does-a-single-request-look-like">What does a single request look like</h3>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> head -n 1
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> head -n 1
 
-May <span class="m">26</span> 06:25:21 10.212.4.16 sitename: https://www.sitename.com<span class="p">|</span>1432621521<span class="p">|</span>memory profiler<span class="p">|</span>1.152.97.17<span class="p">|</span>https://www.sitename.com/<span class="p">|</span>https://www.sitename.com/home<span class="p">|</span>0<span class="o">||</span>4.75 MB - home <span class="nv">request_id</span><span class="o">=</span><span class="s2">&quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&quot;</span></code></pre></div>
+May <span class="m">26</span> 06:25:21 10.212.4.16 sitename: https://www.sitename.com<span class="p">|</span>1432621521<span class="p">|</span>memory profiler<span class="p">|</span>1.152.97.17<span class="p">|</span>https://www.sitename.com/<span class="p">|</span>https://www.sitename.com/home<span class="p">|</span>0<span class="o">||</span>4.75 MB - home <span class="nv">request_id</span><span class="o">=</span><span class="s2">&quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&quot;</span></code></pre></figure>
 
 <p>This comes from your syslog format (which can be changed on a per site basis):</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>drush vget syslog_format
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>drush vget syslog_format
 
-syslog_format: <span class="s1">&#39;!base_url|!timestamp|!type|!ip|!request_uri|!referer|!uid|!link|!message&#39;</span></code></pre></div>
+syslog_format: <span class="s1">&#39;!base_url|!timestamp|!type|!ip|!request_uri|!referer|!uid|!link|!message&#39;</span></code></pre></figure>
 
 <h3 id="extract-the-data-from-syslog">Extract the data from syslog</h3>
 
@@ -203,21 +203,21 @@ syslog_format: <span class="s1">&#39;!base_url|!timestamp|!type|!ip|!request_uri
 
 <p>Using more bash foo</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> head -n <span class="m">1</span> <span class="p">|</span> awk -F<span class="s1">&#39;|&#39;</span> -v <span class="nv">OFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $5, $9}&#39;</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> head -n <span class="m">1</span> <span class="p">|</span> awk -F<span class="s1">&#39;|&#39;</span> -v <span class="nv">OFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $5, $9}&#39;</span>
 
-https://www.sitename.com/,4.75 MB - home <span class="nv">request_id</span><span class="o">=</span><span class="s2">&quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&quot;</span></code></pre></div>
+https://www.sitename.com/,4.75 MB - home <span class="nv">request_id</span><span class="o">=</span><span class="s2">&quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&quot;</span></code></pre></figure>
 
 <p>On Acquia Cloud a request ID is added to all requests, we don’t need this. Also having the string ‘MB’ there is superfluous.</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> head -n <span class="m">1</span> <span class="p">|</span> awk -F<span class="s1">&#39;|&#39;</span> -v <span class="nv">OFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $5, $9}&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/ MB.*//&#39;</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> head -n <span class="m">1</span> <span class="p">|</span> awk -F<span class="s1">&#39;|&#39;</span> -v <span class="nv">OFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $5, $9}&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/ MB.*//&#39;</span>
 
-https://www.sitename.com/,4.75</code></pre></div>
+https://www.sitename.com/,4.75</code></pre></figure>
 
 <p>Perfect.</p>
 
 <p>So in order to create a CSV for analysing in a spreadsheet you could do:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;request_uri,max_memory&quot;</span> &gt; /tmp/memory.csv <span class="o">&amp;&amp;</span> grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> awk -F<span class="s1">&#39;|&#39;</span> -v <span class="nv">OFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $5, $9}&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/ MB.*//&#39;</span> &gt;&gt; /tmp/memory.csv</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;request_uri,max_memory&quot;</span> &gt; /tmp/memory.csv <span class="o">&amp;&amp;</span> grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> awk -F<span class="s1">&#39;|&#39;</span> -v <span class="nv">OFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $5, $9}&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/ MB.*//&#39;</span> &gt;&gt; /tmp/memory.csv</code></pre></figure>
 
 <p>And then you can make pretty graphs if you want:</p>
 
@@ -225,7 +225,7 @@ https://www.sitename.com/,4.75</code></pre></div>
 
 <p>Or if you just want to find the top requests to your application by memory you can do</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> awk -F<span class="s1">&#39;|&#39;</span> -v <span class="nv">OFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $5, $9}&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/ MB.*//&#39;</span> <span class="p">|</span> sort -t, -k+2 -n -r <span class="p">|</span> head -n 20</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>grep <span class="s2">&quot;memory profiler&quot;</span> drupal-watchdog.log <span class="p">|</span> awk -F<span class="s1">&#39;|&#39;</span> -v <span class="nv">OFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $5, $9}&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/ MB.*//&#39;</span> <span class="p">|</span> sort -t, -k+2 -n -r <span class="p">|</span> head -n 20</code></pre></figure>
 
 <h2 id="conclusions">Conclusions</h2>
 
@@ -331,7 +331,7 @@ https://www.sitename.com/,4.75</code></pre></div>
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
             </div>
         </div>
     </div>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+        <meta name="description" content="Getting started on OpenERP can be a bit daunting, initially this behemoth can be really painful. However once you get familiar with the system everything is really easy. In this tutorial I’ll go through the steps involved in adding an additional field to an existing model and adding it to an existing view. We’ll also do this by creating a custom module, so we will also cover some of the basics for doing that as well.">
+    
+
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#603cba">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content="Adding additional fields using a custom module in OpenERP 7" />
+    <meta property="og:site_name" content="Pixelite" />
+    <meta property="og:url" content="http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7/" />
+    <meta property="og:description" content="My eyes, the goggles do nothing!" />
+    <meta property="fb:app_id" content="410615979137383" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_US" />
+
+    
+        <meta property="og:image" content="http://www.pixelite.co.nz/img/post-bg-openerp.png" />
+    
+
+    <!-- Twitter cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pixelite_">
+    
+        <meta name="twitter:creator" content="@thepearson">
+    
+    <meta name="twitter:title" content="Adding additional fields using a custom module in OpenERP 7">
+    <meta name="twitter:description" content="My eyes, the goggles do nothing!">
+    
+        <meta name="twitter:image" content="http://www.pixelite.co.nz/img/post-bg-openerp.png">
+    
+
+
+    <title>Adding additional fields using a custom module in OpenERP 7 - Pixelite</title>
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="http://www.pixelite.co.nz/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="All Drupal planet posts" href="http://www.pixelite.co.nz/drupalplanet.xml" />
+
+    <link rel="canonical" href="http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-pixelite" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img alt="Pixelite homepage" src="/img/pixelite.svg" /></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/about.html">About</a>
+                </li>
+                <li>
+                    <a href="/contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+<!-- Main Content -->
+<article itemscope="" itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="inLanguage" content="en-GB"/>
+    <meta itemprop="wordCount" content="1896"/>
+    <meta itemprop="url" content="http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7"/>
+
+    <header class="intro-header" style="background-image: url('/img/post-bg-openerp.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1 itemprop="name headline">Adding additional fields using a custom module in OpenERP 7</h1>
+                    
+                    <h2 class="subheading" itemprop="description">My eyes, the goggles do nothing!</h2>
+                    
+
+                    <span class="meta">Posted by <a href="/authors/craig-pearson/" title="View Craig Pearson's profile"><span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Craig Pearson</span></span></a> on <time datetime="2013-08-22T00:00:00" itemprop="datePublished">August 22, 2013</time></span>
+                    <ul class="social-buttons cf">
+                        <li>
+                            <a href="http://twitter.com/share" class="socialite twitter-share" data-text="Adding additional fields using a custom module in OpenERP 7" data-url="http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7" data-count="vertical" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/share?url=http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7" class="socialite googleplus-one" data-size="tall" data-href="http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.facebook.com/sharer.php?u=http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7&amp;t=Adding%20additional%20fields%20using%20a%20custom%20module%20in%20OpenERP%207" class="socialite facebook-like" data-href="http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7" data-send="false" data-layout="box_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a>
+                        </li>
+                        <li>
+                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7&amp;title=Adding%20additional%20fields%20using%20a%20custom%20module%20in%20OpenERP%207" class="socialite linkedin-share" data-url="http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7" data-counter="top" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <!-- Post Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <div itemprop="articleBody">
+                    <p>Getting started on OpenERP can be a bit daunting, initially this behemoth can be really painful. However once you get familiar with the system everything is really easy. In this tutorial I’ll go through the steps involved in adding an additional field to an existing model and adding it to an existing view. We’ll also do this by creating a custom module, so we will also cover some of the basics for doing that as well.</p>
+
+<h2 id="some-context-you-say">Some context you say?</h2>
+
+<p>For this example, assume that we are about to migrate out internal project management system to OpenERP, and when we migrate any existing projects over we want an extra field where we can put a reference to the original project management system ID. Essentially modifying the OpenERP project model.</p>
+
+<h2 id="getting-started">Getting started</h2>
+
+<p>We’ll start with a clean install of OpenERP version 7, I wont go into how to install, however I might do so at a later date if there is enough demand. For now you can check out this helpful installation tutorial <a href="http://www.theopensourcerer.com/2012/12/how-to-install-openerp-7-0-on-ubuntu-12-04-lts/">here</a>. Once the database is set up go to <strong>Settings » Modules » Apps</strong> and enable the <strong>Project management</strong> app.</p>
+
+<p>So now that’s done, if you go into the Projects view and click on create you should get something like so.</p>
+
+<p><img class="img-responsive" src="/img/openerp/1_0.png" width="1064" height="599" alt="" /></p>
+
+<p>What we want from this view is to add a field under where the customer field is, called <strong>Legacy ID</strong> right about where I’ve drawn the red block in this image.</p>
+
+<p><img class="img-responsive" src="/img/openerp/2_0.png" width="1064" height="599" alt="" /></p>
+
+<p>So lets get to it.</p>
+
+<h2 id="where-to-put-things">Where to put things</h2>
+
+<p>The module directory in OpenERP is located in the folder <strong>/OPENERP_ROOT/openerp/addons</strong> you can put your modules in there or symlink them into that directory but to make upgrading OpenERP core cleaner, there’s a better way.</p>
+
+<p>Create a new folder outside of the <strong>OPENERP_ROOT</strong> folder and call it something useful, I’ve called mine <strong>custom_modules</strong></p>
+
+<p>In the newly created module directory create an <strong>__init__.py</strong> file with the following code.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">openerp.modules</span> <span class="kn">import</span> <span class="n">get_module_resource</span><span class="p">,</span> <span class="n">get_module_path</span></code></pre></figure>
+
+<p>This tells the system that this directory will contain addons/modules. Now when we run OpenERP, we have to tell the system about this new additional addons directory. This can be done in the config file (good for production servers) with the <strong>addons_path</strong> or via the command line (better for development) at start up like so.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">python</span> <span class="n">openerp</span><span class="o">-</span><span class="n">server</span> <span class="o">--</span><span class="n">addons</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">openerp</span><span class="o">/</span><span class="n">addons</span><span class="p">,</span><span class="o">../</span><span class="n">custom_modules</span></code></pre></figure>
+
+<p>However, if you run this right now, it will fail with the following error</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">openerp</span><span class="o">-</span><span class="n">server</span><span class="p">:</span> <span class="n">error</span><span class="p">:</span> <span class="n">option</span> <span class="o">--</span><span class="n">addons</span><span class="o">-</span><span class="n">path</span><span class="p">:</span> <span class="n">The</span> <span class="n">addons</span><span class="o">-</span><span class="n">path</span> <span class="s">&#39;../custom_modules&#39;</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">seem</span> <span class="n">to</span> <span class="n">a</span> <span class="n">be</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">Addons</span> <span class="n">Directory</span><span class="err">!</span></code></pre></figure>
+
+<p>This is because we haven’t actually created any modules there yet, so lets get on with it.</p>
+
+<h2 id="a-basic-module">A basic module</h2>
+
+<p>Create a new folder in the <strong>custom_modules</strong> folder and name it <strong>legacy_projects</strong>. In this folder create an <strong>__init__.py</strong> file but leave it empty for now. For OpenERP to recognise it We also need to create a module declaration file. In the same folder create a file called <strong>__openerp__.py</strong>  inside this file we will put the following.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="p">{</span>
+    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&quot;Legacy project integration&quot;</span><span class="p">,</span>
+    <span class="s">&#39;version&#39;</span><span class="p">:</span> <span class="s">&quot;1.0&quot;</span><span class="p">,</span>
+    <span class="s">&#39;author&#39;</span><span class="p">:</span> <span class="s">&quot;thepearson&quot;</span><span class="p">,</span>
+    <span class="s">&#39;category&#39;</span><span class="p">:</span> <span class="s">&quot;Tools&quot;</span><span class="p">,</span>
+    <span class="s">&#39;depends&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;project&#39;</span><span class="p">],</span>
+    <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&#39;demo&#39;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&#39;installable&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>I wont go into details about this file for now, (you can read up on it <a href="https://doc.openerp.com/6.0/developer/2_4_module_development/module_structure/#openerp-module-descriptor-file-openerp-py">here</a>) but suffice to say that it tells OpenERP about our module. Now, if you fire up the server it should kick into action.</p>
+
+<p>Lets do that.</p>
+
+<p>At this point, to help with enabling custom modules it’s useful to enable some permissions on our user account. Log in (with administrator or an account that has administrative privs) and navigate to <strong>Settings » Users</strong> and edit your user account. Enable the <strong>Technical features</strong> check-box under usability.</p>
+
+<p><img class="img-responsive" src="/img/openerp/3_0.png" width="672" height="386" alt="" /></p>
+
+<p>Sweet, save your account and refresh your browser. You should now see a whole bunch of extra menu items on the left. One we are looking for in particular is <strong>Update modules list</strong> click on that and then click update. This will refresh the system module cache.</p>
+
+<p><img class="img-responsive" src="/img/openerp/4.png" width="464" height="314" alt="" /></p>
+
+<p>Now if we go to the <strong>Installed modules</strong> section and delete the tag <strong>Installed</strong> from the search box and search for <strong>legacy project</strong> the module you just created should display.</p>
+
+<p><img class="img-responsive" src="/img/openerp/5.png" width="863" height="436" alt="" /></p>
+
+<p>Great, this is how we’d also install the module, but before we do lets make it do something useful first.</p>
+
+<h3 id="uh-a-little-help">Uh, a little help?</h3>
+
+<p>Something that makes development in OpenERP a little easier is <strong>Developer Mode</strong> so lets turn that on now. Log in as administrator, click on the dropdown menu at the top right and then click on <strong>About OpenERP</strong> in the modal that pops up is an <strong>Activate the developer mode</strong> link, click on that.</p>
+
+<p><img class="img-responsive" src="/img/openerp/6.png" width="582" height="356" alt="" /></p>
+
+<p>Developer mode gives you the ability to inspect views and models from the interface so you don’t have to go trawling through code and/or database schemas to figure out what’s going on. It gives you a menu at the top of the page with some handy developer links and if you’re looking at a view you want to modify you can hover over a field to see technical information about it, like below.</p>
+
+<p><img class="img-responsive" src="/img/openerp/7.png" width="764" height="396" alt="" /></p>
+
+<p>As you can see from that screenshot our model (or object) is called <strong>project.project</strong> We’ll use that in the next step.</p>
+
+<h2 id="making-changes-to-an-existing-model">Making changes to an existing model</h2>
+
+<p>First up we want to tell the OpenERP about the new field, <a href="https://launchpad.net/openobject">OpenObject</a> is the ORM framework behind OpenERP and adding additional fields to existing models is easy.</p>
+
+<p>First up lets create a file inside our <strong>legacy_projects</strong> module and save it it <strong>legacy_projects.py</strong>. We also need to tell our module to load that file, so in the <strong>__init__.py</strong> file put the following:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">legacy_projects</span></code></pre></figure>
+
+<p>Sweet, now in the <strong>legacy_projects.py</strong> file put the following.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">openerp.osv</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">osv</span>
+
+<span class="k">class</span> <span class="nc">legacy_projects</span><span class="p">(</span><span class="n">osv</span><span class="o">.</span><span class="n">osv</span><span class="p">):</span>
+
+  <span class="n">_inherit</span> <span class="o">=</span> <span class="s">&quot;project.project&quot;</span>
+
+  <span class="n">_columns</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;legacy_projects_id&#39;</span><span class="p">:</span> <span class="n">fields</span><span class="o">.</span><span class="n">integer</span><span class="p">(</span><span class="s">&#39;Legacy project ID&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="n">_defaults</span> <span class="o">=</span><span class="p">{</span>
+    <span class="s">&#39;legacy_projects_id&#39;</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="p">}</span>
+
+<span class="n">legacy_projects</span><span class="p">()</span></code></pre></figure>
+
+<p>In the first line we import the required classes, then we define our class.</p>
+
+<p>The real magic starts with the line <strong>_inherit = “project.project</strong> basically we are telling the system that our object inherits an existing object.</p>
+
+<p><strong>_columns</strong> is where we define our field, <strong>legacy_projects_id</strong>. I have created it as an integer, gave it a title and set the max ength to 11.</p>
+
+<p>There is a bunch of different fields you can add to an object, again I wont go into then but you can find all of them <a href="https://doc.openerp.com/trunk/server/03_module_dev_02/#type-of-fields">here</a>.</p>
+
+<p>Lastly we define some <strong>_defaults</strong> for fields. In this instance (while not really helpful, but I put it in for clarity) we default the field <strong>legacy_projects_id</strong> to 0.</p>
+
+<p>That’s the model/object modifications done now. Time to add the interface.</p>
+
+<h2 id="the-user-interface">The user interface</h2>
+
+<p>In OpenERP the UI is controlled and formatted using XML files.</p>
+
+<p>In our module folder create a new file called <strong>legacy_projects.xml</strong>. We also need to let OpenERP know about it, so update the line in the  <strong>__openerp__.py</strong> file that reads:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">[],</span></code></pre></figure>
+
+<p>and make it read:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;legacy_projects.xml&#39;</span><span class="p">],</span></code></pre></figure>
+
+<p>Now in the <strong>legacy_projects.xml</strong> file place the following:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;openerp&gt;</span>
+  <span class="nt">&lt;data&gt;</span>
+    <span class="nt">&lt;record</span> <span class="na">model=</span><span class="s">&quot;ir.ui.view&quot;</span> <span class="na">id=</span><span class="s">&quot;legacy_projects_project&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>project.project.form<span class="nt">&lt;/field&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;model&quot;</span><span class="nt">&gt;</span>project.project<span class="nt">&lt;/field&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;inherit_id&quot;</span> <span class="na">ref=</span><span class="s">&quot;project.edit_project&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;arch&quot;</span> <span class="na">type=</span><span class="s">&quot;xml&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;xpath</span> <span class="na">expr=</span><span class="s">&quot;/form/sheet/group/group[2]/field[@name=&#39;partner_id&#39;]&quot;</span> <span class="na">position=</span><span class="s">&quot;after&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;legacy_projects_id&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/xpath&gt;</span>
+        <span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;/record&gt;</span>
+  <span class="nt">&lt;/data&gt;</span>
+<span class="nt">&lt;/openerp&gt;</span></code></pre></figure>
+
+<p>Without getting into too much detail about the views the important pieces of this code are the <strong>record</strong> tag where we define our view’s id.</p>
+
+<p>Next we have the view <strong>name</strong>, <strong>object</strong> (model) and a <strong>reference</strong> to the view we are inheriting.</p>
+
+<p>Since, we are inheriting another modules view, we dont get to define this info, we have to look it up. To do this information, make sure developer mode is enabled, go to the view we are changing then in the developer drop down menu at the top click on <strong>Manage views</strong> You’ll see something like the following.</p>
+
+<p><img class="img-responsive" src="/img/openerp/8.png" width="1102" height="538" alt="" /></p>
+
+<p>In the table you can see <strong>View name</strong>, <strong>Object</strong> and <strong>External ID</strong> these map to <strong>name</strong>, <strong>model</strong> and <strong>inherit_id</strong> respectfully.</p>
+
+<p>The next section has an Xpath expression in it with the <strong>position</strong> attribute, this tells the system to put the field <strong>legacy_projects_id</strong> AFTER the node represented in the Xpath.</p>
+
+<p>If you’re wondering how you figure out where you want to put the field. Use <strong>Development mode</strong>. While in the <strong>Manage views</strong> section, with the current view selected, click <strong>edit</strong>. That’s your view XML. Cool huh?</p>
+
+<p><img class="img-responsive" src="/img/openerp/9.png" width="969" height="711" alt="" /></p>
+
+<h3 id="cool-now-make-it-work">Cool, now make it work.</h3>
+
+<p>Ok, ok, enough with the details, let’s go turn this thing on. Navigate to <strong>Settings » Installed Modules</strong>. Click on the <strong>Update module list</strong> link on the left, and then like before search for you’re module. This time lets enable it.</p>
+
+<p><strong>NOTE: If the above doesn’t work, you may need to restart the server and then either update or uninstall/install your module</strong></p>
+
+<p>Things should whir away for a while and if all is well, your module will be enabled. Let’s go an create a new project and see, navigate to the <strong>Projects</strong> page and hit <strong>Create</strong></p>
+
+<p><img class="img-responsive" src="/img/openerp/10.png" width="1151" height="528" alt="" /></p>
+
+<p><strong>Bingo</strong> Look now we have a new field under the Customer field <strong>Legacy Project ID</strong> and hovering over it in developer mode, we can see it’s the field we created.</p>
+
+<p><img class="img-responsive" src="/img/openerp/11.png" width="324" height="174" alt="" /></p>
+
+<p>If we create a project and enter a value in this field it will be saved to the database, OpenERP does all the work for us. In fact this post seems awfully long for how little code we’ve actually done. Here is what our saved Project looks like.</p>
+
+<p><img class="img-responsive" src="/img/openerp/12.png" width="910" height="379" alt="" /></p>
+
+<h3 id="are-you-done-yet">Are you done yet?</h3>
+
+<p>So there you have it, doesn’t OpenERP look easy. :D Hopefully this totorial has made sense and has been helpful. I’ve posted the source for the code in this tutorial on github, there’s a link after the article. Let me know in the comments if you have any questions, or if you want me to cover another OpenERP topic.</p>
+
+                </div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+                <script type="text/javascript">
+                    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+                    var disqus_shortname = 'pixelite'; // required: replace example with your forum shortname
+                    var disqus_url = 'http://www.pixelite.co.nz/article/adding-additional-fields-using-custom-module-openerp-7';
+
+                    /* * * DON'T EDIT BELOW THIS LINE * * */
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/article/validate-and-clean-user-submitted-address-data-pygeocoder" data-toggle="tooltip" data-placement="top" title="Validate and clean user submitted address data with pygeocoder">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="http://www.pixelite.co.nz/article/using-apache-libcloud-provision-cloud-servers" data-toggle="tooltip" data-placement="top" title="Using apache-libcloud to provision cloud servers">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<hr>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/pixelite_">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/pixelite-co-nz">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JS libs -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/js/socialite.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/js/clean-blog.js"></script>
+
+<!-- Social links -->
+<script type="text/javascript">
+    (function($) {
+        Socialite.load();
+    })(jQuery);
+</script>
+
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34737960-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>

@@ -126,7 +126,7 @@
 <!-- Main Content -->
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
-    <meta itemprop="wordCount" content="552"/>
+    <meta itemprop="wordCount" content="559"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/measuring-drupal-content-growth-over-time/"/>
 
     <header class="intro-header" style="background-image: url('/img/growth/dark.jpg')">
@@ -172,13 +172,13 @@
 
 <p>Here is a simple SQL statement you can execute on your production database to retrieve a count of nodes created grouped by day.</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">drush --uri<span class="o">=</span>www.example.com sqlq <span class="s2">&quot;SELECT count(nid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&#39;%d-%m-%Y&#39;) AS month FROM node  GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&quot;</span> &gt; /tmp/example-nodes.txt</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">drush --uri<span class="o">=</span>www.example.com sqlq <span class="s2">&quot;SELECT count(nid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&#39;%d-%m-%Y&#39;) AS month FROM node  GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&quot;</span> &gt; /tmp/example-nodes.txt</code></pre></figure>
 
 <p><strong>PostgreSQL users</strong> - you can add a custom function to add <code>FROM_UNIXTIME</code> functionality:</p>
 
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">from_unixtime</span><span class="p">(</span><span class="nb">integer</span><span class="p">)</span> <span class="k">RETURNS</span> <span class="k">timestamp</span> <span class="k">AS</span> <span class="s1">&#39;</span>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">from_unixtime</span><span class="p">(</span><span class="nb">integer</span><span class="p">)</span> <span class="k">RETURNS</span> <span class="k">timestamp</span> <span class="k">AS</span> <span class="s1">&#39;</span>
 <span class="s1">     SELECT to_timestamp($1)::timestamp AS result</span>
-<span class="s1">&#39;</span> <span class="k">LANGUAGE</span> <span class="s1">&#39;SQL&#39;</span><span class="p">;</span></code></pre></div>
+<span class="s1">&#39;</span> <span class="k">LANGUAGE</span> <span class="s1">&#39;SQL&#39;</span><span class="p">;</span></code></pre></figure>
 
 <h3 id="cleaning-up-results">Cleaning up results</h3>
 
@@ -213,7 +213,7 @@ tail /tmp/example-nodes.txt
 
 <p>By default the SQL will return a tab separated values file, and with blank lines in there, lets convert this to CSV and enforce consistent line endings:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">cat /tmp/example-nodes.txt <span class="p">|</span> sed <span class="s1">$&#39;s/\r//&#39;</span> <span class="p">|</span> tr <span class="s2">&quot;\\t&quot;</span> <span class="s2">&quot;,&quot;</span> &gt; /tmp/example-nodes.txt</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">cat /tmp/example-nodes.txt <span class="p">|</span> sed <span class="s1">$&#39;s/\r//&#39;</span> <span class="p">|</span> tr <span class="s2">&quot;\\t&quot;</span> <span class="s2">&quot;,&quot;</span> &gt; /tmp/example-nodes.txt</code></pre></figure>
 
 <h2 id="graphing-results">Graphing results</h2>
 
@@ -229,7 +229,7 @@ tail /tmp/example-nodes.txt
 
 <p>You can extend this method to work with taxonomy terms as well with a slight modification to the SQL (Drupal 7):</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">drush --uri<span class="o">=</span>www.example.com sqlq <span class="s2">&quot;SELECT count(tid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&#39;%d-%m-%Y&#39;) AS month FROM taxonomy_term_data GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&quot;</span> &gt; /tmp/example-terms.txt</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">drush --uri<span class="o">=</span>www.example.com sqlq <span class="s2">&quot;SELECT count(tid) as count, DATE_FORMAT(FROM_UNIXTIME(created),&#39;%d-%m-%Y&#39;) AS month FROM taxonomy_term_data GROUP BY YEAR(FROM_UNIXTIME(created)), MONTH(FROM_UNIXTIME(created)), DAY(FROM_UNIXTIME(created))&quot;</span> &gt; /tmp/example-terms.txt</code></pre></figure>
 
 <h2 id="where-to-from-here">Where to from here</h2>
 
@@ -272,6 +272,10 @@ tail /tmp/example-nodes.txt
                         <a href="/article/integrating-multisite-drupal-with-apache-solr/" data-toggle="tooltip" data-placement="top" title="Integrating multisite Drupal with Apache Solr">&larr; Previous Post</a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="http://www.pixelite.co.nz/article/estimating-drupal-projects/" data-toggle="tooltip" data-placement="top" title="Estimating Drupal projects">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
@@ -322,7 +326,7 @@ tail /tmp/example-nodes.txt
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
             </div>
         </div>
     </div>

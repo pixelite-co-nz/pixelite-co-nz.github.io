@@ -126,7 +126,7 @@
 <!-- Main Content -->
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
-    <meta itemprop="wordCount" content="1128"/>
+    <meta itemprop="wordCount" content="1268"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/debugging-drupal-performance-with-cache-debug/"/>
 
     <header class="intro-header" style="background-image: url('/img/post-bg-hero.png')">
@@ -195,19 +195,19 @@ Drupal has a caching layer to help with this. When you want to store something i
 <h3 id="basic-configuration">Basic configuration</h3>
 <p>If you’ve used the memcache module before, this should feel familiar. In order to use Cache Debug, you need to set it as the cache handler:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_backends&#39;</span><span class="p">][]</span> <span class="o">=</span> <span class="s1">&#39;sites/all/modules/cache_debug/cache_debug.inc&#39;</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_default_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;DrupalDebugCache&#39;</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">?&gt;</span><span class="x"></span></code></pre></figure>
 
 <p>This tells Drupal that there is a cache backend located in the path provided (make sure its correct for your Drupal site!) and that the default class for all cache bins is the DrupalDebugCache class. If you only want to monitor a single bin you may want to omit this option.</p>
 
 <p>Since Cache Debug is a logger and not an actual caching system, it needs to pass cache requests onto a real cache system. By default, Debug Cache will use Drupal core’s Database Cache system for cache storage, but if you’re using memcache, redis or similar, you may want to set that as the handler for Cache Debug:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;MemCacheDrupal&#39;</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_cache_debug_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;DrupalDatabaseCache&#39;</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">?&gt;</span><span class="x"></span></code></pre></figure>
 
 <p>You need to also configure those modules accordingly.</p>
 
@@ -217,38 +217,38 @@ Drupal has a caching layer to help with this. When you want to store something i
 
 <p>You may want to choose your own logging location. For example, if you use dblog, then you won’t want to log to watchdog because it will bloat your database. Likewise, if you don’t want to bloat  our php error log, then you may want to log to an arbitrary file. You can choose your logging location by setting <code>cache_debug_logging_destination</code> to error_log (default), watchdog or file. For file you will also need to provide the location:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_logging_destination&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;file&#39;</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_log_filepath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;/tmp/cachedebug.log&#39;</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">?&gt;</span><span class="x"></span></code></pre></figure>
 
 <h3 id="configuring-logging-options">Configuring logging options</h3>
 
 <p>You can choose to log calls to cache get, getMulti, set and clear. You can also choose to log a stacktrace of these calls to show the stack that triggered the call. This is most useful for calls to SET and CLEAR. For a minimal logging option with the most about of insight, you might want to try this:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_log_get&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">FALSE</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_log_getMulti&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">FALSE</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_log_set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_log_clear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_stacktrace_set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_stacktrace_clear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">?&gt;</span><span class="x"></span></code></pre></figure>
 
 <h3 id="logging-per-cache-bin">Logging per cache bin</h3>
 
 <p>You don’t have to log the entire caching layer if you know which bin to look at for the caching issue you’re observing. For example, if you’re looking for misuse of variable_set, you only need to log the cache_bootstrap bin. In which case you could do this:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="c1"># Do not log to all cache bins so ensure this line is removed (from above):</span>
 <span class="c1"># $conf[&#39;cache_default_class&#39;] = &#39;DrupalDebugCache&#39;;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_bootstrap_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;DrupalDebugCache&#39;</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">?&gt;</span><span class="x"></span></code></pre></figure>
 
 <h3 id="configure-for-common-issues">Configure for common issues</h3>
 <p>Variable set calls and theme registry rebuilds are the two most common issues and so Cache Debug has use cases for these issues built in. So long as Cache Debug is the cache handler for the bin, you can turn off logging and turn on these features and Cache Debug will only log when these issues occur:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_default_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;DrupalDebugCache&#39;</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_common_settings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
   <span class="s1">&#39;variables&#39;</span> <span class="o">=&gt;</span> <span class="k">TRUE</span><span class="p">,</span>
@@ -259,7 +259,7 @@ Drupal has a caching layer to help with this. When you want to store something i
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_log_getMulti&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">FALSE</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_log_set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">FALSE</span><span class="p">;</span>
 <span class="nv">$conf</span><span class="p">[</span><span class="s1">&#39;cache_debug_log_clear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">FALSE</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">?&gt;</span><span class="x"></span></code></pre></figure>
 
 <h2 id="analysing-the-logged-data">Analysing the logged data</h2>
 
@@ -356,7 +356,7 @@ Some calls also log additional data, for example, cache clear also indicates if 
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
             </div>
         </div>
     </div>

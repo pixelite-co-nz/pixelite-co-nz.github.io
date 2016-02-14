@@ -126,7 +126,7 @@
 <!-- Main Content -->
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
     <meta itemprop="inLanguage" content="en-GB"/>
-    <meta itemprop="wordCount" content="1257"/>
+    <meta itemprop="wordCount" content="1357"/>
     <meta itemprop="url" content="http://www.pixelite.co.nz/article/dynamic-content-caching-based-on-attributes-in-drupal-7/"/>
 
     <header class="intro-header" style="background-image: url('/img/cache-attributes.jpg')">
@@ -225,7 +225,7 @@
 
 <p>Rather than using any existing contrib modules, the code required to do what we want is very simple. Here is some simple custom code that can be used as a starting point for your code:</p>
 
-<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="sd">/**</span>
 <span class="sd"> * Implements hook_page_build().</span>
 <span class="sd"> *</span>
@@ -249,7 +249,7 @@
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
-<span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+<span class="cp">?&gt;</span><span class="x"></span></code></pre></figure>
 
 <p>The above example is simple, but hopefully gives you a taste of what can be achieved with very little code.</p>
 
@@ -257,13 +257,13 @@
 
 <p>I have a few cURL aliases in my <code>.bashrc</code> that will come in handy if you do a lot of this type of thing:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># cURL</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># cURL</span>
 <span class="k">function</span> curlh<span class="o">()</span> <span class="o">{</span> curl -sLIXGET <span class="s2">&quot;$@&quot;</span><span class="p">;</span> <span class="o">}</span>
-<span class="k">function</span> curlc<span class="o">()</span> <span class="o">{</span> curl -sLIXGET <span class="s2">&quot;$@&quot;</span> <span class="p">|</span> grep -E -i <span class="s2">&quot;^(Cache-Control|Age|Expires|Set-Cookie|X-Cache|X-Varnish|X-Hits|Vary)&quot;</span><span class="p">;</span> <span class="o">}</span></code></pre></div>
+<span class="k">function</span> curlc<span class="o">()</span> <span class="o">{</span> curl -sLIXGET <span class="s2">&quot;$@&quot;</span> <span class="p">|</span> grep -E -i <span class="s2">&quot;^(Cache-Control|Age|Expires|Set-Cookie|X-Cache|X-Varnish|X-Hits|Vary)&quot;</span><span class="p">;</span> <span class="o">}</span></code></pre></figure>
 
 <p>So if you are after all response headers you can:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>curlh www.example.com
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>curlh www.example.com
 HTTP/1.1 <span class="m">200</span> OK
 Accept-Ranges: bytes
 Cache-Control: max-age<span class="o">=</span>604800
@@ -277,15 +277,15 @@ X-Cache: HIT
 x-ec-custom-error: 1
 Content-Length: 1270
 Connection: Keep-Alive
-Age: 2265</code></pre></div>
+Age: 2265</code></pre></figure>
 
 <p>If you just want the relevant caching response headers:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>curlc www.example.com
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>curlc www.example.com
 Cache-Control: max-age<span class="o">=</span>604800
 Expires: Sun, <span class="m">13</span> Sep <span class="m">2015</span> 22:52:40 GMT
 X-Cache: HIT
-Age: 2249</code></pre></div>
+Age: 2249</code></pre></figure>
 
 <h3 id="what-this-technique-relies-on">What this technique relies on</h3>
 
@@ -379,7 +379,7 @@ Age: 2249</code></pre></div>
                     </li>
                     
                 </ul>
-                <p class="copyright text-muted">&copy; Pixelite 2015 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+                <p class="copyright text-muted">&copy; Pixelite 2016 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
             </div>
         </div>
     </div>

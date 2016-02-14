@@ -15,6 +15,9 @@ paginate: 21
 exclude: ["node_modules"]
 highlighter: pygments
 
+# gems
+gems: ["jekyll-paginate"]
+
 # Thumbnail settings.
 # @see https://github.com/zroger/jekyll-minimagick
 mini_magick:

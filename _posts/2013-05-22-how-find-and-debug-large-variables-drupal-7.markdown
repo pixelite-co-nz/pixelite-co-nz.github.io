@@ -1,7 +1,8 @@
 ---
 layout: post
 title: How to find and debug large variables in Drupal 7
-permalink: /article/how-find-and-debug-large-variables-drupal-7
+permalink: /article/how-find-and-debug-large-variables-drupal-7/
+permalink-disqus: /article/how-find-and-debug-large-variables-drupal-7
 author: "Sean Hamlin"
 categories:
 - tutorial

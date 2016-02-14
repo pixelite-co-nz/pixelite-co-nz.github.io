@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Guzzle for HTTP POST authentication and form submission with Symfony 2.0"
-permalink: /article/guzzle-http-post-authentication-and-form-submission-symfony-20
+permalink: /article/guzzle-http-post-authentication-and-form-submission-symfony-20/
+permalink-disqus: /article/guzzle-http-post-authentication-and-form-submission-symfony-20
 author: "Adam Bramley"
 categories:
 - tutorial

@@ -2,7 +2,8 @@
 layout: post
 title: "How computers see. A simple introduction to computer vision"
 header-img: "img/cv/Jonny5_1.png"
-permalink: /article/how-computers-see-simple-introduction-computer-vision
+permalink: /article/how-computers-see-simple-introduction-computer-vision/
+permalink-disqus: /article/how-computers-see-simple-introduction-computer-vision
 author: "Craig Pearson"
 categories:
 - tutorial

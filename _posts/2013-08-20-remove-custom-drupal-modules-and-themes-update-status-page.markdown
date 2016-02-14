@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Remove custom Drupal modules and themes from the update status page
-permalink: /article/remove-custom-drupal-modules-and-themes-update-status-page
+permalink: /article/remove-custom-drupal-modules-and-themes-update-status-page/
+permalink-disqus: /article/remove-custom-drupal-modules-and-themes-update-status-page
 author: "Sean Hamlin"
 categories:
 - tutorial

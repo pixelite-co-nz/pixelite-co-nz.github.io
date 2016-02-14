@@ -4,7 +4,8 @@ title: "Extracting a file or a folder from a git repository with full git histor
 subtitle: "Simple git commands to save you"
 excerpt: "Rather that performing a simple file copy and losing all git history, it is actually quite simple to extract the file or folder with full commit history."
 header-img: "img/post-bg-05.jpg"
-permalink: /article/extracting-file-folder-from-git-repository-with-full-git-history
+permalink: /article/extracting-file-folder-from-git-repository-with-full-git-history/
+permalink-disqus: /article/extracting-file-folder-from-git-repository-with-full-git-history
 author: "Sean Hamlin"
 categories:
 - tutorial

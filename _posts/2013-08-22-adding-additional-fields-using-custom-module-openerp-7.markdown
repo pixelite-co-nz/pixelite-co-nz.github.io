@@ -3,7 +3,8 @@ layout: post
 title: Adding additional fields using a custom module in OpenERP 7
 header-img: "img/post-bg-openerp.png"
 subtitle: "My eyes, the goggles do nothing!"
-permalink: /article/adding-additional-fields-using-custom-module-openerp-7
+permalink: /article/adding-additional-fields-using-custom-module-openerp-7/
+permalink-disqus: /article/adding-additional-fields-using-custom-module-openerp-7
 author: "Craig Pearson"
 categories:
 - tutorial

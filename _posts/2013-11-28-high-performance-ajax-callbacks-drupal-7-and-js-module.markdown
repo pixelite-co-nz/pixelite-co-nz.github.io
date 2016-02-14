@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "High performance AJAX callbacks with Drupal 7 and the JS module"
-permalink: /article/high-performance-ajax-callbacks-drupal-7-and-js-module
+permalink: /article/high-performance-ajax-callbacks-drupal-7-and-js-module/
+permalink-disqus: /article/high-performance-ajax-callbacks-drupal-7-and-js-module
 author: "Sean Hamlin"
 categories:
 - tutorial

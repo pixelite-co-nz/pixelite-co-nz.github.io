@@ -3,7 +3,8 @@ layout: post
 title: Using Snap.svg for rich interactivity
 subtitle: "A quick intro into using Snap.svg"
 header-img: "img/snap/background.jpg"
-permalink: /article/using-snap-svg-for-rich-interactivity
+permalink: /article/using-snap-svg-for-rich-interactivity/
+permalink-disqus: /article/using-snap-svg-for-rich-interactivity
 author: "Craig Pearson"
 categories:
 - tutorial

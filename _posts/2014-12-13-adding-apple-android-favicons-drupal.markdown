@@ -4,7 +4,8 @@ title: "Adding Apple and Android favicons to Drupal"
 subtitle: "Icons on all the things"
 excerpt: "As you end up building more and more websites that target mobile devices (e.g. iPhone, iPad, Android, Windows), you need to supply an ever increasing amount of favicons."
 header-img: "img/post-bg-favicon.png"
-permalink: /article/adding-apple-android-favicons-drupal
+permalink: /article/adding-apple-android-favicons-drupal/
+permalink-disqus: /article/adding-apple-android-favicons-drupal
 author: "Sean Hamlin"
 categories:
 - tutorial

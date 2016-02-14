@@ -3,7 +3,8 @@ layout: post
 title: Attaching AJAX events to non-form page elements in Drupal
 header-img: "img/post-bg-01.jpg"
 subtitle: "Making AJAX request in Drupal using the form API is real nice and simple"
-permalink: /article/attaching-ajax-events-non-form-page-elements-drupal
+permalink: /article/attaching-ajax-events-non-form-page-elements-drupal/
+permalink-disqus: /article/attaching-ajax-events-non-form-page-elements-drupal
 author: "Craig Pearson"
 categories:
 - tutorial

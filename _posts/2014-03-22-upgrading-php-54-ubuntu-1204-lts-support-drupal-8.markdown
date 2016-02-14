@@ -3,7 +3,8 @@ layout: post
 title: "Upgrading PHP to 5.4 on Ubuntu 12.04 LTS to support Drupal 8"
 excerpt: "As of the 28 February 2014, Drupal 8 now requires a minimum PHP version of 5.4.2."
 header-img: "img/upgradingphp/php_minimum_web.png"
-permalink: /article/upgrading-php-54-ubuntu-1204-lts-support-drupal-8
+permalink: /article/upgrading-php-54-ubuntu-1204-lts-support-drupal-8/
+permalink-disqus: /article/upgrading-php-54-ubuntu-1204-lts-support-drupal-8
 author: "Sean Hamlin"
 categories:
 - tutorial

@@ -3,7 +3,8 @@ layout: post
 title: "Convert an existing textfield into a textarea in Drupal 7"
 header-img: "img/post-bg-02.jpg"
 subtitle: "SQL to the rescue"
-permalink: /article/convert-existing-textfield-textarea-drupal-7
+permalink: /article/convert-existing-textfield-textarea-drupal-7/
+permalink-disqus: /article/convert-existing-textfield-textarea-drupal-7
 author: "Sean Hamlin"
 categories:
 - tutorial

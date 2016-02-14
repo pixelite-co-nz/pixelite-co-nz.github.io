@@ -10,7 +10,7 @@ facebook_username:
 
 # Build settings.
 markdown: kramdown
-permalink: /article/:title
+permalink: /article/:title/
 paginate: 21
 exclude: ["node_modules"]
 highlighter: pygments

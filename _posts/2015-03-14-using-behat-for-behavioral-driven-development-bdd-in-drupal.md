@@ -4,7 +4,8 @@ title: "Using Behat for Behavioral Driven Development (BDD) in Drupal"
 subtitle: "How to get this done in Drupal"
 excerpt: "BDD allows you to write human readable stories that describe the behavior of your website."
 header-img: "img/plane.jpg"
-permalink: /article/using-behat-for-behavioral-driven-development-bdd-in-drupal
+permalink: /article/using-behat-for-behavioral-driven-development-bdd-in-drupal/
+permalink-disqus: /article/using-behat-for-behavioral-driven-development-bdd-in-drupal
 author: "Sean Hamlin"
 categories:
 - tutorial

@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "A practical example for converting a Drupal 7 module to work with Drupal 8"
-permalink: /article/practical-example-converting-drupal-7-module-work-drupal-8
+permalink: /article/practical-example-converting-drupal-7-module-work-drupal-8/
+permalink-disqus: /article/practical-example-converting-drupal-7-module-work-drupal-8
 author: "Sean Hamlin"
 categories:
 - tutorial

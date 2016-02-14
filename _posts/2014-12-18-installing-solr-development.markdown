@@ -3,7 +3,8 @@ layout: post
 title: Installing Solr for development
 subtitle: "Simple Solr server setup for use while developing"
 header-img: "img/solr/solr1.jpg"
-permalink: /article/installing-solr-development
+permalink: /article/installing-solr-development/
+permalink-disqus: /article/installing-solr-development
 author: "Craig Pearson"
 categories:
 - tutorial

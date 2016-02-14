@@ -2,7 +2,8 @@
 layout: post
 title: "Error aggregation and alerting with Drupal 7 and Raygun.io"
 header-img: "img/post-bg-raygun.png"
-permalink: /article/error-aggregation-and-alerting-drupal-7-and-raygunio
+permalink: /article/error-aggregation-and-alerting-drupal-7-and-raygunio/
+permalink-dsiqus: /article/error-aggregation-and-alerting-drupal-7-and-raygunio
 author: "Sean Hamlin"
 categories:
 - tutorial

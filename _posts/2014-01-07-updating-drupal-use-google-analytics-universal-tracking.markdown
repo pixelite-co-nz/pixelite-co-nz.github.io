@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Updating Drupal to use Google Analytics Universal tracking
-permalink: /article/updating-drupal-use-google-analytics-universal-tracking
+permalink: /article/updating-drupal-use-google-analytics-universal-tracking/
+permalink-disqus: /article/updating-drupal-use-google-analytics-universal-tracking
 author: "Sean Hamlin"
 categories:
 - tutorial

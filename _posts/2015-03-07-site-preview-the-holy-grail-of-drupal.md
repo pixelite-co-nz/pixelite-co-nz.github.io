@@ -4,7 +4,8 @@ title: "Site preview - the holy grail of Drupal"
 subtitle: "Also introducing a new module preview sync"
 excerpt: "So recently I did a talk at DrupalSouth Melbourne on site preview solutions that exist within Drupal at present. I noticed that no one had managed to do a comparison between them as they stand at the moment, so I aimed to help out there."
 header-img: "img/post-bg-01.jpg"
-permalink: /article/site-preview-the-holy-grail-of-drupal
+permalink: /article/site-preview-the-holy-grail-of-drupal/
+permalink-disqus: /article/site-preview-the-holy-grail-of-drupal
 author: "Sean Hamlin"
 categories:
 - tutorial

@@ -2,7 +2,8 @@
 layout: post
 title: Validate and clean user submitted address data with pygeocoder
 header-img: "img/casperjs.jpg"
-permalink: /article/validate-and-clean-user-submitted-address-data-pygeocoder
+permalink: /article/validate-and-clean-user-submitted-address-data-pygeocoder/
+permalink-disqus: /article/validate-and-clean-user-submitted-address-data-pygeocoder
 author: "Craig Pearson"
 categories:
 - tutorial

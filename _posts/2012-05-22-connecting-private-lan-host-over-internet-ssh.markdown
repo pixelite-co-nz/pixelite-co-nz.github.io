@@ -2,7 +2,8 @@
 layout: post
 title: "Connecting to a private LAN host over the internet via SSH."
 header-img: "img/post-bg-03.jpg"
-permalink: /article/connecting-private-lan-host-over-internet-ssh
+permalink: /article/connecting-private-lan-host-over-internet-ssh/
+permalink-disqus: /article/connecting-private-lan-host-over-internet-ssh
 author: "Craig Pearson"
 categories:
 - tutorial

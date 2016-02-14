@@ -3,7 +3,8 @@ layout: post
 title: Backing up content via email to GMail
 header-img: "img/post-bg-02.jpg"
 subtitle: "Make use of all that storage"
-permalink: /article/backing-content-email-gmail
+permalink: /article/backing-content-email-gmail/
+permalink-disqus: /article/backing-content-email-gmail
 author: "Craig Pearson"
 categories:
 - tutorial

@@ -3,7 +3,8 @@ layout: post
 title: "Building custom content panes (aka ctools content types) in panels 3, and Drupal 7"
 header-img: "img/post-bg-pane.jpg"
 subtitle: "Custom panes > blocks"
-permalink: /article/building-custom-content-panes-aka-ctools-content-types-panels-3-and-drupal-7
+permalink: /article/building-custom-content-panes-aka-ctools-content-types-panels-3-and-drupal-7/
+permalink-disqus: /article/building-custom-content-panes-aka-ctools-content-types-panels-3-and-drupal-7
 author: "Sean Hamlin"
 categories:
 - tutorial

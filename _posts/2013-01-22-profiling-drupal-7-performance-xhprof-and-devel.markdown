@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Profiling Drupal 7 performance with XHProf and Devel"
-permalink: /article/profiling-drupal-7-performance-xhprof-and-devel
+permalink: /article/profiling-drupal-7-performance-xhprof-and-devel/
+permalink-disqus: /article/profiling-drupal-7-performance-xhprof-and-devel
 author: "Craig Pearson"
 categories:
 - tutorial

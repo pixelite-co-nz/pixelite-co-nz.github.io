@@ -2,7 +2,8 @@
 layout: post
 title: Why I use CasperJS for regression testing web applications
 header-img: "img/casperjs.jpg"
-permalink: /article/why-i-use-casperjs-regression-testing-web-applications
+permalink: /article/why-i-use-casperjs-regression-testing-web-applications/
+permalink-disqus: /article/why-i-use-casperjs-regression-testing-web-applications
 author: "Sean Hamlin"
 categories:
 - tutorial

@@ -2,7 +2,8 @@
 layout: post
 title: "How to create a dashboard with Dashing and integrate with Drupal data"
 header-img: "img/dashing/dashboard.png"
-permalink: /article/how-create-dashboard-dashing-and-integrate-drupal-data
+permalink: /article/how-create-dashboard-dashing-and-integrate-drupal-data/
+permalink-disqus: /article/how-create-dashboard-dashing-and-integrate-drupal-data
 author: "Sean Hamlin"
 categories:
 - tutorial

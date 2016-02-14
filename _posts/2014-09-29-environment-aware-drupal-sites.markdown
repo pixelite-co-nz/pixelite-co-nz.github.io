@@ -2,7 +2,8 @@
 layout: post
 title: "Environment aware Drupal sites"
 header-img: "img/post-bg-01.jpg"
-permalink: /article/environment-aware-drupal-sites
+permalink: /article/environment-aware-drupal-sites/
+permalink-disqus: /article/environment-aware-drupal-sites
 author: "Sean Hamlin"
 categories:
 - tutorial

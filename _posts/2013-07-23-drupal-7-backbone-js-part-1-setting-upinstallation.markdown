@@ -2,7 +2,8 @@
 layout: post
 title: "Drupal 7 & Backbone JS: Part 1 - Setting up/Installation"
 header-img: "img/post-bg-01.jpg"
-permalink: /article/drupal-7-backbone-js-part-1-setting-upinstallation
+permalink: /article/drupal-7-backbone-js-part-1-setting-upinstallation/
+permalink-disqus: /article/drupal-7-backbone-js-part-1-setting-upinstallation
 author: "Adam Bramley"
 categories:
 - tutorial

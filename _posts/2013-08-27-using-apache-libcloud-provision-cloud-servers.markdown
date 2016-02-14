@@ -2,7 +2,8 @@
 layout: post
 title: Using apache-libcloud to provision cloud servers
 header-img: "img/libcloud/libcloud2.png"
-permalink: /article/using-apache-libcloud-provision-cloud-servers
+permalink: /article/using-apache-libcloud-provision-cloud-servers/
+permalink-disqus: /article/using-apache-libcloud-provision-cloud-servers
 author: "Craig Pearson"
 categories:
 - tutorial

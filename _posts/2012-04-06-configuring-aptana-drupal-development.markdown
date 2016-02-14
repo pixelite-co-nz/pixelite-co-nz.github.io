@@ -3,7 +3,8 @@ layout: post
 title: "Configuring Aptana for Drupal development"
 header-img: "img/post-bg-hero.png"
 subtitle: "Eclipse on steroids"
-permalink: /article/configuring-aptana-drupal-development
+permalink: /article/configuring-aptana-drupal-development/
+permalink-disqus: /article/configuring-aptana-drupal-development
 author: "Sean Hamlin"
 categories:
 - tutorial

@@ -10,6 +10,79 @@
     <language>en</language>
     
       <item>
+        <title>Deleting multiple fields with large amounts of data in Drupal 7</title>
+        <link>http://www.pixelite.co.nz/article/deleting-multiple-fields-with-large-amounts-of-data-in-drupal-7/</link>
+        <description>&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;I was recently tasked with cleaning up a legacy Drupal 7 database to which had accumulated a lot of data in several fields. The fields were no longer used, and the data could be deleted. The data however totalled more than &lt;em&gt;30 GB&lt;/em&gt; with those 7 fields, and this presented a few challenges.&lt;/p&gt;
+
+&lt;h2 id=&quot;existing-solutions-that-did-not-quite-cut-it&quot;&gt;Existing solutions that did not quite cut it&lt;/h2&gt;
+
+&lt;p&gt;I search around the internet to see the best way to delete fields in Drupal 7 using an update hook. I came across this &lt;a href=&quot;http://drupal.stackexchange.com/questions/46085/how-to-programmatically-remove-a-field-from-a-node&quot;&gt;stack overflow post&lt;/a&gt; to which advised using something like:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;EXAMPLE_update_7001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;field_delete_field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;field_name&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;field_purge_batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The main issue with the above code is that it only marks the data for deletion, and then slowly removes it on cron. This could take  weeks to fully remove the data. It was not an ideal solution in our case.&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+
+&lt;p&gt;If you want to expatiate the process of removing data from fields, and also the fields themselves, we found the code below would remove the 30 GB of data, remove the tables, update the content types, all in one nice update hook. It does rely on having removed the fields from your features, so that are the respective content type can be reverted successfully.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;EXAMPLE_update_7001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$fields_to_delete&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_a&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_b&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_c&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_d&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_e&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_f&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_g&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$fields_to_delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;db_truncate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;field_data_&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;db_truncate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;field_revision_&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;field_delete_field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;watchdog&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;EXAMPLE&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Deleted the field @field from all content types.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;@field&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * The fields aren&amp;#39;t really deleted until the purge function runs, ordinarily&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * during cron. Count the number of fields we need to purge, and add five in&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * case a few other miscellaneous fields are in there somehow.&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;field_purge_batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$fields_to_delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// Revert features to update the content type in Drupal to drop the field.&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;features_revert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;EXAMPLE&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;field&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)));&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;A couple of lessons can be learnt here&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Truncations, even on large data sets, are extremely quick, and awesome. The above update hook takes less than 1 minute to run end to end.&lt;/li&gt;
+  &lt;li&gt;If you are going to programmatically update nodes with a high degree of frequency, consider &lt;a href=&quot;https://www.drupal.org/project/field_sql_norevisions&quot;&gt;disabling revisions&lt;/a&gt; on those content types. Your database thanks you in advance.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you have had to delete fields in update hooks in Drupal, let me know if you used another method and how that went for you.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Wed, 17 Feb 2016 00:00:00 +1300</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/deleting-multiple-fields-with-large-amounts-of-data-in-drupal-7/</guid>
+        <comments>http://www.pixelite.co.nz/article/deleting-multiple-fields-with-large-amounts-of-data-in-drupal-7/#disqus_thread</comments>
+      </item>
+    
+      <item>
         <title>Estimating Drupal projects</title>
         <link>http://www.pixelite.co.nz/article/estimating-drupal-projects/</link>
         <description>&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
@@ -989,73 +1062,6 @@ string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot
         <dc:creator>Sean Hamlin</dc:creator>
         <guid isPermaLink="true">http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/</guid>
         <comments>http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/#disqus_thread</comments>
-      </item>
-    
-      <item>
-        <title>Site preview - the holy grail of Drupal</title>
-        <link>http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal/</link>
-        <description>&lt;h2 id=&quot;what-is-site-preview&quot;&gt;What is site preview&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;The ability to see (and have selected others see) changes to content and layout that is not yet visible to the general public&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;So recently I did a talk at &lt;a href=&quot;https://melbourne2015.drupal.org.au/session/site-preview-holy-grail-drupal&quot;&gt;DrupalSouth Melbourne&lt;/a&gt; on site preview solutions that exist within Drupal at present. I noticed that no one had managed to do a comparison between them as they stand at the moment, so I aimed to help out there.&lt;/p&gt;
-
-&lt;p&gt;Solutions compared in the talk:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Drupal 7 (stock)&lt;/li&gt;
-  &lt;li&gt;SPS&lt;/li&gt;
-  &lt;li&gt;CPS&lt;/li&gt;
-  &lt;li&gt;Zariz&lt;/li&gt;
-  &lt;li&gt;Live preview&lt;/li&gt;
-  &lt;li&gt;What is coming in Drupal 8&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I also wanted to introduce the new solution that was developed for the Ministry of Health New Zealand, that aimed to solve site preview in an entirely different manner.&lt;/p&gt;
-
-&lt;h2 id=&quot;slides&quot;&gt;Slides&lt;/h2&gt;
-
-&lt;p&gt;Here are my &lt;a href=&quot;http://bit.ly/drupalsouthsitepreview&quot;&gt;full slides&lt;/a&gt; from the talk if you want to read about the above options in more detail.&lt;/p&gt;
-
-&lt;h2 id=&quot;how-preview-sync-is-different&quot;&gt;How preview sync is different&lt;/h2&gt;
-
-&lt;p&gt;Instead of try to take over your production site, and pollute it with complex revisioning and access control, and altering your EFQ and views using magic, it instead works with your existing workflow (workbench_moderation integration is &lt;abbr title=&quot;out of the box&quot;&gt;OOTB&lt;/abbr&gt;), and aims to be a lightweight solution.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/site-preview/diagram.png&quot; alt=&quot;Preview sync syndicates your production database to a separate preview environment&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Preview sync, takes a live snapshot (optimised) of your production database, and imports this to a separate dedicated preview environment. Then a number of actions take place, all of which are entirely alterable, so you can add your own tasks in, and remove tasks you don’t need.&lt;/p&gt;
-
-&lt;p&gt;Example tasks in preview sync:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;environment switch to preview, this allows you to enable and disable modules, perform actions (e.g. redirecting email to a log). This is a powerful hook.&lt;/li&gt;
-  &lt;li&gt;publish the content currently in ‘Needs Review’, this allows your content approvers to see the content, including all surrounding content as if it was published on production, but in a safe and controlled environment&lt;/li&gt;
-  &lt;li&gt;re-index solr, if your site is largely driven by Apache Solr (which is not uncommon), this will allow the newly published content above to be inserted into the preview Solr index. This is a unique feature&lt;/li&gt;
-  &lt;li&gt;your task here, seriously, the task list is completely alterable, and any drush command can be remotely executed on the preview environment. Custom drush commands can be added. An example of which is the bundled workbench-moderation-publish drush command.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;security&quot;&gt;Security&lt;/h3&gt;
-
-&lt;p&gt;As all the complex access control is not needed on production (e.g. you are never sending un-published content to Solr), there is a huge security benefit to using preview sync. Access control to nodes is kept simple on production.&lt;/p&gt;
-
-&lt;p&gt;Also, as the preview environment is dedicated, you can lock down access, e.g. only allow access to your preview site from certain IPs. This way, your internal content approvers can still see the content, and no one else.&lt;/p&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;If preview sync sounds like it could be useful to you, I am keen to know - please leave a comment below. I am also keen to hear if&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;there is a missing feature that is needed for you to adopt preview sync&lt;/li&gt;
-  &lt;li&gt;key integrations with other contributed modules are missing&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Sat, 07 Mar 2015 00:00:00 +1300</pubDate>
-        <dc:creator>Sean Hamlin</dc:creator>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal/</guid>
-        <comments>http://www.pixelite.co.nz/article/site-preview-the-holy-grail-of-drupal/#disqus_thread</comments>
       </item>
     
   </channel>

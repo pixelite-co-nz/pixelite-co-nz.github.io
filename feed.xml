@@ -8,9 +8,92 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 15 Feb 2016 10:42:49 +1300</pubDate>
-    <lastBuildDate>Mon, 15 Feb 2016 10:42:49 +1300</lastBuildDate>
+    <pubDate>Wed, 17 Feb 2016 21:49:13 +1300</pubDate>
+    <lastBuildDate>Wed, 17 Feb 2016 21:49:13 +1300</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>Deleting multiple fields with large amounts of data in Drupal 7</title>
+        <description>&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;I was recently tasked with cleaning up a legacy Drupal 7 database to which had accumulated a lot of data in several fields. The fields were no longer used, and the data could be deleted. The data however totalled more than &lt;em&gt;30 GB&lt;/em&gt; with those 7 fields, and this presented a few challenges.&lt;/p&gt;
+
+&lt;h2 id=&quot;existing-solutions-that-did-not-quite-cut-it&quot;&gt;Existing solutions that did not quite cut it&lt;/h2&gt;
+
+&lt;p&gt;I search around the internet to see the best way to delete fields in Drupal 7 using an update hook. I came across this &lt;a href=&quot;http://drupal.stackexchange.com/questions/46085/how-to-programmatically-remove-a-field-from-a-node&quot;&gt;stack overflow post&lt;/a&gt; to which advised using something like:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;EXAMPLE_update_7001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;field_delete_field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;field_name&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;field_purge_batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The main issue with the above code is that it only marks the data for deletion, and then slowly removes it on cron. This could take  weeks to fully remove the data. It was not an ideal solution in our case.&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+
+&lt;p&gt;If you want to expatiate the process of removing data from fields, and also the fields themselves, we found the code below would remove the 30 GB of data, remove the tables, update the content types, all in one nice update hook. It does rely on having removed the fields from your features, so that are the respective content type can be reverted successfully.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;EXAMPLE_update_7001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;$fields_to_delete&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_a&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_b&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_c&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_d&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_e&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_f&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;field_example_g&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$fields_to_delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;db_truncate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;field_data_&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;db_truncate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;field_revision_&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;field_delete_field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;watchdog&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;EXAMPLE&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Deleted the field @field from all content types.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;@field&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * The fields aren&amp;#39;t really deleted until the purge function runs, ordinarily&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * during cron. Count the number of fields we need to purge, and add five in&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * case a few other miscellaneous fields are in there somehow.&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;field_purge_batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$fields_to_delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// Revert features to update the content type in Drupal to drop the field.&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;features_revert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;EXAMPLE&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;field&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)));&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;A couple of lessons can be learnt here&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Truncations, even on large data sets, are extremely quick, and awesome. The above update hook takes less than 1 minute to run end to end.&lt;/li&gt;
+  &lt;li&gt;If you are going to programmatically update nodes with a high degree of frequency, consider &lt;a href=&quot;https://www.drupal.org/project/field_sql_norevisions&quot;&gt;disabling revisions&lt;/a&gt; on those content types. Your database thanks you in advance.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you have had to delete fields in update hooks in Drupal, let me know if you used another method and how that went for you.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Wed, 17 Feb 2016 00:00:00 +1300</pubDate>
+        <link>http://www.pixelite.co.nz/article/deleting-multiple-fields-with-large-amounts-of-data-in-drupal-7/</link>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/deleting-multiple-fields-with-large-amounts-of-data-in-drupal-7/</guid>
+        
+        <category>drupal</category>
+        
+        <category>drupalplanet</category>
+        
+        <category>updatehook</category>
+        
+        <category>database</category>
+        
+        
+        <category>tutorial</category>
+        
+      </item>
     
       <item>
         <title>Estimating Drupal projects</title>
@@ -1215,83 +1298,6 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
         <category>drupalcon</category>
         
         <category>bestof</category>
-        
-        
-        <category>tutorial</category>
-        
-      </item>
-    
-      <item>
-        <title>Drupal Migrate D2D :: Taxonomy terms on nodes</title>
-        <description>&lt;p&gt;A migration project I am currently working on hit a small hurdle with taxonomy terms on a content type. This took too long to resolve. Hopefully posting this here will save others the time and hassle I went though.&lt;/p&gt;
-
-&lt;h2 id=&quot;migrate-d2d&quot;&gt;Migrate D2D&lt;/h2&gt;
-&lt;p&gt;I am going to assume that if you are reading this you are already using the &lt;a href=&quot;https://www.drupal.org/project/migrate_d2d&quot;&gt;migrate_d2d&lt;/a&gt; module so I won’t go into the big explanation about what it is, why you should use it and just how greatful we all should be to &lt;a href=&quot;https://www.drupal.org/u/mikeryan&quot;&gt;Mike Ryan&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;node-migration-and-taxonomies&quot;&gt;Node migration and taxonomies&lt;/h2&gt;
-&lt;p&gt;After following the docs I found that my taxonomy field was not being populated. A little digging led me to the conclusion that this was not something d2d handled out of the box and it was something I would have to deal with myself. There are a number of moving parts involved with this and due to all of these I can understand &lt;em&gt;why&lt;/em&gt; it is not something migrate d2d could do.&lt;/p&gt;
-
-&lt;h3 id=&quot;public-function-prepareentity-row&quot;&gt;public function prepare($entity, $row)&lt;/h3&gt;
-&lt;p&gt;The magic happens here.  The &lt;code&gt;prepare()&lt;/code&gt; function is the final thing to be called before the node object is saved. This is where we get to do any final tweaks or tidyups. You can find full detail on this in the &lt;a href=&quot;https://www.drupal.org/node/1132582&quot;&gt;Commonly implemented Migration methods&lt;/a&gt; page in the &lt;a href=&quot;https://www.drupal.org/migrate&quot;&gt;Migrate handbook&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In the &lt;code&gt;prepare()&lt;/code&gt; function the &lt;code&gt;$entity&lt;/code&gt; is the new object that we are about to save and the &lt;code&gt;$row&lt;/code&gt; is our source object. At this point the taxonomy has been added to the &lt;code&gt;$row&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Within the &lt;code&gt;$row&lt;/code&gt; object the taxonomy has been added with its vid as the root level attribute. If you don’t know to watch for that it can catch you. Added to that it is the vid of the destination vocabulary that is used which caught me off guard. The situation I had did not have me migrating the vobacularies, just the terms within them and the vid for the Categories vocab was not the same on my development environment as it was on my staging environment. This caught me out initially as I don’t have direct access to the staging database to examine the content of tables.&lt;/p&gt;
-
-&lt;figure&gt;
-  &lt;img src=&quot;http://www.pixelite.co.nz/img/migrate-d2d/row_object_krumo.png&quot; alt=&quot;Krumo output of $row.&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;
-  &lt;figcaption&gt;&lt;small&gt;source $row-&amp;gt;{destination vid} = array({source tid}, {source tid}, {source tid})&lt;/small&gt;&lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;Once it was realised that the vid was from the destination vocabulary things got easier.  This is how the code looked in the end for me;&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;prepare&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// The node&amp;#39;s terms are in an array under their destination vocab ID and&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// this is different from environment to environment. However, we&amp;#39;ve only&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// got one taxonomy...&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;$keys&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;array_keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$keys&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;is_numeric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;$cat_vid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;empty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$cat_vid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$cat_vid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$tid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// We want the tid of the term we have migrated. This lets us look it up&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// our migrate_map table.&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;$new_tid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;db_select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;migrate_map_tncategoryterms&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;m&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fields&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;m&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;destid1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;condition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;sourceid1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$tid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fetchField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;$node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;field_category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;LANGUAGE_NONE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;tid&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$new_tid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;h3 id=&quot;caveats&quot;&gt;Caveats&lt;/h3&gt;
-&lt;p&gt;This worked for me because I only had &lt;strong&gt;one&lt;/strong&gt; taxonomy field to worry about. The moment you get more than one you will want to revisit the assignment of $new_tid to the appropriate field. This shouldn’t be a problem to hand code and if you have migrated the vocabularies too you may be able to use the migrate_map table to make something more dynamic.&lt;/p&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;If you have (or are currently) using migrate I would be interested to hear how you found it. Especially if you are migrating terms, but not the vocabulary.&lt;/p&gt;
-
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Thu, 14 May 2015 00:00:00 +1200</pubDate>
-        <link>http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/</link>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/</guid>
-        
-        <category>drupal</category>
-        
-        <category>drupalplanet</category>
-        
-        <category>migrate</category>
-        
-        <category>migrated2d</category>
         
         
         <category>tutorial</category>

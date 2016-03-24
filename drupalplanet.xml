@@ -10,6 +10,166 @@
     <language>en</language>
     
       <item>
+        <title>Writing PHPunit tests for your custom modules in Drupal 8</title>
+        <link>http://www.pixelite.co.nz/article/writing-phpunit-tests-for-your-custom-modules-in-drupal-8/</link>
+        <description>&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;I have been doing a bit of Drupal 8 development as of recent, and am loving the new changes, and entities everywhere. I am passionate about automated testing, and when I saw that integrating PHPunit into your custom modules is now even easier, I set out to see how this all worked.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-is-phpunit-important&quot;&gt;Why is PHPunit important&lt;/h2&gt;
+
+&lt;p&gt;There are are number of reasons why PHPunit is a great idea&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;it forces you to write testable code in the first place, this means small classes, with methods that do a single thing&lt;/li&gt;
+  &lt;li&gt;it runs in only a few seconds, there is also no need to have a working Drupal install&lt;/li&gt;
+  &lt;li&gt;integrates with PHPStorm, allowing you run your tests from within the IDE&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-1-set-up-your-phpunitxmldist-file&quot;&gt;Step 1, set up your phpunit.xml.dist file&lt;/h2&gt;
+
+&lt;p&gt;There is a file that comes included with Drupal 8 core, but by default it will not scan any sub-directories under &lt;code&gt;/modules&lt;/code&gt; (e.g. like the very common &lt;code&gt;/modules/custom&lt;/code&gt;). I stumbled across this question on &lt;a href=&quot;http://drupal.stackexchange.com/questions/162719/phpunit-with-custom-contrib-and-submodules-structure&quot;&gt;stackoverflow&lt;/a&gt;. So you have a couple of options from here:&lt;/p&gt;
+
+&lt;h3 id=&quot;option-1---create-and-use-your-own-phpunitxmldist-file&quot;&gt;Option 1 - Create and use your own phpunit.xml.dist file&lt;/h3&gt;
+
+&lt;p&gt;You can simply copy (and modify) Drupal 8 core’s phpunit.xml.dist file into git repo somewhere (perhaps outside the webroot), and use this file for all your custom module tests.&lt;/p&gt;
+
+&lt;h3 id=&quot;option-2---patch-drupal-8-core&quot;&gt;Option 2 - Patch Drupal 8 core&lt;/h3&gt;
+
+&lt;p&gt;Another option (which is the option I took) was to apply a simple patch to Drupal core. There is an &lt;a href=&quot;https://www.drupal.org/node/2499239&quot;&gt;open issue on drupal.org&lt;/a&gt; to look at scanning all sub-directories for test files. At the time of writing it was uncertain whether this patch would be accepted by the community.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-2-write-your-tests&quot;&gt;Step 2, write your tests&lt;/h2&gt;
+
+&lt;p&gt;There are some general conventions you should use when writing your PHPunit tests:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the suffix of the filename should be &lt;code&gt;Test.php&lt;/code&gt;, e.g. &lt;code&gt;MonthRangeTest.php&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;the files should all reside in either the directory &lt;code&gt;/MY_MODULE/tests/src/Unit/&lt;/code&gt; or a sub directory of that&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;More information on the requirements can be found on the &lt;a href=&quot;https://www.drupal.org/node/2116043&quot;&gt;drupal.org documentation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;dataproviders&quot;&gt;Dataproviders&lt;/h3&gt;
+
+&lt;p&gt;Data providers are pretty much the best thing to happen to automated testing. Instead of testing a single scenario, you can instead test a whole range of permutations in order to find those bugs. You start by declaring an annotation &lt;code&gt;@dataProvider&lt;/code&gt; for your test method:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+  &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @covers ::getMonthRange&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @dataProvider monthRangeDataProvider&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;testGetMonthRange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$expected_start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$expected_end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$month_offset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ... more code&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;You then declare a method &lt;code&gt;monthRangeDataProvider&lt;/code&gt; that returns an array of test cases (which are also arrays). The items in the data provider method are passed one at a time to the testing method, in the same order they are declared (so you can map them to friendly names).&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+  &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * Data provider for testGetMonthRange().&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @return array&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   Nested arrays of values to check:&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   - $expected_start&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   - $expected_end&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   - $month_offset&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   - $now&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;monthRangeDataProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// Feb 29 @ noon.&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1454284800&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1456790399&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1456747200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// ... more tests follow&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;More information can be found in the &lt;a href=&quot;https://phpunit.de/manual/3.7/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.data-providers&quot;&gt;phpunit documentation for data providers&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;testing-for-expected-exceptions&quot;&gt;Testing for expected exceptions&lt;/h3&gt;
+
+&lt;p&gt;Just as important as testing valid inputs, you should also test invalid inputs as well. This is easily achieved with &lt;code&gt;@expectedException&lt;/code&gt; annotations above your test method:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+  &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * Tests that an end date that is before the start date produces an exception.&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @expectedException        Exception&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @expectedExceptionMessage Start date must be before end date&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;testGetWorkingDaysInRangeException&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ... more code in here&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;step-3-enhance-your-test-class-with-phpunit-metadata&quot;&gt;Step 3, enhance your test class with PHPunit metadata&lt;/h2&gt;
+
+&lt;p&gt;You can annotate both the test class and the methods to provide additional information and metadata about your tests:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@covers&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is mainly used for PHPunit’s automated code coverage report, but I find it also very helpful for developers to up front state what method that are testing.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@coversDefaultClass&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is used at a class level, and saves you having to write rather lengthy @covers statement for all your testing methods, if they all test the same class.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@depends&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If a certain test makes no sense to run unless a previous test passed, then you can add in a ‘depends’ annotation above the test method in question. You can depend on multiple other tests too. Note, that this does not change the execution order of the tests, they are still executed top to bottom.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@group&lt;/strong&gt; or &lt;strong&gt;@author&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You can think of adding a ‘group’ to a PHPunit class the same as tagging in. It is free tagging in that sense, and you can tag a single class with many tags. This should allow you to categorise your tests. @author is an alias of group, the idea being you can run all tests written by a particular developer.&lt;/p&gt;
+
+&lt;p&gt;More information can be found in the &lt;a href=&quot;https://phpunit.de/manual/3.7/en/appendixes.annotations.html&quot;&gt;PHPunit documentation on annotations&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-4-run-your-test-suite&quot;&gt;Step 4, run your test suite&lt;/h2&gt;
+
+&lt;p&gt;This section assumes you have opted to use Drupal core’s phpunit.xml.dist file (modify the paths as appropriate if you are using a file in another location).&lt;/p&gt;
+
+&lt;p&gt;List groups (or tags)&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;core/
+../vendor/bin/phpunit --list-groups&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Run all tests that are tags with a particular group (or tag)&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;core/
+../vendor/bin/phpunit --group tamdash&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Example CLI output&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;../vendor/bin/phpunit --group tamdash
+PHPUnit 4.8.11 by Sebastian Bergmann and contributors.
+...........
+Time: 5.01 seconds, Memory: 144.25Mb
+OK &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;11&lt;/span&gt; tests, &lt;span class=&quot;m&quot;&gt;18&lt;/span&gt; assertions&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If you are using PHPStorm, spend a few minutes and &lt;a href=&quot;https://www.drupal.org/node/2288559&quot;&gt;set this up too&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/phpunit/phpstorm.png&quot; alt=&quot;Set up PHPStorm to run PHPunit tests&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Example output&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/phpunit/phpstorm-run.png&quot; alt=&quot;Running PHPunit tests in PHPStorm&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So now there is no need to flip back to your terminal if you just want to quickly run a group of tests.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;PHPunit is a great way to be able to run quick tests on isolated parts of your code. Tests often take less than 10 seconds to run, so developer feedback is near instant. It also forces your developers to write better more testible code from the get go. This can only be a good thing. Personally I am very excited to see PHPunit join Drupal 8, and cannot wait to see what people do with it.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;There seems to be quite healthy debate on whether contrib or custom modules should ship with their own phpunit.xml.dist file or whether Drupal core’s file should cover both. I am keen to hear anyone’s thoughts on this. Also let me know if you have any contrib modules in the wild shipping their own phpunit.xml.dist files, and how you found that process.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 24 Mar 2016 00:00:00 +1300</pubDate>
+        <dc:creator>Sean Hamlin</dc:creator>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/writing-phpunit-tests-for-your-custom-modules-in-drupal-8/</guid>
+        <comments>http://www.pixelite.co.nz/article/writing-phpunit-tests-for-your-custom-modules-in-drupal-8/#disqus_thread</comments>
+      </item>
+    
+      <item>
         <title>Deleting multiple fields with large amounts of data in Drupal 7</title>
         <link>http://www.pixelite.co.nz/article/deleting-multiple-fields-with-large-amounts-of-data-in-drupal-7/</link>
         <description>&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
@@ -910,158 +1070,6 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
         <dc:creator>Gold</dc:creator>
         <guid isPermaLink="true">http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/</guid>
         <comments>http://www.pixelite.co.nz/article/migrate-d2d-taxonomy-terms-on-nodes/#disqus_thread</comments>
-      </item>
-    
-      <item>
-        <title>How and why you should update PHP to PHP 5.5 with Drupal</title>
-        <link>http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/</link>
-        <description>&lt;p&gt;This post is a follow up to my previous blog post on &lt;a href=&quot;/article/upgrading-php-54-ubuntu-1204-lts-support-drupal-8&quot;&gt;how to upgrade PHP to 5.4 to support Drupal 8&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;why-you-should-upgrade-php&quot;&gt;Why you should upgrade PHP&lt;/h2&gt;
-
-&lt;p&gt;If you are looking for reasons to ditch PHP 5.3, here are some:&lt;/p&gt;
-
-&lt;h3 id=&quot;security&quot;&gt;Security&lt;/h3&gt;
-
-&lt;p&gt;PHP 5.3 &lt;a href=&quot;http://php.net/supported-versions.php&quot;&gt;reached end of life in August 2014&lt;/a&gt;, this means that if you are running this version, you are running an insecure version of PHP that potentially has security holes in it. This is bad for obvious reasons.&lt;/p&gt;
-
-&lt;h3 id=&quot;bundled-opcode-cache&quot;&gt;Bundled opcode cache&lt;/h3&gt;
-
-&lt;p&gt;PHP 5.5 is the first version that bundles an opcode cache with PHP, this means there is also no need to also run APC (unless you need userland caching in &lt;a href=&quot;https://github.com/krakjoe/apcu&quot;&gt;APCu&lt;/a&gt;).&lt;/p&gt;
-
-&lt;h3 id=&quot;performance&quot;&gt;Performance&lt;/h3&gt;
-
-&lt;p&gt;PHP &lt;a href=&quot;http://news.php.net/php.internals/57760&quot;&gt;profiled the 5.4 release compared to 5.3 for Drupal&lt;/a&gt;, and that found that:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;7% more requests/second&lt;/li&gt;
-  &lt;li&gt;50% PHP memory reduction&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;PHP 5.5 offers more performance again, and there is a section at the bottom of this article that goes through a real life scenario.&lt;/p&gt;
-
-&lt;h3 id=&quot;cool-new-features&quot;&gt;Cool new features&lt;/h3&gt;
-
-&lt;p&gt;Read through the list of new features, here are some neat things you are missing out on:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/language.exceptions.php#language.exceptions.finally&quot;&gt;try/catch/finally&lt;/a&gt; is finally now in&lt;/li&gt;
-  &lt;li&gt;Short array syntax&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$array = [&lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;  &amp;quot;foo&amp;quot; =&amp;gt; &amp;quot;bar&amp;quot;,&lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;  &amp;quot;bar&amp;quot; =&amp;gt; &amp;quot;foo&amp;quot;,&lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Function array dereferencing&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;  $secondElement = getArray()[1];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/language.oop5.traits.php&quot;&gt;Traits&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;And &lt;a href=&quot;http://php.net/manual/en/migration54.new-features.php&quot;&gt;many&lt;/a&gt; &lt;a href=&quot;http://php.net/manual/en/migration55.new-features.php&quot;&gt;others&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;how-to-upgrade-to-php-55&quot;&gt;How to upgrade to PHP 5.5&lt;/h2&gt;
-
-&lt;p&gt;There are a number of ways to update your server to PHP 5.5.&lt;/p&gt;
-
-&lt;h3 id=&quot;upgrade-to-ubuntu-trusty-tahr-1404&quot;&gt;Upgrade to Ubuntu Trusty Tahr 14.04&lt;/h3&gt;
-
-&lt;p&gt;Ubuntu Trusty Tahr 14.04 (which is an LTS version), which comes bundled with &lt;a href=&quot;http://packages.ubuntu.com/trusty/php5-common&quot;&gt;PHP 5.5.9&lt;/a&gt;. This is probably the best solution if you are managing your own Ubuntu box.&lt;/p&gt;
-
-&lt;h3 id=&quot;install-a-ppa-on-ubuntu-precise-1204&quot;&gt;Install a PPA on Ubuntu Precise 12.04&lt;/h3&gt;
-
-&lt;p&gt;If you are running the older Ubuntu Precise 12.04, you can add a PPA&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sudo add-apt-repository ppa:ondrej/php5
-sudo apt-get update
-sudo apt-get install php5
-php5 -v&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;It would be worth considering a dist upgrade though, but this at least can buy you some time.&lt;/p&gt;
-
-&lt;h3 id=&quot;acquia-cloud-ui&quot;&gt;Acquia Cloud UI&lt;/h3&gt;
-
-&lt;p&gt;If you use &lt;a href=&quot;https://www.acquia.com/products-services/acquia-cloud&quot;&gt;Acquia Cloud&lt;/a&gt; for hosting there is a convenient PHP version selector in the UI.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/php55/cloud.png&quot; alt=&quot;Acquia Cloud UI allows site administrators to change the PHP version&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;More information can be found in the &lt;a href=&quot;https://docs.acquia.com/cloud/configure/environments/php#php-version&quot;&gt;documentation&lt;/a&gt;. Be aware, once you upgrade beyond PHP 5.3, you cannot downgrade, so ensure you test your code on a development server first ;)&lt;/p&gt;
-
-&lt;h2 id=&quot;common-coding-issues&quot;&gt;Common coding issues&lt;/h2&gt;
-
-&lt;p&gt;Although Drupal 7 core, and most popular contributed modules will already support PHP 5.5, it would pay to do a code audit on any custom code written to ensure you are not using things you should not be. Here are some links you should read:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/migration54.incompatible.php&quot;&gt;PHP 5.4 incompatible changes&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://php.net/manual/en/migration55.incompatible.php&quot;&gt;PHP 5.5 incompatible changes&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Below are some of the most common issues I have found in sites:&lt;/p&gt;
-
-&lt;h3 id=&quot;call-time-pass-by-reference&quot;&gt;Call time pass-by-reference&lt;/h3&gt;
-
-&lt;p&gt;If you have this in your code, you will have a bad time, as this is now a PHP fatal.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;foo(&amp;amp;$a); // Bad times.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;h3 id=&quot;only-variables-can-be-passed-by-reference&quot;&gt;Only variables can be passed by reference&lt;/h3&gt;
-
-&lt;p&gt;This will cause PHP to throw notices.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;php -a
-Interactive shell
-
-php &amp;gt; ini_set&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;error_reporting&amp;#39;&lt;/span&gt;, E_ALL&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-php &amp;gt; var_dump&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;reset&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;explode&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;Jim|Bob|Cat&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-PHP Strict Standards:  Only variables should be passed by reference in php shell code on line 1
-
-Strict Standards: Only variables should be passed by reference in php shell code on line 1
-string&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Jim&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Where you will likely find this in Drupal in my experience is when manually rendering nodes:&lt;/p&gt;
-
-&lt;p&gt;This code works in PHP 5.3, but will throw notices in PHP 5.5:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$rendered = drupal_render(node_view(node_load(1), &amp;#39;teaser&amp;#39;));&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;The fix is to simply use a temporary variable:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;$view = node_view(node_load(1), &amp;#39;teaser&amp;#39;);&lt;/span&gt;
-&lt;span class=&quot;x&quot;&gt;$rendered = drupal_render($view);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;The reason being that &lt;code&gt;drupal_render()&lt;/code&gt; expects a variable to be passed in (as it is passed by reference).&lt;/p&gt;
-
-&lt;h3 id=&quot;how-do-you-find-coding-issues&quot;&gt;How do you find coding issues&lt;/h3&gt;
-
-&lt;p&gt;Enable the syslog module, and tail that in your development environment, hunt down and fix as many notices and warnings as possible. The more noisy your logs are, the harder it is to find actual issues in them. While you are at it, turn off the dblog module, this is only helpful if you do not have access to your syslog (as it is a performance issue to be continually writing to the database).&lt;/p&gt;
-
-&lt;h2 id=&quot;real-world-performance-comparison&quot;&gt;Real world performance comparison&lt;/h2&gt;
-
-&lt;p&gt;This was taken from a recent site that underwent a PHP 5.3 to 5.5 upgrade. Here are 2 New Relic overviews, taken with identical performance tests run against the same codebase. The first image is taken with PHP 5.3 running:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/php55/php53.png&quot; alt=&quot;Performance of Drupal on PHP 5.3 is not that flash&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You can see PHP time is around 260ms of the request.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/php55/php55.png&quot; alt=&quot;Performance of Drupal on PHP 5.5 is much better than 5.3&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;With an upgrade to PHP 5.5, the time spent in PHP drops to around 130ms. So this is around a a 50% reduction in PHP time. This not only makes your application faster, but also it means you can serve more traffic from the same hardware.&lt;/p&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;If you have gone through a recent PHP upgrade, I would be interested to hear how you found it, and what performance gains you managed to achieve.&lt;/p&gt;
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Mon, 13 Apr 2015 00:00:00 +1200</pubDate>
-        <dc:creator>Sean Hamlin</dc:creator>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/</guid>
-        <comments>http://www.pixelite.co.nz/article/how-why-you-should-update-php-to-55-with-drupal/#disqus_thread</comments>
       </item>
     
   </channel>

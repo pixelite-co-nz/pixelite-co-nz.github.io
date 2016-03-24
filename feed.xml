@@ -8,9 +8,179 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 17 Feb 2016 21:49:13 +1300</pubDate>
-    <lastBuildDate>Wed, 17 Feb 2016 21:49:13 +1300</lastBuildDate>
+    <pubDate>Thu, 24 Mar 2016 19:02:44 +1300</pubDate>
+    <lastBuildDate>Thu, 24 Mar 2016 19:02:44 +1300</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>Writing PHPunit tests for your custom modules in Drupal 8</title>
+        <description>&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;I have been doing a bit of Drupal 8 development as of recent, and am loving the new changes, and entities everywhere. I am passionate about automated testing, and when I saw that integrating PHPunit into your custom modules is now even easier, I set out to see how this all worked.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-is-phpunit-important&quot;&gt;Why is PHPunit important&lt;/h2&gt;
+
+&lt;p&gt;There are are number of reasons why PHPunit is a great idea&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;it forces you to write testable code in the first place, this means small classes, with methods that do a single thing&lt;/li&gt;
+  &lt;li&gt;it runs in only a few seconds, there is also no need to have a working Drupal install&lt;/li&gt;
+  &lt;li&gt;integrates with PHPStorm, allowing you run your tests from within the IDE&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-1-set-up-your-phpunitxmldist-file&quot;&gt;Step 1, set up your phpunit.xml.dist file&lt;/h2&gt;
+
+&lt;p&gt;There is a file that comes included with Drupal 8 core, but by default it will not scan any sub-directories under &lt;code&gt;/modules&lt;/code&gt; (e.g. like the very common &lt;code&gt;/modules/custom&lt;/code&gt;). I stumbled across this question on &lt;a href=&quot;http://drupal.stackexchange.com/questions/162719/phpunit-with-custom-contrib-and-submodules-structure&quot;&gt;stackoverflow&lt;/a&gt;. So you have a couple of options from here:&lt;/p&gt;
+
+&lt;h3 id=&quot;option-1---create-and-use-your-own-phpunitxmldist-file&quot;&gt;Option 1 - Create and use your own phpunit.xml.dist file&lt;/h3&gt;
+
+&lt;p&gt;You can simply copy (and modify) Drupal 8 core’s phpunit.xml.dist file into git repo somewhere (perhaps outside the webroot), and use this file for all your custom module tests.&lt;/p&gt;
+
+&lt;h3 id=&quot;option-2---patch-drupal-8-core&quot;&gt;Option 2 - Patch Drupal 8 core&lt;/h3&gt;
+
+&lt;p&gt;Another option (which is the option I took) was to apply a simple patch to Drupal core. There is an &lt;a href=&quot;https://www.drupal.org/node/2499239&quot;&gt;open issue on drupal.org&lt;/a&gt; to look at scanning all sub-directories for test files. At the time of writing it was uncertain whether this patch would be accepted by the community.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-2-write-your-tests&quot;&gt;Step 2, write your tests&lt;/h2&gt;
+
+&lt;p&gt;There are some general conventions you should use when writing your PHPunit tests:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the suffix of the filename should be &lt;code&gt;Test.php&lt;/code&gt;, e.g. &lt;code&gt;MonthRangeTest.php&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;the files should all reside in either the directory &lt;code&gt;/MY_MODULE/tests/src/Unit/&lt;/code&gt; or a sub directory of that&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;More information on the requirements can be found on the &lt;a href=&quot;https://www.drupal.org/node/2116043&quot;&gt;drupal.org documentation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;dataproviders&quot;&gt;Dataproviders&lt;/h3&gt;
+
+&lt;p&gt;Data providers are pretty much the best thing to happen to automated testing. Instead of testing a single scenario, you can instead test a whole range of permutations in order to find those bugs. You start by declaring an annotation &lt;code&gt;@dataProvider&lt;/code&gt; for your test method:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+  &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @covers ::getMonthRange&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @dataProvider monthRangeDataProvider&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;testGetMonthRange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$expected_start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$expected_end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$month_offset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ... more code&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;You then declare a method &lt;code&gt;monthRangeDataProvider&lt;/code&gt; that returns an array of test cases (which are also arrays). The items in the data provider method are passed one at a time to the testing method, in the same order they are declared (so you can map them to friendly names).&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+  &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * Data provider for testGetMonthRange().&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @return array&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   Nested arrays of values to check:&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   - $expected_start&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   - $expected_end&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   - $month_offset&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *   - $now&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;monthRangeDataProvider&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// Feb 29 @ noon.&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1454284800&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1456790399&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1456747200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// ... more tests follow&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;More information can be found in the &lt;a href=&quot;https://phpunit.de/manual/3.7/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.data-providers&quot;&gt;phpunit documentation for data providers&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;testing-for-expected-exceptions&quot;&gt;Testing for expected exceptions&lt;/h3&gt;
+
+&lt;p&gt;Just as important as testing valid inputs, you should also test invalid inputs as well. This is easily achieved with &lt;code&gt;@expectedException&lt;/code&gt; annotations above your test method:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+  &lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * Tests that an end date that is before the start date produces an exception.&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   *&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @expectedException        Exception&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   * @expectedExceptionMessage Start date must be before end date&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;   */&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;testGetWorkingDaysInRangeException&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ... more code in here&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;step-3-enhance-your-test-class-with-phpunit-metadata&quot;&gt;Step 3, enhance your test class with PHPunit metadata&lt;/h2&gt;
+
+&lt;p&gt;You can annotate both the test class and the methods to provide additional information and metadata about your tests:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@covers&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is mainly used for PHPunit’s automated code coverage report, but I find it also very helpful for developers to up front state what method that are testing.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@coversDefaultClass&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is used at a class level, and saves you having to write rather lengthy @covers statement for all your testing methods, if they all test the same class.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@depends&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If a certain test makes no sense to run unless a previous test passed, then you can add in a ‘depends’ annotation above the test method in question. You can depend on multiple other tests too. Note, that this does not change the execution order of the tests, they are still executed top to bottom.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@group&lt;/strong&gt; or &lt;strong&gt;@author&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You can think of adding a ‘group’ to a PHPunit class the same as tagging in. It is free tagging in that sense, and you can tag a single class with many tags. This should allow you to categorise your tests. @author is an alias of group, the idea being you can run all tests written by a particular developer.&lt;/p&gt;
+
+&lt;p&gt;More information can be found in the &lt;a href=&quot;https://phpunit.de/manual/3.7/en/appendixes.annotations.html&quot;&gt;PHPunit documentation on annotations&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-4-run-your-test-suite&quot;&gt;Step 4, run your test suite&lt;/h2&gt;
+
+&lt;p&gt;This section assumes you have opted to use Drupal core’s phpunit.xml.dist file (modify the paths as appropriate if you are using a file in another location).&lt;/p&gt;
+
+&lt;p&gt;List groups (or tags)&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;core/
+../vendor/bin/phpunit --list-groups&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Run all tests that are tags with a particular group (or tag)&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;core/
+../vendor/bin/phpunit --group tamdash&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Example CLI output&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;../vendor/bin/phpunit --group tamdash
+PHPUnit 4.8.11 by Sebastian Bergmann and contributors.
+...........
+Time: 5.01 seconds, Memory: 144.25Mb
+OK &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;11&lt;/span&gt; tests, &lt;span class=&quot;m&quot;&gt;18&lt;/span&gt; assertions&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If you are using PHPStorm, spend a few minutes and &lt;a href=&quot;https://www.drupal.org/node/2288559&quot;&gt;set this up too&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/phpunit/phpstorm.png&quot; alt=&quot;Set up PHPStorm to run PHPunit tests&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Example output&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/phpunit/phpstorm-run.png&quot; alt=&quot;Running PHPunit tests in PHPStorm&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So now there is no need to flip back to your terminal if you just want to quickly run a group of tests.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;PHPunit is a great way to be able to run quick tests on isolated parts of your code. Tests often take less than 10 seconds to run, so developer feedback is near instant. It also forces your developers to write better more testible code from the get go. This can only be a good thing. Personally I am very excited to see PHPunit join Drupal 8, and cannot wait to see what people do with it.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;There seems to be quite healthy debate on whether contrib or custom modules should ship with their own phpunit.xml.dist file or whether Drupal core’s file should cover both. I am keen to hear anyone’s thoughts on this. Also let me know if you have any contrib modules in the wild shipping their own phpunit.xml.dist files, and how you found that process.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 24 Mar 2016 00:00:00 +1300</pubDate>
+        <link>http://www.pixelite.co.nz/article/writing-phpunit-tests-for-your-custom-modules-in-drupal-8/</link>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/writing-phpunit-tests-for-your-custom-modules-in-drupal-8/</guid>
+        
+        <category>drupal</category>
+        
+        <category>drupalplanet</category>
+        
+        <category>phpunit</category>
+        
+        <category>testing</category>
+        
+        
+        <category>tutorial</category>
+        
+      </item>
     
       <item>
         <title>Deleting multiple fields with large amounts of data in Drupal 7</title>
@@ -1170,134 +1340,6 @@ https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
         <category>memory</category>
         
         <category>performance</category>
-        
-        
-        <category>tutorial</category>
-        
-      </item>
-    
-      <item>
-        <title>Top 10 DrupalCon LA sessions</title>
-        <description>&lt;h2 id=&quot;drupalcon-la&quot;&gt;DrupalCon LA&lt;/h2&gt;
-
-&lt;p&gt;So I did not make it along to DrupalCon Los Angeles, but I did spend some time reading twitter, and watching the sessions online. Here are some of the sessions I found entertaining and insightful and would recommend to others.&lt;/p&gt;
-
-&lt;h2 id=&quot;driesnote-keynote&quot;&gt;Driesnote Keynote&lt;/h2&gt;
-
-&lt;p&gt;Dries, as always, sets the lay of the land with Drupal. He also goes into the early days of Drupal, and how some key people he was involved with and have now gone on to form organisations that centre around Drupal.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Best quote:&lt;/em&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Obstacles don’t block the path, they are the path&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-16by9&quot;&gt;
-&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/uNRtZDAS0xI&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;no&quot;&gt;No&lt;/h2&gt;
-
-&lt;p&gt;Larry Garfield gives an interesting talk on why sometimes it is best to say NO in order to give focus to the things that actually matter.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Best quote:&lt;/em&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Case and point, the new Macbook Airs, they say NO TO EVERYTHING.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/eXYs09gxIzE&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;php-containers-at-scale-5k-containers-per-server&quot;&gt;PHP Containers at Scale: 5K Containers per Server&lt;/h2&gt;
-
-&lt;p&gt;David Strauss explains the history of web hosting, and how this is now far more complex. David is CTO of &lt;a href=&quot;https://pantheon.io/&quot;&gt;Pantheon&lt;/a&gt;, and they now run 100,000+ websites, all with dev + test + production environments. Pantheon run 150+ containers on a 30GB box (205MB each on average). Really interesting talk on how to run large amounts of sites efficiently.&lt;/p&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/hFqEsqRFB9s&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;decoupled-drupal-when-why-and-how&quot;&gt;Decoupled Drupal: When, Why, and How&lt;/h2&gt;
-
-&lt;p&gt;Amitai Burstein and Josh Koenig give a really entertaining presentation on monolithical architectures and some developer frustrations. And then introduce REST web services in Drupal 8, and how this can be used to provide better consumer interfaces for other frameworks.&lt;/p&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/CSrWpXe4nzw&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;features-for-drupal-8&quot;&gt;Features for Drupal 8&lt;/h2&gt;
-
-&lt;p&gt;Mike Potter goes through what role features played in Drupal 7, and how features will adapt in Drupal 8 now that CMI is in. Features in Drupal 8 will be going back to it’s roots and provide ‘bundles’ of configuration for re-use.&lt;/p&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/-91v3QvMkc0&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;meet-commerce-2x&quot;&gt;Meet Commerce 2.x&lt;/h2&gt;
-
-&lt;p&gt;Ryan and Bojan go through 1.x on Drupal 7, and how they have chosen to develop Commerce 2.x on Drupal 8. This is a complete rewrite. The hierarchical product model is really exciting.&lt;/p&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/I65tHQtJSJY&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;how-when-and-why-to-patch-a-module&quot;&gt;How, When and Why to Patch a Module&lt;/h2&gt;
-
-&lt;p&gt;Joshua Turton goes over what a patch is, when you should patch contributed modules, and how to keep track of these with Drush make.&lt;/p&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/rsNEF_JZ-2o&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;p&gt;My colleague Josh also wrote a blog post on &lt;a href=&quot;https://www.acquia.com/blog/patching-drush-make&quot;&gt;how to use Drush make&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;ci-for-css-creating-a-visual-regression-testing-workflow&quot;&gt;CI for CSS: Creating a Visual Regression Testing Workflow&lt;/h2&gt;
-
-&lt;p&gt;I topic that I am passionate about is visual regressions, here Kate Kligman goes through some tools that can help you test your site for visual changes. Tools covered include PhantomJS, SlimerJS, Selenium, &lt;a href=&quot;https://github.com/BBC-News/wraith&quot;&gt;Wraith&lt;/a&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/D63FWeYhISU&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;speeding-up-drupal-8-development-using-drupal-console&quot;&gt;Speeding up Drupal 8 development using Drupal Console&lt;/h2&gt;
-
-&lt;p&gt;Eduardo and Jesus give us an introduction to your new best friend in Drupal 8. Drupal console is a Symfony CLI application to help you write boilerplate code, e.g. to create a new module. Personally, I am excited for the form API generator, and the ability to create a new entity with a single command.&lt;/p&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/8Eu43RXKHmw&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;p&gt;For more information see &lt;a href=&quot;http://drupalconsole.com/&quot;&gt;drupalconsole.com&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;qa-with-dries&quot;&gt;Q&amp;amp;A with Dries&lt;/h2&gt;
-
-&lt;p&gt;As Drupal heads down from 130 critical issues down to &lt;a href=&quot;https://www.drupal.org/project/issues/search/drupal?project_issue_followers=&amp;amp;status%5B%5D=1&amp;amp;status%5B%5D=13&amp;amp;status%5B%5D=8&amp;amp;status%5B%5D=14&amp;amp;status%5B%5D=15&amp;amp;status%5B%5D=4&amp;amp;status%5B%5D=16&amp;amp;priorities%5B%5D=400&amp;amp;version%5B%5D=8.x&amp;amp;issue_tags_op=%3D&quot;&gt;22&lt;/a&gt; currently, what are some key concerns by people. The questions are answered by dries, xjm, webchick and alexpott.&lt;/p&gt;
-
-&lt;div class=&quot;embed-responsive embed-responsive-4by3&quot;&gt;
-&lt;iframe width=&quot;960&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/nAzQpbdZGGI&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;where-can-i-find-more-videos&quot;&gt;Where can I find more videos&lt;/h2&gt;
-
-&lt;p&gt;Don’t worry there are plenty more videos on the &lt;a href=&quot;https://www.youtube.com/user/DrupalAssociation/videos&quot;&gt;Drupal Association Youtube page&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;If you have any awesome sessions that I have missed let me know in the comments.&lt;/p&gt;
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Fri, 22 May 2015 00:00:00 +1200</pubDate>
-        <link>http://www.pixelite.co.nz/article/top-10-drupalcon-la-sessions/</link>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/top-10-drupalcon-la-sessions/</guid>
-        
-        <category>drupal</category>
-        
-        <category>drupalplanet</category>
-        
-        <category>drupalcon</category>
-        
-        <category>bestof</category>
         
         
         <category>tutorial</category>

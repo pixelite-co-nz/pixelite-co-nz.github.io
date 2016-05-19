@@ -8,9 +8,175 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 24 Mar 2016 19:02:44 +1300</pubDate>
-    <lastBuildDate>Thu, 24 Mar 2016 19:02:44 +1300</lastBuildDate>
+    <pubDate>Thu, 19 May 2016 21:36:07 +1200</pubDate>
+    <lastBuildDate>Thu, 19 May 2016 21:36:07 +1200</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>10 things I learnt building in Drupal 8</title>
+        <description>&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;I have had the chance to be involved with 2 fresh builds with Drupal 8 now, I thought I would describe some of the neat things I have found during this time and some of my lessons learned. My hope is that blog post will help you in your journey with Drupal 8.&lt;/p&gt;
+
+&lt;h2 id=&quot;drupal-console-is-awesome&quot;&gt;1. Drupal Console is awesome&lt;/h2&gt;
+
+&lt;p&gt;Every time you need to generate a custom module, or a new block in a custom module, you can quickly and easily use &lt;a href=&quot;https://drupalconsole.com/&quot;&gt;Drupal Console&lt;/a&gt; to produce the code scaffolding code for you. This quite easily makes the job of a developer a lot less stressful, and allows you to focus on actually writing code that delivers functionality.&lt;/p&gt;
+
+&lt;p&gt;I plucked these example commands that I use frequently from my bash history:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;drupal site:mode dev
+drupal generate:module
+drupal generate:plugin:block
+drupal generate:routesubscriber
+drupal generate:form:config&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Documentation is &lt;a href=&quot;http://docs.drupalconsole.com/en/index.html&quot;&gt;online&lt;/a&gt; but for the most part, the commands are self documenting, if you use the &lt;code&gt;--help&lt;/code&gt; option, then you get a great summary on the command, and the other options you can pass in.&lt;/p&gt;
+
+&lt;p&gt;The other nice thing is that this is a &lt;a href=&quot;http://symfony.com/doc/current/components/console/introduction.html&quot;&gt;Symfony Console&lt;/a&gt; application, so it should feel very familiar to you if you used another tool written in the same framework.&lt;/p&gt;
+
+&lt;h2 id=&quot;custom-block-types-are-amazing&quot;&gt;2. Custom block types are amazing&lt;/h2&gt;
+
+&lt;p&gt;In Drupal 7 land there was &lt;a href=&quot;https://www.drupal.org/project/bean&quot;&gt;bean&lt;/a&gt; which was an attempt to stop making ‘meta’ nodes to fill in content editable parts of complex landing pages. Now, fast forward to Drupal 8, and custom block types are now in Drupal Core.&lt;/p&gt;
+
+&lt;p&gt;This basically means as a site builder you now have another really powerful tool at your disposal in order to model content effectively in Drupal 8.&lt;/p&gt;
+
+&lt;p&gt;Each custom block type can have it’s own fields, it’s own display settings, and form displays.&lt;/p&gt;
+
+&lt;p&gt;Here are the final custom block types on a recent Drupal 8 build:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/d8/blocktypes.png&quot; alt=&quot;Custom block types in Drupal 8&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;One downside is that there is no access control per custom block type (just a global permission “administer blocks”), no doubt contrib will step in to fill this hole in the future (does anyone know a module that can help here?). In the mean time there is &lt;a href=&quot;https://www.drupal.org/node/1975064&quot;&gt;drupal.org issue&lt;/a&gt; on the subject.&lt;/p&gt;
+
+&lt;p&gt;I also found it weird that the custom blocks administration section was not directly under the ‘structure’ section of the site, there is another &lt;a href=&quot;https://www.drupal.org/node/2501691&quot;&gt;drupal.org issue&lt;/a&gt; about normalising this as well. Setting up some default shortcuts really helped me save some time.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/d8/shortcuts.png&quot; alt=&quot;Shortcuts are handy in Drupal 8 to remember where the custom block section is&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;view-modes-on-all-the-things&quot;&gt;3. View modes on all the things&lt;/h2&gt;
+
+&lt;p&gt;To create custom view modes in Drupal 7 required either a custom module or Dave Reid’s &lt;a href=&quot;https://www.drupal.org/project/entity_view_mode&quot;&gt;entity_view_mode&lt;/a&gt; contrib module. Now this is baked into Drupal 8 core.&lt;/p&gt;
+
+&lt;p&gt;View modes on your custom block types takes things to yet another level still as well. This is one more feather in the Drupal site builder’s cap.&lt;/p&gt;
+
+&lt;h2 id=&quot;twig-is-the-best&quot;&gt;4. Twig is the best&lt;/h2&gt;
+
+&lt;p&gt;In Drupal 7 I always found it weird that you could not unleash a front end developer upon your site and expect to have a pleasant result. In order to be successful the themer would need to know PHP, preprocess hooks, template naming standards, the mystical specific order in which the templates apply and so on. This often meant that a backend and front end developer would need to work together in order to create a good outcome.&lt;/p&gt;
+
+&lt;p&gt;With the introduction of Twig, I now feel that theming is back in the hands of the front end developer, and knowledge of PHP is no longer needed in order to override just about any markup that Drupal 8 produces.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Pro tip&lt;/strong&gt; - use the Drupal Console command &lt;code&gt;drupal site:mode dev&lt;/code&gt; to enable Twig development options, and disable Drupal caching. Another positive side effect is that Twig will then render the entire list of templates that you could be using, and which one you actually are using (and where that template is located).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/d8/twigdevel.png&quot; alt=&quot;Twig developer comments in HTML are the best&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Pro tip:&lt;/strong&gt; - If you want to use a template per custom block type (to which I did), then you can use this PHP snippet in your theme’s &lt;code&gt;.theme&lt;/code&gt; file (taken from &lt;a href=&quot;https://www.drupal.org/node/2460893#comment-10766412&quot;&gt;drupal.org&lt;/a&gt;):&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * Implements hook_theme_suggestions_HOOK_alter() for form templates.&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; *&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * @param array $suggestions&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * @param array $variables&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;THEMENAME_theme_suggestions_block_alter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$suggestions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$variables&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$variables&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;elements&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;content&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#block_content&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;array_splice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$suggestions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;block__bundle__&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$variables&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;elements&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;content&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;#block_content&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;bundle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;panelizer--panels-ipe-is-a-formidable-site-building-tool&quot;&gt;5. Panelizer + panels IPE is a formidable site building tool&lt;/h2&gt;
+
+&lt;p&gt;When looking for a layout manager to help build the more complex landing pages, I came across &lt;a href=&quot;https://www.drupal.org/project/panelizer&quot;&gt;panelizer&lt;/a&gt; + &lt;a href=&quot;https://www.drupal.org/project/panels&quot;&gt;panels IPE&lt;/a&gt;. Using panelizer you are able to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;create per node layout variants&lt;/li&gt;
+  &lt;li&gt;apply a single layout to all nodes of a particular bundle (e.g. all your news articles have the same layout)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The other neat thing is that the layouts themselves are now standardised between all the various layout managers using a contrib module called &lt;a href=&quot;https://www.drupal.org/project/layout_plugin&quot;&gt;layout_plugin&lt;/a&gt;. Also they are just YAML and Twig. Simple. There is even an effort to get this &lt;a href=&quot;https://www.drupal.org/node/2296423&quot;&gt;merged into Drupal 8.2&lt;/a&gt; which I think would be a great idea.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Downside&lt;/strong&gt; - all JS is still rendered on the page even though the user (e.g. anonymous users) have no access to panelizer. There is a patch on &lt;a href=&quot;https://www.drupal.org/node/2688951&quot;&gt;drupal.org&lt;/a&gt; to help fix this.&lt;/p&gt;
+
+&lt;p&gt;Since starting this build there has also been a stable release of &lt;a href=&quot;https://www.drupal.org/project/ds&quot;&gt;display suite&lt;/a&gt; come out for Drupal 8 as well giving you even more options.&lt;/p&gt;
+
+&lt;h2 id=&quot;you-can-build-a-rather-complex-site-with-very-little-contributed-modules&quot;&gt;6. You can build a rather complex site with very little contributed modules&lt;/h2&gt;
+
+&lt;p&gt;For this most recent site I build I got away with using only 10 contributed modules (one of which - &lt;a href=&quot;https://www.drupal.org/project/devel&quot;&gt;devel&lt;/a&gt; was purely for debugging purposes).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ctools&lt;/li&gt;
+  &lt;li&gt;google_analytics&lt;/li&gt;
+  &lt;li&gt;metatag&lt;/li&gt;
+  &lt;li&gt;panels&lt;/li&gt;
+  &lt;li&gt;token&lt;/li&gt;
+  &lt;li&gt;contact_block&lt;/li&gt;
+  &lt;li&gt;devel&lt;/li&gt;
+  &lt;li&gt;layout_plugin&lt;/li&gt;
+  &lt;li&gt;panelizer&lt;/li&gt;
+  &lt;li&gt;pathauto&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This means you are inherently building a more stable and supportable site, as most of the functionality now comes out of Drupal core.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-contact-module-now-is-supercharged&quot;&gt;7. The contact module now is supercharged&lt;/h2&gt;
+
+&lt;p&gt;In Drupal 7, the contact module was one of those modules to which I never turned on, as it was rather inflexible. You could not change the fields in a UI, nor add email recipients, or have more than 1 form. Now in Drupal 8 you can have as many “contact” forms as you want, each one is fieldable, and can send emails to as many people as needed.&lt;/p&gt;
+
+&lt;p&gt;You can also enhance the core module with:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.drupal.org/project/contact_block&quot;&gt;contact_block&lt;/a&gt; - allows you to place the contact form in a block&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.drupal.org/project/contact_storage&quot;&gt;contact_storage&lt;/a&gt; - allows you to store the submissions in the database, rather than firing an email and forgetting about it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is still a place for webform, namely:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;large complex form with lots of fields&lt;/li&gt;
+  &lt;li&gt;multi-step forms&lt;/li&gt;
+  &lt;li&gt;forms you want to ‘save draft’&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can read more about this in the &lt;a href=&quot;https://www.ostraining.com/blog/drupal/drupal-8-contact-forms/#comment-2333911795&quot;&gt;OS training blog post&lt;/a&gt; on the contact module.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Downside&lt;/strong&gt; - I wanted to have a plain page use the path &lt;code&gt;/contact&lt;/code&gt; but the contact module registers this path, so pathauto gave my contact page a path of &lt;code&gt;/contact-0&lt;/code&gt;. Luckily creating a &lt;a href=&quot;https://www.drupal.org/node/2187643&quot;&gt;route subscriber&lt;/a&gt; with Drupal Console was painless, so altering the contact module route was very simple to do. I can paste the code here if needed, but most of it is the code that Drupal Console generates for you.&lt;/p&gt;
+
+&lt;h2 id=&quot;phpunit-is-bundled-into-core&quot;&gt;8. PHPunit is bundled into core&lt;/h2&gt;
+
+&lt;p&gt;Now that Drupal 8 is largely Object Oriented (OO), you are able to test classes using PHPunit. I have &lt;a href=&quot;/article/writing-phpunit-tests-for-your-custom-modules-in-drupal-8/&quot;&gt;wrote about phpunit&lt;/a&gt; in the past if you want to know more.&lt;/p&gt;
+
+&lt;h2 id=&quot;views-is-in-core&quot;&gt;9. Views is in core&lt;/h2&gt;
+
+&lt;p&gt;This was the main reason why adoption of Drupal 7 was so slow after it’s initial 7.0 release, as everyone needed views to be stable before jumping ship. Now with views bundled into core, views plugins are also being ported at a great rate of knots too.&lt;/p&gt;
+
+&lt;h2 id=&quot;ckeditor-is-in-core&quot;&gt;10. CKEditor is in core&lt;/h2&gt;
+
+&lt;p&gt;I often found that this was one library that never (or hardly ever) got updated on sites that had been around for a while. More worryingly, CKEditor (the library) would from time to time fix security related issues. Now that this comes with Drupal 8 core, it is just one less thing to worry about.&lt;/p&gt;
+
+&lt;p&gt;Also I would love to shout out to &lt;a href=&quot;https://www.drupal.org/u/wim-leers&quot;&gt;Wim Leers&lt;/a&gt; (and other contributors) for &lt;a href=&quot;https://www.drupal.org/node/2027181&quot;&gt;revamping the image dialog&lt;/a&gt; with alignment and caption options. I cannot tell you how much pain and suffering this caused me in Drupal 7.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/d8/image.png&quot; alt=&quot;The image dialog bundled with Drupal 8 in CKeditor is amazing&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;If you have built a site recently in Drupal 8 and have found anything interesting or exciting, please let me know in the comments. Also keen to see what sites people have built, so post a link to it if it is public.&lt;/p&gt;
+</description>
+        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
+        <pubDate>Thu, 19 May 2016 00:00:00 +1200</pubDate>
+        <link>http://www.pixelite.co.nz/article/10-things-i-learnt-building-in-drupal-8/</link>
+        <guid isPermaLink="true">http://www.pixelite.co.nz/article/10-things-i-learnt-building-in-drupal-8/</guid>
+        
+        <category>drupal</category>
+        
+        <category>drupalplanet</category>
+        
+        <category>twig</category>
+        
+        <category>drupalconsole</category>
+        
+        
+        <category>tutorial</category>
+        
+      </item>
     
       <item>
         <title>Writing PHPunit tests for your custom modules in Drupal 8</title>
@@ -1232,112 +1398,6 @@ Some calls also log additional data, for example, cache clear also indicates if 
         <category>php</category>
         
         <category>cache</category>
-        
-        <category>performance</category>
-        
-        
-        <category>tutorial</category>
-        
-      </item>
-    
-      <item>
-        <title>How to profile PHP memory with Drupal</title>
-        <description>&lt;h2 id=&quot;why-is-this-important&quot;&gt;Why is this important&lt;/h2&gt;
-
-&lt;p&gt;How to size the PHP setting &lt;code&gt;max_memory&lt;/code&gt; is actually really important for the health of your Drupal application. Size this too small, and you risk getting PHP fatals due to not enough memory allocated. Size this too large, and you are essentially under-utilising your hardware, which in turn can lead to more cost.&lt;/p&gt;
-
-&lt;h2 id=&quot;how-to-record-every-drupal-requests-php-max-memory-usage&quot;&gt;How to record every Drupal requests PHP max memory usage&lt;/h2&gt;
-
-&lt;p&gt;Tim Hillard created this really nice module called &lt;a href=&quot;https://www.drupal.org/project/memory_profiler&quot;&gt;Memory profiler&lt;/a&gt;, which probably wins some sort of award for being around one of the smallest modules on drupal.org. Essentially this module registers a &lt;a href=&quot;https://api.drupal.org/api/drupal/includes%21bootstrap.inc/function/drupal_register_shutdown_function/7&quot;&gt;shutdown function&lt;/a&gt; that gets called at the end of every normal Drupal request.&lt;/p&gt;
-
-&lt;p&gt;The module is lightweight enough to run on production and only produces an extra syslog line per request.&lt;/p&gt;
-
-&lt;h2 id=&quot;analyse-the-data&quot;&gt;Analyse the data&lt;/h2&gt;
-
-&lt;p&gt;The data for memory profiler flows into watchdog, so if you run syslog (which you should), you can use CLI tools to analyse the data.&lt;/p&gt;
-
-&lt;h3 id=&quot;what-does-a-single-request-look-like&quot;&gt;What does a single request look like&lt;/h3&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n 1
-
-May &lt;span class=&quot;m&quot;&gt;26&lt;/span&gt; 06:25:21 10.212.4.16 sitename: https://www.sitename.com&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;1432621521&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;memory profiler&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;1.152.97.17&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;https://www.sitename.com/&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;https://www.sitename.com/home&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;4.75 MB - home &lt;span class=&quot;nv&quot;&gt;request_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;This comes from your syslog format (which can be changed on a per site basis):&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;drush vget syslog_format
-
-syslog_format: &lt;span class=&quot;s1&quot;&gt;&amp;#39;!base_url|!timestamp|!type|!ip|!request_uri|!referer|!uid|!link|!message&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;h3 id=&quot;extract-the-data-from-syslog&quot;&gt;Extract the data from syslog&lt;/h3&gt;
-
-&lt;p&gt;From here you can tokenise the parts you actually care about, in other words the:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;URL requested (part 5)&lt;/li&gt;
-  &lt;li&gt;PHP max memory (part 9)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Using more bash foo&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt;
-
-https://www.sitename.com/,4.75 MB - home &lt;span class=&quot;nv&quot;&gt;request_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;v-fc9573dc-036f-11e5-a8c0-22000af91462&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;On Acquia Cloud a request ID is added to all requests, we don’t need this. Also having the string ‘MB’ there is superfluous.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt;
-
-https://www.sitename.com/,4.75&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Perfect.&lt;/p&gt;
-
-&lt;p&gt;So in order to create a CSV for analysing in a spreadsheet you could do:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;request_uri,max_memory&amp;quot;&lt;/span&gt; &amp;gt; /tmp/memory.csv &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; /tmp/memory.csv&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;And then you can make pretty graphs if you want:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.pixelite.co.nz/img/profile/graph.png&quot; alt=&quot;Graph showing PHP memory usage sorted by smallest to largest&quot; class=&quot;img-responsive img-thumbnail&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Or if you just want to find the top requests to your application by memory you can do&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;memory profiler&amp;quot;&lt;/span&gt; drupal-watchdog.log &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F&lt;span class=&quot;s1&quot;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; -v &lt;span class=&quot;nv&quot;&gt;OFS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;{print $5, $9}&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ MB.*//&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sort -t, -k+2 -n -r &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; head -n 20&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
-
-&lt;p&gt;Based on your findings in the logs, you should be able to come up with:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;A better understanding of your request memory profile&lt;/li&gt;
-  &lt;li&gt;Better max memory settings for your Drupal application&lt;/li&gt;
-  &lt;li&gt;Potentially identify poor performing pages (memory wise) and can look to optimise them&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;gotchas&quot;&gt;Gotchas&lt;/h2&gt;
-
-&lt;p&gt;This module will only work if:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code&gt;hook_boot()&lt;/code&gt; is called (which might not be the case if you run custom lightweight PHP scripts that do not bootstrap Drupal)&lt;/li&gt;
-  &lt;li&gt;The Drupal request is not terminated with a SIGTERM or SIGKILL signal&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
-
-&lt;p&gt;Let me know if you found this helpful, or if you have any changes to my bash foo. If you have profiled your Drupal application recently, what methods and tools did you use?&lt;/p&gt;
-</description>
-        <creativeCommons:license>http://creativecommons.org/licenses/by-nc/4.0/</creativeCommons:license>
-        <pubDate>Wed, 27 May 2015 00:00:00 +1200</pubDate>
-        <link>http://www.pixelite.co.nz/article/how-to-profile-php-memory-with-drupal/</link>
-        <guid isPermaLink="true">http://www.pixelite.co.nz/article/how-to-profile-php-memory-with-drupal/</guid>
-        
-        <category>drupal</category>
-        
-        <category>drupalplanet</category>
-        
-        <category>php</category>
-        
-        <category>memory</category>
         
         <category>performance</category>
         

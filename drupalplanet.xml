@@ -18,7 +18,7 @@
 
 &lt;h2 id=&quot;drupal-console-is-awesome&quot;&gt;1. Drupal Console is awesome&lt;/h2&gt;
 
-&lt;p&gt;Every time you need to generate a custom module, or a new block in a custom module, you can quickly and easily use &lt;a href=&quot;https://drupalconsole.com/&quot;&gt;Drupal Console&lt;/a&gt; to produce the code scaffolding code for you. This quite easily makes the job of a developer a lot less stressful, and allows you to focus on actually writing code that delivers functionality.&lt;/p&gt;
+&lt;p&gt;Every time you need to generate a custom module, or a new block in a custom module, you can quickly and easily use &lt;a href=&quot;https://drupalconsole.com/&quot;&gt;Drupal Console&lt;/a&gt; to produce the code scaffolding for you. This quite easily makes the job of a developer a lot less stressful, and allows you to focus on actually writing code that delivers functionality.&lt;/p&gt;
 
 &lt;p&gt;I plucked these example commands that I use frequently from my bash history:&lt;/p&gt;
 

@@ -8,8 +8,8 @@
     <description>A technology blog or rant area depending on the topic</description>
     <link>http://www.pixelite.co.nz/</link>
     <atom:link href="http://www.pixelite.co.nz/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 19 May 2016 21:36:07 +1200</pubDate>
-    <lastBuildDate>Thu, 19 May 2016 21:36:07 +1200</lastBuildDate>
+    <pubDate>Sat, 21 May 2016 12:04:13 +1200</pubDate>
+    <lastBuildDate>Sat, 21 May 2016 12:04:13 +1200</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
     
       <item>
@@ -20,7 +20,7 @@
 
 &lt;h2 id=&quot;drupal-console-is-awesome&quot;&gt;1. Drupal Console is awesome&lt;/h2&gt;
 
-&lt;p&gt;Every time you need to generate a custom module, or a new block in a custom module, you can quickly and easily use &lt;a href=&quot;https://drupalconsole.com/&quot;&gt;Drupal Console&lt;/a&gt; to produce the code scaffolding code for you. This quite easily makes the job of a developer a lot less stressful, and allows you to focus on actually writing code that delivers functionality.&lt;/p&gt;
+&lt;p&gt;Every time you need to generate a custom module, or a new block in a custom module, you can quickly and easily use &lt;a href=&quot;https://drupalconsole.com/&quot;&gt;Drupal Console&lt;/a&gt; to produce the code scaffolding for you. This quite easily makes the job of a developer a lot less stressful, and allows you to focus on actually writing code that delivers functionality.&lt;/p&gt;
 
 &lt;p&gt;I plucked these example commands that I use frequently from my bash history:&lt;/p&gt;
 

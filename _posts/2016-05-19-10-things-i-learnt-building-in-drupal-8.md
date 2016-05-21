@@ -21,7 +21,7 @@ I have had the chance to be involved with 2 fresh builds with Drupal 8 now, I th
 
 ## 1. Drupal Console is awesome
 
-Every time you need to generate a custom module, or a new block in a custom module, you can quickly and easily use [Drupal Console](https://drupalconsole.com/) to produce the code scaffolding code for you. This quite easily makes the job of a developer a lot less stressful, and allows you to focus on actually writing code that delivers functionality.
+Every time you need to generate a custom module, or a new block in a custom module, you can quickly and easily use [Drupal Console](https://drupalconsole.com/) to produce the code scaffolding for you. This quite easily makes the job of a developer a lot less stressful, and allows you to focus on actually writing code that delivers functionality.
 
 I plucked these example commands that I use frequently from my bash history:
 
